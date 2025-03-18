@@ -16,6 +16,8 @@ import { COMPONENTS_SETINGS } from "@/constants/Constants";
 import PersonalInformation from "@/components/Modules/Settings/personaleInformation";
 import { Image } from "react-native";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
+import ChangePassword from "@/components/Modules/Settings/ChangePassword";
+import MyLocation from "@/components/Modules/Settings/MyLocation";
 
 export default function More() {
   const navigation = useNavigation();
@@ -68,6 +70,15 @@ export default function More() {
             returnBack={() => handleView("")}
           />
         );
+      case COMPONENTS_SETINGS.CHANGE_PASSWORD:
+        return <ChangePassword returnBack={() => handleView("")} />;
+      case COMPONENTS_SETINGS.MY_LOCATION:
+        return (
+          <MyLocation
+            returnBack={() => handleView("")}
+            idUser={dataUser?.items.id}
+          />
+        );
       default:
         return <View></View>;
     }
@@ -117,7 +128,10 @@ export default function More() {
                 </ThemedText>
               </View>
             </Pressable>
-            <Pressable style={localStyle.itemMenu} onPress={() => {}}>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => handleView(COMPONENTS_SETINGS.CHANGE_PASSWORD)}
+            >
               <View style={localStyle.itemMenuText}>
                 <MaterialIcons name="password" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
@@ -126,7 +140,10 @@ export default function More() {
                 </ThemedText>
               </View>
             </Pressable>
-            <Pressable style={localStyle.itemMenu} onPress={() => {}}>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => handleView(COMPONENTS_SETINGS.MY_LOCATION)}
+            >
               <View style={localStyle.itemMenuText}>
                 <Entypo name="location" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
@@ -188,7 +205,13 @@ export default function More() {
           <View style={localStyle.contentDivisor}>
             <Pressable style={localStyle.itemMenu} onPress={() => {}}>
               <View style={localStyle.itemMenuText}>
-                <AntDesign name="delete" style={localStyle.iconItem} />
+                <AntDesign
+                  name="delete"
+                  style={{
+                    ...localStyle.iconItem,
+                    color: GlobalColors.dangerColor,
+                  }}
+                />
                 <ThemedText darkColor="black">
                   {"    "}
                   Eliminar cuenta

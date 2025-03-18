@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://192.168.0.11:8002/api/esthetic",
+  baseURL: `${process.env.EXPO_PUBLIC_API_URL}/api/esthetic`,
 });
 
 // axios.defaults.withCredentials = true;
