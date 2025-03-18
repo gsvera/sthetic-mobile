@@ -21,6 +21,11 @@ export const apiUser = {
       data
     );
   },
+  updatePassword: function (value) {
+    return axiosInstance.put(
+      `${AUTH_BASE_URL}/update-password-by-user?new-password=${value}`
+    );
+  },
   login: function (data) {
     return axiosInstance.post(`${BASE_URL}/login`, data);
   },
