@@ -56,7 +56,7 @@ const schema = yup.object().shape({
     .required("Campo obligatorio")
     .matches(
       REGEX.PASSWORD,
-      "La contraseña debe incluir al menos una letra mayúscula, un número y un carácter especial"
+      "La contraseña debe incluir minimo 8 caracteres,  al menos una letra mayúscula una minuscula, un número y un carácter especial"
     )
     .oneOf([yup.ref("password")], "Las contraseñas deben coincidir"),
 });

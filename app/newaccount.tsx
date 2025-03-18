@@ -56,7 +56,7 @@ export default function newAccount() {
     // console.log("🚀 ~ handleSuccessSaveUser ~ data:", data);
     if (data.error) {
       // console.log("🚀 ~ handleSuccessSaveUser ~ data.error:", data.error);
-      ErrorAlertMessage();
+      ErrorAlertMessage(data.message);
       return;
     }
     setStoreSession({ key: KEY_STORE.userToken, value: data.items.token });

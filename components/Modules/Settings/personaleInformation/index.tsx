@@ -6,7 +6,7 @@ import { SubHeaderReturn } from "@/components/Shared/SubHeaderReturn";
 import { ThemedText } from "@/components/ThemedText";
 import { GlobalColors, textColors } from "@/constants/Colors";
 import { REGEX, TYPE_STATUS } from "@/constants/Constants";
-import { ButtonStyle } from "@/constants/StyleComponents";
+import { ButtonStyle, GeneralStyle } from "@/constants/StyleComponents";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -81,15 +81,6 @@ export const PersonalInformation = ({
   });
   const formData = watch();
 
-  // QUERYS
-  // const { data: dataUser, isFetching: loadingData } = useQuery({
-  //   queryKey: [REACT_QUERY_KEYS.user.getDataUser("personal-information")],
-  //   queryFn: () => apiUser.getDataUser(),
-  //   ...{
-  //     select: (data: ResponseAPi) => data.data,
-  //   },
-  // });
-
   const { data: dataLada = [] } = useQuery({
     queryKey: [REACT_QUERY_KEYS.lada.getFilterData("personal-information")],
     queryFn: () => apiLada.getFilterData(),
@@ -129,16 +120,6 @@ export const PersonalInformation = ({
   };
 
   // EFFECTS
-
-  // useEffect(() => {
-  //   if (dataUser?.items) {
-  //     setValue("firstName", dataUser?.items.firstName);
-  //     setValue("lastName", dataUser?.items.lastName);
-  //     setValue("phone", dataUser?.items.phone);
-  //     setValue("email", dataUser?.items.email);
-  //   }
-  // }, [dataUser]);
-
   useEffect(() => {
     if (dataLada && initFormData.lada) {
       const findLada = dataLada?.find(
@@ -149,15 +130,6 @@ export const PersonalInformation = ({
   }, [initFormData.lada, dataLada]);
 
   useEffect(() => {
-    // console.log(dataUser?.items.firstName, formData.firstName);
-    // if (
-    // dataUser?.items.firstName !== formData.firstName ||
-    // dataUser?.items.lastName !== formData.lastName ||
-    // dataUser?.items.phone !== formData.phone ||
-    // dataUser?.items.email !== formData.email
-    // ) {
-    //   setDisableButton(false);
-    // } else setDisableButton(true);
     const hasFormDataChange =
       JSON.stringify(initFormData) === JSON.stringify(formData);
     setDisableButton(hasFormDataChange);
@@ -192,7 +164,7 @@ export const PersonalInformation = ({
               name="firstName"
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={localStyle.input}
+                  style={GeneralStyle.simpleInput}
                   placeholder="Ingrese su nombre"
                   onBlur={onBlur}
                   onChangeText={onChange}
@@ -211,7 +183,7 @@ export const PersonalInformation = ({
               name="lastName"
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={localStyle.input}
+                  style={GeneralStyle.simpleInput}
                   placeholder="Ingrese su apellido"
                   onBlur={onBlur}
                   onChangeText={onChange}
@@ -237,7 +209,7 @@ export const PersonalInformation = ({
                     name="lada"
                     render={({ field: { value } }) => ( */}
                 <TextInput
-                  style={localStyle.input}
+                  style={GeneralStyle.simpleInput}
                   value={lada}
                   editable={false}
                   selectTextOnFocus={false}
@@ -252,7 +224,7 @@ export const PersonalInformation = ({
                   name="phone"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                      style={localStyle.input}
+                      style={GeneralStyle.simpleInput}
                       placeholder="Ingrese su numero de telefono"
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -274,7 +246,7 @@ export const PersonalInformation = ({
               name="email"
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={localStyle.input}
+                  style={GeneralStyle.simpleInput}
                   placeholder="Ingrese su email"
                   keyboardType="email-address"
                   onChangeText={onChange}
@@ -307,17 +279,6 @@ export const PersonalInformation = ({
 };
 
 const localStyle = StyleSheet.create({
-  input: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    // borderWidth: 1,
-    // borderColor: "gray",
-    borderBottomWidth: 1,
-    borderBottomColor: "gray",
-    // borderRadius: 5,
-    paddingHorizontal: 10,
-  },
   label: {
     fontSize: 18,
     fontWeight: "bold",
@@ -326,7 +287,6 @@ const localStyle = StyleSheet.create({
   },
   contentButton: {
     marginTop: 15,
-    // width: "80%",
   },
 });
 

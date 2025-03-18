@@ -17,6 +17,7 @@ export enum GlobalColors {
   blackColor = "black",
   whiteColor = 'white',
   greenColor = "#20c81b",
+  dangerColor = "#ff4d4d",
   blueSuccessColor =  '#081229',
   successNotification = '#20c81b',
   updateNotification = '#3867fc',
