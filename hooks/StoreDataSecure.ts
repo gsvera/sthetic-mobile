@@ -1,7 +1,9 @@
 import * as SecureStore from 'expo-secure-store';
 
 export const KEY_STORE = {
-    userToken: 'userToken'
+    userToken: 'userToken',
+    userData: 'userData',
+    profilePicture: 'profilePicture'
 }
 
 type keyGetProps={

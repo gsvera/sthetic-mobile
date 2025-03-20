@@ -11,7 +11,10 @@ export const REGEX = {
 export enum COMPONENTS_SETINGS {
     PERSONAL_INFORMATION = 'personalInformation',
     CHANGE_PASSWORD = 'changePassword',
-    MY_LOCATION = 'myLocation'
+    MY_LOCATION = 'myLocation',
+    PROFILE_PICTURE = 'profilePicture',
+    TYPE_SERVICES = 'typeServices',
+    SERVICES_CATALOG = 'services_catalog'
 }
 
 export enum TYPE_STATUS {
