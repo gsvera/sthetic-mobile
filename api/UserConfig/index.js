@@ -11,6 +11,9 @@ export const apiUserConfig = {
   saveLocation: function (data) {
     return axiosInstance.post(`${BASE_URL}/save-location`, data);
   },
+  saveProfilePicture: function (data) {
+    return axiosInstance.put(`${BASE_URL}/save-profile-picture`, data);
+  },
 };
 
 export default apiUserConfig;

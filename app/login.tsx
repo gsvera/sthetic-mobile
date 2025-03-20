@@ -47,20 +47,20 @@ export default function Login() {
 
   const { mutate: login } = useMutation({
     mutationFn: (data) => apiUser.login(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessLogin(data),
+    onSuccess: (data: ResponseAPi) => handleSuccessLogin(data.data),
     onError: (error: any) => handleError(error),
   });
 
-  const handleSuccessLogin = (data: ResponseAPi) => {
-    if (data.data.error) {
+  const handleSuccessLogin = (data: ObjectResponse) => {
+    if (data.error) {
       ErrorAlertMessage("Usuario o contraseña invalido");
       return;
     }
     setStoreSession({
       key: KEY_STORE.userToken,
-      value: data.data.items?.token,
+      value: data.items?.token,
     });
-    setToken(data.data.items?.token);
+    setToken(data.items?.token);
     navigation.navigate("(tabs)" as never);
   };
 

@@ -18,7 +18,6 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { setToken } = useApiProvider();
   const [tokenSession, setTokenSession] = useState<string | null>("");
-  // console.log("🚀 ~ TabLayout ~ tokenSession:", tokenSession);
 
   getStoreSession({ key: KEY_STORE.userToken }).then((value) => {
     setTokenSession(value);

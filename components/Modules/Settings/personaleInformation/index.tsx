@@ -46,7 +46,7 @@ const schema = yup.object().shape({
     .email("Ingrese un correo valido"),
 });
 
-type formPersonalInformation = {
+export type formPersonalInformation = {
   firstName: string;
   lastName: string;
   lada: string;

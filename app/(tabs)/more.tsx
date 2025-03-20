@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { GlobalColors } from "@/constants/Colors";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
@@ -8,27 +8,41 @@ import {
 } from "@/components/Shared/Notifications/AlertMessage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiUser } from "@/api/User";
-import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
+import {
+  getStoreSession,
+  KEY_STORE,
+  setStoreSession,
+} from "@/hooks/StoreDataSecure";
 import { useNavigation } from "expo-router";
 import { useApiProvider } from "@/provider/InterceptorProvider";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { COMPONENTS_SETINGS } from "@/constants/Constants";
-import PersonalInformation from "@/components/Modules/Settings/personaleInformation";
+import PersonalInformation, {
+  formPersonalInformation,
+} from "@/components/Modules/Settings/PersonaleInformation";
 import { Image } from "react-native";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import ChangePassword from "@/components/Modules/Settings/ChangePassword";
 import MyLocation from "@/components/Modules/Settings/MyLocation";
+import { Camera } from "expo-camera";
+import CameraCustom from "@/components/Modules/Settings/CameraCustom";
+import UploadOptionPictureModal from "@/components/Shared/UploadOptionPictureModal";
+import { UserType } from "@/utils/types";
+import ServicesCatalog from "@/components/Modules/Settings/ServicesCatalog";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import TypeServices from "@/components/Modules/Settings/TypeServices";
 
 export default function More() {
   const navigation = useNavigation();
   const { setToken } = useApiProvider();
   const [viewComponent, setViewComponent] = useState<string>();
+  // const [openModal, setOpenModal] = useState(false);
 
   const { data: dataUser, isFetching: loadingData } = useQuery({
     queryKey: [REACT_QUERY_KEYS.user.getDataUser("personal-information")],
     queryFn: () => apiUser.getDataUser(),
     ...{
-      select: (data: ResponseAPi) => data.data,
+      select: (data: ResponseAPi) => data.data.items,
     },
   });
 
@@ -58,15 +72,15 @@ export default function More() {
     switch (element) {
       case COMPONENTS_SETINGS.PERSONAL_INFORMATION:
         const dataUserForm = {
-          firstName: dataUser?.items.firstName,
-          lastName: dataUser?.items.lastName,
-          lada: dataUser?.items.lada,
-          phone: dataUser?.items.phone,
-          email: dataUser?.items.email,
+          firstName: dataUser?.firstName,
+          lastName: dataUser?.lastName,
+          lada: dataUser?.lada,
+          phone: dataUser?.phone,
+          email: dataUser?.email,
         };
         return (
           <PersonalInformation
-            formDataInformation={dataUserForm}
+            formDataInformation={dataUserForm as formPersonalInformation}
             returnBack={() => handleView("")}
           />
         );
@@ -74,14 +88,30 @@ export default function More() {
         return <ChangePassword returnBack={() => handleView("")} />;
       case COMPONENTS_SETINGS.MY_LOCATION:
         return (
-          <MyLocation
+          <MyLocation returnBack={() => handleView("")} idUser={dataUser?.id} />
+        );
+      case COMPONENTS_SETINGS.PROFILE_PICTURE:
+        return (
+          <CameraCustom
             returnBack={() => handleView("")}
-            idUser={dataUser?.items.id}
+            idUser={dataUser?.id}
           />
         );
+      case COMPONENTS_SETINGS.TYPE_SERVICES:
+        return <TypeServices returnBack={() => handleView("")} />;
+      case COMPONENTS_SETINGS.SERVICES_CATALOG:
+        return <ServicesCatalog returnBack={() => handleView("")} />;
       default:
         return <View></View>;
     }
+  };
+
+  // const handleOpenModal = () => {
+  //   setOpenModal((v) => !v);
+  // };
+
+  const activeCamera = () => {
+    handleView(COMPONENTS_SETINGS.PROFILE_PICTURE);
   };
 
   const handleLogout = () => {
@@ -93,6 +123,7 @@ export default function More() {
       handleConfirmAction: logoutSession,
     });
   };
+
   return (
     <View>
       {viewComponent ? (
@@ -100,16 +131,23 @@ export default function More() {
       ) : (
         <View>
           <View style={localStyle.contentHeader}>
-            <View>
+            <TouchableOpacity
+              // onPress={() => handleView(COMPONENTS_SETINGS.PROFILE_PICTURE)}
+              onPress={activeCamera}
+            >
               <Image
-                source={require("@/assets/images/react-logo.png")}
+                source={
+                  !dataUser?.profilePictureB64
+                    ? require("@/assets/images/react-logo.png")
+                    : { uri: dataUser?.profilePictureB64 }
+                }
                 style={localStyle.avatar}
               />
-            </View>
+            </TouchableOpacity>
             <View style={{ marginLeft: 10 }}>
               <ThemedText>Bienvenido!</ThemedText>
               <ThemedText style={{ fontWeight: "bold" }}>
-                {dataUser?.items?.firstName} {dataUser?.items?.lastName}
+                {dataUser?.firstName} {dataUser?.lastName}
               </ThemedText>
             </View>
           </View>
@@ -157,7 +195,7 @@ export default function More() {
                 <AntDesign name="idcard" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
                   {"    "}
-                  Mi subscripción
+                  Mi subscripción xxxx
                 </ThemedText>
               </View>
             </Pressable>
@@ -168,25 +206,34 @@ export default function More() {
                 <AntDesign name="bells" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
                   {"    "}
-                  Notificaciones
+                  Notificaciones xxxx
                 </ThemedText>
               </View>
             </Pressable>
-            <Pressable style={localStyle.itemMenu} onPress={() => {}}>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => handleView(COMPONENTS_SETINGS.TYPE_SERVICES)}
+            >
               <View style={localStyle.itemMenuText}>
                 <MaterialIcons name="style" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
                   {"    "}
-                  catálogo de servicios
+                  Tipo de servicios
                 </ThemedText>
               </View>
             </Pressable>
-            <Pressable style={localStyle.itemMenu} onPress={() => {}}>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => handleView(COMPONENTS_SETINGS.SERVICES_CATALOG)}
+            >
               <View style={localStyle.itemMenuText}>
-                <AntDesign name="calendar" style={localStyle.iconItem} />
+                <MaterialCommunityIcons
+                  name="book-open-page-variant-outline"
+                  style={localStyle.iconItem}
+                />
                 <ThemedText darkColor="black">
                   {"    "}
-                  Servicios
+                  Catálogo de servicios
                 </ThemedText>
               </View>
             </Pressable>
@@ -214,11 +261,16 @@ export default function More() {
                 />
                 <ThemedText darkColor="black">
                   {"    "}
-                  Eliminar cuenta
+                  Eliminar cuenta xxxx
                 </ThemedText>
               </View>
             </Pressable>
           </View>
+          {/* <UploadOptionPictureModal
+            activeCamera={activeCamera}
+            open={openModal}
+            handleCloseModal={handleOpenModal}
+          /> */}
         </View>
       )}
     </View>
