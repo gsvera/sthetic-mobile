@@ -98,7 +98,12 @@ export default function More() {
           />
         );
       case COMPONENTS_SETINGS.TYPE_SERVICES:
-        return <TypeServices returnBack={() => handleView("")} />;
+        return (
+          <TypeServices
+            idUser={dataUser?.id}
+            returnBack={() => handleView("")}
+          />
+        );
       case COMPONENTS_SETINGS.SERVICES_CATALOG:
         return <ServicesCatalog returnBack={() => handleView("")} />;
       default:
@@ -233,7 +238,7 @@ export default function More() {
                 />
                 <ThemedText darkColor="black">
                   {"    "}
-                  Catálogo de servicios
+                  Catálogo de servicios xxxx
                 </ThemedText>
               </View>
             </Pressable>

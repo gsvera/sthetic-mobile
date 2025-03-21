@@ -11,5 +11,11 @@ export const REACT_QUERY_KEYS = {
     },
     lada: {
         getFilterData: (key:string) => `get-lada-filter-data-${key}`
+    },
+    catalogs: {
+        typeServices: {
+            getByUser: (key: string) => `get-catalogs-type-by-user-${key}`,
+            getAll: (key:string) => `get-all-catalogs-type-services-${key}`
+        }
     }
 }
