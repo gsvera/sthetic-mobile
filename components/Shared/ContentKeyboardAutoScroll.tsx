@@ -37,7 +37,6 @@ const localStyles = StyleSheet.create({
     flex: 1,
   },
   ScrollContainer: {
-    padding: 20,
     flexGrow: 1, // Asegura que el contenido ocupe todo el espacio
     justifyContent: "center",
   },

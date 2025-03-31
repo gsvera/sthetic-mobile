@@ -16,6 +16,9 @@ export const REACT_QUERY_KEYS = {
         typeServices: {
             getByUser: (key: string) => `get-catalogs-type-by-user-${key}`,
             getAll: (key:string) => `get-all-catalogs-type-services-${key}`
+        },
+        services: {
+            getByUserId: (key:string) => `get-catalog-user-service-by-id-${key}`
         }
     }
 }

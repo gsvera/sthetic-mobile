@@ -8,14 +8,10 @@ import {
 } from "@/components/Shared/Notifications/AlertMessage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiUser } from "@/api/User";
-import {
-  getStoreSession,
-  KEY_STORE,
-  setStoreSession,
-} from "@/hooks/StoreDataSecure";
+import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
 import { useNavigation } from "expo-router";
 import { useApiProvider } from "@/provider/InterceptorProvider";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { COMPONENTS_SETINGS } from "@/constants/Constants";
 import PersonalInformation, {
   formPersonalInformation,
@@ -24,10 +20,7 @@ import { Image } from "react-native";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import ChangePassword from "@/components/Modules/Settings/ChangePassword";
 import MyLocation from "@/components/Modules/Settings/MyLocation";
-import { Camera } from "expo-camera";
 import CameraCustom from "@/components/Modules/Settings/CameraCustom";
-import UploadOptionPictureModal from "@/components/Shared/UploadOptionPictureModal";
-import { UserType } from "@/utils/types";
 import ServicesCatalog from "@/components/Modules/Settings/ServicesCatalog";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import TypeServices from "@/components/Modules/Settings/TypeServices";
@@ -54,14 +47,19 @@ export default function More() {
 
   const handleSuccessLogout = async (data: ResponseAPi) => {
     if (!data.data.error) {
-      setToken(null);
-      await setStoreSession({ key: KEY_STORE.userToken, value: "" });
-      navigation.navigate("login" as never);
+      deleteSession();
     }
   };
 
   const handleErrorLogout = (err: any) => {
     ErrorAlertMessage();
+    deleteSession();
+  };
+
+  const deleteSession = async () => {
+    setToken(null);
+    await setStoreSession({ key: KEY_STORE.userToken, value: "" });
+    navigation.navigate("login" as never);
   };
 
   const handleView = (view: string) => {
@@ -105,15 +103,16 @@ export default function More() {
           />
         );
       case COMPONENTS_SETINGS.SERVICES_CATALOG:
-        return <ServicesCatalog returnBack={() => handleView("")} />;
+        return (
+          <ServicesCatalog
+            returnBack={() => handleView("")}
+            idUser={dataUser?.id}
+          />
+        );
       default:
         return <View></View>;
     }
   };
-
-  // const handleOpenModal = () => {
-  //   setOpenModal((v) => !v);
-  // };
 
   const activeCamera = () => {
     handleView(COMPONENTS_SETINGS.PROFILE_PICTURE);
@@ -136,10 +135,7 @@ export default function More() {
       ) : (
         <View>
           <View style={localStyle.contentHeader}>
-            <TouchableOpacity
-              // onPress={() => handleView(COMPONENTS_SETINGS.PROFILE_PICTURE)}
-              onPress={activeCamera}
-            >
+            <TouchableOpacity onPress={activeCamera}>
               <Image
                 source={
                   !dataUser?.profilePictureB64
@@ -238,7 +234,7 @@ export default function More() {
                 />
                 <ThemedText darkColor="black">
                   {"    "}
-                  Catálogo de servicios xxxx
+                  Catálogo de servicios
                 </ThemedText>
               </View>
             </Pressable>

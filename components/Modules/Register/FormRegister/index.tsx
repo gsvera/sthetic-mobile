@@ -143,7 +143,7 @@ export const FormRegister = ({
     <ContentKeyboardAutoScroll>
       <View style={localStyles.ContentForm}>
         <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>Nombre(s)</Text>
+          <Text style={localStyles.label}>* Nombre(s)</Text>
           <Controller
             control={control}
             name="firstName"
@@ -162,7 +162,7 @@ export const FormRegister = ({
           )}
         </View>
         <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>Apellido(s)</Text>
+          <Text style={localStyles.label}>* Apellido(s)</Text>
           <Controller
             control={control}
             name="lastName"
@@ -181,7 +181,7 @@ export const FormRegister = ({
           )}
         </View>
         <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>Numero de telefono</Text>
+          <Text style={localStyles.label}>* Numero de telefono</Text>
           <View
             style={{
               flexDirection: "row",
@@ -244,7 +244,7 @@ export const FormRegister = ({
           )}
         </View>
         <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>Email</Text>
+          <Text style={localStyles.label}>* Email</Text>
           <Controller
             control={control}
             name="email"
@@ -264,7 +264,7 @@ export const FormRegister = ({
           )}
         </View>
         <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>Contraseña</Text>
+          <Text style={localStyles.label}>* Contraseña</Text>
           <Controller
             control={control}
             name="password"
@@ -296,7 +296,7 @@ export const FormRegister = ({
           )}
         </View>
         <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>Confirmar Contraseña</Text>
+          <Text style={localStyles.label}>* Confirmar Contraseña</Text>
           <Controller
             control={control}
             name="confirmPassword"
