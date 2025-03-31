@@ -142,7 +142,7 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
               );
             })}
           </View>
-          <View style={{ marginTop: 20, paddingHorizontal: 20 }}>
+          <View style={ButtonStyle.contentBtn}>
             <Button
               title="Guardar"
               color={

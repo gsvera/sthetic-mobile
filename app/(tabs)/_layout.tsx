@@ -24,8 +24,6 @@ export default function TabLayout() {
     setToken(value);
   });
 
-  // setStoreSession({ key: KEY_STORE.userToken, value: "" });
-
   if (tokenSession === null) return <Redirect href="/login" />;
 
   return (

@@ -12,14 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  View,
-  TextInput,
-  Text,
-  Button,
-} from "react-native";
+import { StyleSheet, View, TextInput, Text, Button } from "react-native";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -67,13 +60,11 @@ export const PersonalInformation = ({
   const [disableButton, setDisableButton] = useState(true);
   const queryClient = useQueryClient();
   const initFormData = formDataInformation;
-  const [lada, setLada] = useState(); // DEBE ESTAS CON EL useform PERO POR EL MOMENTO NO SE VA A EDITAR
+  const [lada, setLada] = useState(); // PENDIENTE A REVISAR: DEBE ESTAS CON EL useform PERO POR EL MOMENTO NO SE VA A EDITAR
   const {
     control,
     handleSubmit,
-    setValue,
     watch,
-    getValues,
     formState: { errors },
   } = useForm<formPersonalInformation>({
     resolver: yupResolver(schema),
@@ -141,7 +132,6 @@ export const PersonalInformation = ({
     try {
       updatePersonalInformation(data);
     } catch (err) {
-      // console.log(err);
       ErrorAlertMessage();
     }
   };
@@ -152,13 +142,10 @@ export const PersonalInformation = ({
         subtitle="Mis datos personales"
         handleReturn={returnBack}
       />
-      {/* {loadingData ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : ( */}
       <View style={{ justifyContent: "center", flexDirection: "row" }}>
         <View style={{ width: "80%", paddingTop: 20 }}>
           <View style={{ marginVertical: 10 }}>
-            <ThemedText style={localStyle.label}>Nombre(s)</ThemedText>
+            <ThemedText style={localStyle.label}>* Nombre(s)</ThemedText>
             <Controller
               control={control}
               name="firstName"
@@ -177,7 +164,7 @@ export const PersonalInformation = ({
             )}
           </View>
           <View style={{ marginVertical: 10 }}>
-            <ThemedText style={localStyle.label}>Apellido(s)</ThemedText>
+            <ThemedText style={localStyle.label}>* Apellido(s)</ThemedText>
             <Controller
               control={control}
               name="lastName"
@@ -218,7 +205,7 @@ export const PersonalInformation = ({
                   /> */}
               </View>
               <View style={{ width: "60%" }}>
-                <ThemedText style={localStyle.label}>Telefono</ThemedText>
+                <ThemedText style={localStyle.label}>* Telefono</ThemedText>
                 <Controller
                   control={control}
                   name="phone"
@@ -240,7 +227,7 @@ export const PersonalInformation = ({
             </View>
           </View>
           <View style={{ marginVertical: 10 }}>
-            <ThemedText style={localStyle.label}>Email</ThemedText>
+            <ThemedText style={localStyle.label}>* Email</ThemedText>
             <Controller
               control={control}
               name="email"
@@ -282,7 +269,7 @@ const localStyle = StyleSheet.create({
   label: {
     fontSize: 18,
     fontWeight: "bold",
-    color: GlobalColors.blackColor,
+    color: GlobalColors.blueColor,
     marginBottom: 10,
   },
   contentButton: {
