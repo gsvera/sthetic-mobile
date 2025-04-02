@@ -54,7 +54,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   const { mutate: saveLocation } = useMutation({
     mutationFn: (data: dataLocationType) => apiUserConfig.saveLocation(data),
     onSuccess: (response: ResponseAPi) => handleSaveResponse(response),
-    onError: (err) => handleSaveError(err),
+    onError: (err) => ErrorAlertMessage,
   });
 
   const handleSaveResponse = (data: ResponseAPi) => {
@@ -69,11 +69,6 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
         message: data.data.message,
       });
     }
-  };
-
-  const handleSaveError = (err: any) => {
-    // console.log("🚀 ~ handleSaveError ~ err:", err);
-    ErrorAlertMessage();
   };
 
   useEffect(() => {

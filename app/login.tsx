@@ -53,7 +53,7 @@ export default function Login() {
 
   const handleSuccessLogin = (data: ObjectResponse) => {
     if (data.error) {
-      ErrorAlertMessage("Usuario o contraseña invalido");
+      ErrorAlertMessage({ message: "Usuario o contraseña invalido" });
       return;
     }
     setStoreSession({
@@ -65,9 +65,10 @@ export default function Login() {
   };
 
   const handleError = (error: any) => {
-    ErrorAlertMessage(
-      "Hubo un problema al querer inciar sesión, por favor intentelo mas tarde"
-    );
+    ErrorAlertMessage({
+      message:
+        "Hubo un problema al querer inciar sesión, por favor intentelo mas tarde",
+    });
   };
 
   useEffect(() => {

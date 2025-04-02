@@ -18,7 +18,8 @@ export const REACT_QUERY_KEYS = {
             getAll: (key:string) => `get-all-catalogs-type-services-${key}`
         },
         services: {
-            getByUserId: (key:string) => `get-catalog-user-service-by-id-${key}`
+            getByUserId: (key:string) => `get-catalog-user-service-by-id-${key}`,
+            getToEdit: (key:number) => `get-catalog-user-service-to-edit-${key}`
         }
     }
 }

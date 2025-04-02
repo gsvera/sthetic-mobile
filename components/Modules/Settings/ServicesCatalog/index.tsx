@@ -16,14 +16,23 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { TYPE_STATUS } from "@/constants/Constants";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import ModalConfirm from "@/components/Shared/ModalConfirm";
+import { fileTypes } from "@/constants/GeneralTypes";
+import UploadVideoModal from "./OptionUploadModal/UploadVideoModal";
+import { ButtonGeneralStyle } from "@/constants/StyleComponents";
+
+/**
+ * ESTE ARCHIVO TIENE COMENTADO LAS OPCIONES PARA SUBIR VIDEO PARA UN FUTURO
+ * @param param0
+ * @returns
+ */
 
 export const ServicesCatalog = ({
   returnBack,
   idUser,
 }: functionServicesType) => {
   const { handleNotification } = useNotificationProvider();
-  const [openModalOption, setOpenModalOption] = useState(false);
-  const [openModalImage, setOpenModalImage] = useState(false);
+  // const [openModalOption, setOpenModalOption] = useState(false);
+  const [openModalUpload, setOpenModalUpload] = useState<fileTypes>(null);
   const [openModalConfirm, setOpenModalConfirm] = useState(false);
   const [idSelected, setIdSelected] = useState(0);
 
@@ -45,28 +54,45 @@ export const ServicesCatalog = ({
     mutationFn: (data: any) => apiCatalogUserService.saveCatalogService(data),
     onSuccess: (data: ResponseAPi) =>
       handleSuccessSaveCatalogService(data.data),
-    onError: (err) => ErrorAlertMessage(err.message),
+    onError: (err) => ErrorAlertMessage,
+  });
+
+  const { mutate: updateCatalogService } = useMutation({
+    mutationFn: (data: any) => apiCatalogUserService.updateCatalogService(data),
+    onSuccess: (data: ResponseAPi) =>
+      handleSuccessUpdateCatalogService(data.data),
+    onError: (err) => ErrorAlertMessage,
   });
 
   const { mutate: deleteProject } = useMutation({
     mutationFn: (data: any) => apiCatalogUserService.deleteProject(data),
     onSuccess: (data: ResponseAPi) => handleSuccessDeleteProject(data.data),
-    onError: (err) => ErrorAlertMessage(err.message),
+    onError: (err) => ErrorAlertMessage,
   });
 
   const handleSuccessSaveCatalogService = (data: ObjectResponse) => {
-    if (data.error) return ErrorAlertMessage(data.message);
+    if (data.error) return ErrorAlertMessage({ message: data.message });
 
     refetchGetProject();
     handleNotification({
       type: TYPE_STATUS.SUCCESS,
       message: data.message,
     });
-    handleOpenModalImage();
+    handleOpenTypeModalUpload(null);
+  };
+
+  const handleSuccessUpdateCatalogService = (data: ObjectResponse) => {
+    if (data.error) return ErrorAlertMessage({ message: data.message });
+    refetchGetProject();
+    handleNotification({
+      type: TYPE_STATUS.UPDATE,
+      message: data.message,
+    });
+    handleOpenTypeModalUpload(null);
   };
 
   const handleSuccessDeleteProject = (data: ObjectResponse) => {
-    if (data.error) return ErrorAlertMessage(data.message);
+    if (data.error) return ErrorAlertMessage({ message: data.message });
 
     refetchGetProject();
     handleNotification({
@@ -80,13 +106,14 @@ export const ServicesCatalog = ({
     setOpenModalConfirm(true);
   };
 
-  const handleOpenModalOption = () => {
-    setOpenModalOption((v) => !v);
-  };
+  // const handleOpenModalOption = () => {
+  //   setOpenModalOption((v) => !v);
+  // };
 
-  const handleOpenModalImage = () => {
-    handleOpenModalOption();
-    setOpenModalImage((v) => !v);
+  const handleOpenTypeModalUpload = (data: fileTypes = null) => {
+    // handleOpenModalOption();
+    setIdSelected(0);
+    setOpenModalUpload(data);
   };
 
   const handleOpenModalConfirm = useCallback(() => {
@@ -99,6 +126,14 @@ export const ServicesCatalog = ({
     setOpenModalConfirm(false);
   }, [idSelected]);
 
+  const openEditProject = useCallback(
+    (idProject: number) => {
+      setIdSelected(idProject);
+      setOpenModalUpload("image");
+    },
+    [idSelected]
+  );
+
   return (
     <View>
       <SubHeaderReturn
@@ -107,8 +142,9 @@ export const ServicesCatalog = ({
       />
       <View style={localStyle.contentBtnAdd}>
         <TouchableOpacity
-          style={localStyle.btnAddProject}
-          onPress={handleOpenModalOption}
+          style={ButtonGeneralStyle.btnAction}
+          // onPress={handleOpenModalOption} // Cuando mejore el proyecto habilitaremos la opcion de subir videos ;-)
+          onPress={() => handleOpenTypeModalUpload("image")}
         >
           <View style={localStyle.btnContent}>
             <ThemedText
@@ -138,23 +174,35 @@ export const ServicesCatalog = ({
                 totalElement={item.totalElement}
                 catalogUserServiceDetailDTO={item.catalogUserServiceDetailDTO}
                 deleteProject={handleSelectDeleteProject}
+                editProject={openEditProject}
               />
             ))}
           </View>
         </ScrollView>
       )}
 
-      <OptionUploadModal
-        open={openModalOption}
-        handleCloseModal={handleOpenModalOption}
-        handleOpenImageModal={handleOpenModalImage}
-      />
       <UploadImageModal
-        open={openModalImage}
-        handleCloseModal={handleOpenModalImage}
+        open={openModalUpload === "image"}
+        handleCloseModal={handleOpenTypeModalUpload}
         idUser={idUser}
         handleSave={saveCatalogService}
+        handleUpdate={updateCatalogService}
+        idEntity={idSelected}
       />
+      {/* 
+        Cuando mejore el proyecto habilitaremos la opcion de subir videos ;-) 
+      */}
+      {/* <OptionUploadModal
+          open={openModalOption}
+          handleCloseModal={handleOpenModalOption}
+          handleOpenTypeModalUpload={handleOpenTypeModalUpload}
+        /> */}
+      {/* <UploadVideoModal
+        open={openModalUpload === "video"}
+        handleCloseModal={handleOpenTypeModalUpload}
+        idUser={idUser}
+        handleSave={saveCatalogService}
+      /> */}
       <ModalConfirm
         open={openModalConfirm}
         handleClose={handleOpenModalConfirm}
@@ -185,7 +233,8 @@ const localStyle = StyleSheet.create({
   },
   scrollViewGallery: {
     height: "80%",
-    padding: 10,
+    paddingHorizontal: 10,
+    marginTop: 10,
   },
 });
 

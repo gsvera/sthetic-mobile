@@ -129,12 +129,12 @@ export const FormRegister = ({
       );
 
       if (searchUser.data.error) {
-        ErrorAlertMessage(searchUser.data.message);
+        ErrorAlertMessage({ message: searchUser.data.message });
       } else {
         handlePersonalInformation(data);
       }
     } catch (err) {
-      ErrorAlertMessage();
+      ErrorAlertMessage({});
       // console.log(err);
     }
   };

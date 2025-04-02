@@ -22,3 +22,7 @@ export enum TYPE_STATUS {
     SUCCESS = 'success',
     ERROR = 'error'
 }
+
+export enum MAX_LENGTH {
+    MAX_FILE_TO_UPLOAD = 5
+}

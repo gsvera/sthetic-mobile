@@ -7,7 +7,7 @@ export type imageWithOptiosProps = {
   uri: string;
   iconDelete?: "close" | "trash";
   styleImg?: {};
-  deleteAction: (id: number | string) => void;
+  deleteAction?: (id: number | string) => void;
 };
 
 export const ImageWithOptions = ({
@@ -17,15 +17,12 @@ export const ImageWithOptions = ({
   iconDelete,
   styleImg,
 }: imageWithOptiosProps) => {
-  const handleRemovePicture = (id: number | string) => {
-    deleteAction(id);
+  const handleRemovePicture = () => {
+    deleteAction?.(id);
   };
   return (
     <View style={styleImg || localStyle.contentImg}>
-      <Pressable
-        style={localStyle.removeIconImg}
-        onPress={() => handleRemovePicture(id)}
-      >
+      <Pressable style={localStyle.removeIconImg} onPress={handleRemovePicture}>
         {iconDelete === "trash" ? (
           <Feather name="trash" size={24} color="red" />
         ) : (

@@ -84,7 +84,7 @@ export const PersonalInformation = ({
     mutationFn: (data: formPersonalInformation) =>
       apiUser.updatePersonalInformation(data),
     onSuccess: (data: ResponseAPi) => handleSuccessUpdate(data),
-    onError: (err) => handleErrorUpdate(err),
+    onError: (err) => ErrorAlertMessage,
   });
 
   const handleSuccessUpdate = (data: ResponseAPi) => {
@@ -103,11 +103,6 @@ export const PersonalInformation = ({
       message: "Sus datos se han actualizado con éxito",
     });
     returnBack();
-  };
-
-  const handleErrorUpdate = (err: any) => {
-    // console.log("🚀 ~ handleErrorUpdate ~ err:", err);
-    ErrorAlertMessage();
   };
 
   // EFFECTS
@@ -132,7 +127,7 @@ export const PersonalInformation = ({
     try {
       updatePersonalInformation(data);
     } catch (err) {
-      ErrorAlertMessage();
+      ErrorAlertMessage({});
     }
   };
 
