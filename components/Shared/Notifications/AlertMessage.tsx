@@ -1,9 +1,15 @@
 import { Alert } from "react-native";
 
-export const ErrorAlertMessage = (
-  message = "Ocurrió un error al realizar la solicitud, favor de intentarlo mas tarde"
-) => {
-  return Alert.alert("Advertencia", message, [
+type ErrorAlertMessageProps = {
+  title?: string;
+  message?: string;
+};
+
+export const ErrorAlertMessage = ({
+  title = "Advertencia",
+  message = "Ocurrió un error al realizar la solicitud, favor de intentarlo mas tarde",
+}: ErrorAlertMessageProps) => {
+  return Alert.alert(title, message, [
     {
       text: "Cerrar",
       style: "cancel",

@@ -4,15 +4,16 @@ import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { modalCustomProps } from "./types";
+import { fileTypes } from "@/constants/GeneralTypes";
 
 type optionsUploadModal = modalCustomProps & {
-  handleOpenImageModal: () => void;
+  handleOpenTypeModalUpload: (data: fileTypes) => void;
 };
 
 export const OptionUploadModal = ({
   open,
   handleCloseModal,
-  handleOpenImageModal,
+  handleOpenTypeModalUpload,
 }: optionsUploadModal) => {
   return (
     <Modal animationType="slide" transparent={true} visible={open}>
@@ -26,7 +27,7 @@ export const OptionUploadModal = ({
         <View style={localStyle.modalView}>
           <TouchableOpacity
             style={{ flexDirection: "row" }}
-            onPress={handleOpenImageModal}
+            onPress={() => handleOpenTypeModalUpload("image")}
           >
             <ThemedText style={localStyle.label} darkColor="black">
               Cargar imagen {"  "}
@@ -34,7 +35,10 @@ export const OptionUploadModal = ({
             <AntDesign name="picture" size={24} color="black" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            style={{ flexDirection: "row" }}
+            onPress={() => handleOpenTypeModalUpload("video")}
+          >
             <ThemedText style={localStyle.label} darkColor="black">
               Cargar video{"  "}
             </ThemedText>

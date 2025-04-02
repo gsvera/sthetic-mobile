@@ -3,3 +3,5 @@ export type selectOptionType = {
     value: string,
     checked?: boolean
 }
+
+export type fileTypes = 'image' | 'video' | null;

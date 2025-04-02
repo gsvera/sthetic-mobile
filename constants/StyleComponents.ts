@@ -24,13 +24,41 @@ export const ButtonGeneralStyle = StyleSheet.create({
         backgroundColor: GlobalColors.blueSuccessColor,
         paddingVertical: 5,
         paddingHorizontal:10,
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 3,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    btnInfo: {
+        backgroundColor: GlobalColors.cianColor,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 3,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     btnCancel: {
         backgroundColor: GlobalColors.grayColor,
         paddingVertical: 5,
         paddingHorizontal:10,
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 3,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    btnAction: {
+        backgroundColor: GlobalColors.blueColor,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 3,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     btnBig: {
         width: '48%'
@@ -44,6 +72,15 @@ export const TextStyle = StyleSheet.create({
     },
     darkColor: {
         color: GlobalColors.blackColor
+    },
+    lightColor: {
+        color: GlobalColors.whiteColor
+    },
+    bold: {
+        fontWeight: 'bold'
+    },
+    center: {
+        textAlign: 'center'
     }
 })
 

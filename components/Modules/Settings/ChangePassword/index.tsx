@@ -49,7 +49,7 @@ export const ChangePassword = ({ returnBack }: changePasswordProps) => {
   };
 
   const handleErrorUpdate = (err: any) => {
-    ErrorAlertMessage();
+    ErrorAlertMessage({});
   };
 
   useEffect(() => {

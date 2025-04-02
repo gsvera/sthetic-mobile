@@ -42,7 +42,7 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
   const { mutate: saveTypeServices } = useMutation({
     mutationFn: (data: any) => apiTypeService.saveTypeServiceByUser(data),
     onSuccess: (data: ResponseAPi) => handleSuccessSaveTypeServices(data.data),
-    onError: (error) => ErrorAlertMessage(error.message),
+    onError: (error) => ErrorAlertMessage,
   });
 
   const handleSuccessSaveTypeServices = (data: ObjectResponse) => {

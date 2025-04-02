@@ -49,24 +49,17 @@ export default function newAccount() {
   const { mutate: createUser } = useMutation({
     mutationFn: (data: any) => apiUser.saveUser(data),
     onSuccess: (data: ResponseAPi) => handleSuccessSaveUser(data?.data),
-    onError: (err) => handleErrorSaveUser(err),
+    onError: (err) => ErrorAlertMessage,
   });
 
   const handleSuccessSaveUser = (data: ObjectResponse) => {
-    // console.log("🚀 ~ handleSuccessSaveUser ~ data:", data);
     if (data.error) {
-      // console.log("🚀 ~ handleSuccessSaveUser ~ data.error:", data.error);
-      ErrorAlertMessage(data.message);
+      ErrorAlertMessage({ message: data.message });
       return;
     }
     setStoreSession({ key: KEY_STORE.userToken, value: data.items.token });
     setToken(data.items.token);
     setShowMessageSuccess(true);
-  };
-
-  const handleErrorSaveUser = (error: any) => {
-    // console.log("🚀 ~ handleErrorSaveUser ~ error:", error);
-    ErrorAlertMessage();
   };
 
   const handlePersonalInformationStore = (personalInformation: FormInputs) => {

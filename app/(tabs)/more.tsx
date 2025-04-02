@@ -52,7 +52,7 @@ export default function More() {
   };
 
   const handleErrorLogout = (err: any) => {
-    ErrorAlertMessage();
+    ErrorAlertMessage({});
     deleteSession();
   };
 
