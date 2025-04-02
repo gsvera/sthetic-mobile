@@ -18,6 +18,7 @@ import SuccessNotification from "@/components/Shared/Notifications/SuccessNotifi
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
 import { useApiProvider } from "@/provider/InterceptorProvider";
+import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
 
 enum STEP_CREATION_PROFILE {
   FIELD_PROFILE = 1,
@@ -84,6 +85,7 @@ export default function newAccount() {
       // EL ID PROFILE 2 ES PARA LOS QUE PRESENTAN SERVICIOS
       createUser({
         ...personalInformation,
+        password: parsePasswordEncrypt(personalInformation?.password as string),
         planSelect: plan.id,
         idProfile: 2,
       });

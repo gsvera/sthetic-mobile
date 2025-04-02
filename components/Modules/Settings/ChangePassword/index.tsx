@@ -6,6 +6,7 @@ import { GlobalColors } from "@/constants/Colors";
 import { REGEX, TYPE_STATUS } from "@/constants/Constants";
 import { ButtonStyle, GeneralStyle } from "@/constants/StyleComponents";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
+import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -62,7 +63,7 @@ export const ChangePassword = ({ returnBack }: changePasswordProps) => {
   };
 
   const handleSubmitUpdate = () => {
-    updatePassword(valuePass);
+    updatePassword(parsePasswordEncrypt(valuePass));
   };
 
   return (

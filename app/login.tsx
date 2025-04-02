@@ -7,7 +7,7 @@ import {
   textColors,
 } from "@/constants/Colors";
 import { Link, useNavigation } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Button,
@@ -17,6 +17,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -28,6 +29,9 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
 import { useApiProvider } from "@/provider/InterceptorProvider";
 import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
+import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
+import { loginData } from "@/constants/GeneralTypes";
+import { Ionicons } from "@expo/vector-icons";
 
 const schema = yup.object({
   username: yup.string().required("Ingrese un usuario valid"),
@@ -44,9 +48,10 @@ export default function Login() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const [hiddenPass, setHiddenPass] = useState(true);
 
   const { mutate: login } = useMutation({
-    mutationFn: (data) => apiUser.login(data),
+    mutationFn: (data: loginData) => apiUser.login(data),
     onSuccess: (data: ResponseAPi) => handleSuccessLogin(data.data),
     onError: (error: any) => handleError(error),
   });
@@ -77,9 +82,10 @@ export default function Login() {
 
   const imageBg = require("@/assets/images/background.webp");
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: loginData) => {
     setToken(null);
-    login(data);
+    const passwordEncrypt = parsePasswordEncrypt(data.password);
+    login({ ...data, password: passwordEncrypt });
   };
 
   return (
@@ -117,14 +123,26 @@ export default function Login() {
               control={control}
               name="password"
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={loginStyle.input}
-                  placeholder="Ingrese su password"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  secureTextEntry={true}
-                />
+                <View style={{ flexDirection: "row" }}>
+                  <TextInput
+                    style={loginStyle.input}
+                    placeholder="Ingrese su password"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    secureTextEntry={hiddenPass}
+                  />
+                  <TouchableOpacity
+                    style={styles.icon}
+                    onPress={() => setHiddenPass((prev) => !prev)}
+                  >
+                    <Ionicons
+                      name={hiddenPass ? "eye-off" : "eye"}
+                      size={24}
+                      color="gray"
+                    />
+                  </TouchableOpacity>
+                </View>
               )}
             />
           </View>
@@ -169,5 +187,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 30,
     color: GlobalColors.pinkColor,
+  },
+  icon: {
+    marginVertical: "auto",
+    marginLeft: -30,
   },
 });
