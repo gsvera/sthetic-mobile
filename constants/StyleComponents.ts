@@ -84,6 +84,19 @@ export const TextStyle = StyleSheet.create({
     }
 })
 
+export const InputStyle = StyleSheet.create({
+    withBorder: {
+        borderWidth: 1,
+        borderColor: "gray",
+        borderRadius: 5,
+        padding: 10,
+    },
+    bigBox: {
+        height: 100
+    }
+})
+
+
 export const GeneralStyle = StyleSheet.create({
     simpleInput: {
         flexDirection: "row",

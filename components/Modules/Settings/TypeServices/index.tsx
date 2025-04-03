@@ -1,4 +1,10 @@
-import { Button, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { functionServicesType } from "../types";
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
 import { useEffect, useMemo, useState } from "react";
@@ -8,7 +14,11 @@ import { apiTypeService } from "@/api/TypeService";
 import Checkbox from "expo-checkbox";
 import { ThemedText } from "@/components/ThemedText";
 import { selectOptionType } from "@/constants/GeneralTypes";
-import { ButtonStyle } from "@/constants/StyleComponents";
+import {
+  ButtonStyle,
+  InputStyle,
+  TextStyle,
+} from "@/constants/StyleComponents";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { TYPE_STATUS } from "@/constants/Constants";
@@ -17,6 +27,7 @@ import LoadingView from "@/components/Shared/LoadingView";
 export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
   const { handleNotification } = useNotificationProvider();
   const [selectedKeys, setSelectedKeys] = useState<number[]>([]);
+  const [generalDescription, setGeneralDescription] = useState("");
 
   const { data: listCatalogType = [], isPending: isPendingCatalogType } =
     useQuery({
@@ -29,15 +40,16 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
       },
     });
 
-  const { data: listTypeByUser = [], isPending: isPendingByUser } = useQuery({
-    queryKey: [
-      REACT_QUERY_KEYS.catalogs.typeServices.getByUser(idUser as string),
-    ],
-    queryFn: () => apiTypeService.getByUser(idUser),
-    ...{
-      select: (data: ResponseAPi) => data.data.items,
-    },
-  });
+  const { data: descriptionService = [], isPending: isPendingByUser } =
+    useQuery({
+      queryKey: [
+        REACT_QUERY_KEYS.catalogs.typeServices.getByUser(idUser as string),
+      ],
+      queryFn: () => apiTypeService.getByUser(idUser),
+      ...{
+        select: (data: ResponseAPi) => data.data.items,
+      },
+    });
 
   const { mutate: saveTypeServices } = useMutation({
     mutationFn: (data: any) => apiTypeService.saveTypeServiceByUser(data),
@@ -60,21 +72,30 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
   };
 
   useEffect(() => {
-    if (listTypeByUser.length > 0) {
-      const keysByUser = [];
-      for (let i = 0; i < listTypeByUser.length; i++) {
-        keysByUser.push(listTypeByUser[i]?.idTypeService);
+    if (descriptionService) {
+      setGeneralDescription(
+        descriptionService?.descriptionService?.generalDescription
+      );
+      if (descriptionService?.listType?.length > 0) {
+        const keysByUser = [];
+        const arrItems = descriptionService.listType;
+        for (let i = 0; i < arrItems.length; i++) {
+          keysByUser.push(arrItems[i]?.idTypeService);
+        }
+        setSelectedKeys(keysByUser);
       }
-      setSelectedKeys(keysByUser);
     }
-  }, [listTypeByUser]);
+  }, [descriptionService]);
 
   const isPendingLoad = useMemo(
     () => isPendingByUser || isPendingCatalogType,
     [isPendingByUser, isPendingCatalogType]
   );
 
-  const disabledBtn = useMemo(() => selectedKeys.length === 0, [selectedKeys]);
+  const disabledBtn = useMemo(
+    () => selectedKeys.length === 0 || !generalDescription,
+    [selectedKeys, generalDescription]
+  );
 
   const listOption = useMemo(
     () =>
@@ -110,16 +131,35 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
     saveTypeServices({
       idUser,
       idsType: selectedKeys.toString(),
+      generalDescription,
     });
   };
 
   return (
     <View>
       <SubHeaderReturn subtitle="Tipo de servicios" handleReturn={returnBack} />
+      <View style={{ width: "90%", marginHorizontal: "auto", paddingTop: 10 }}>
+        <ThemedText
+          style={{
+            ...TextStyle.fontBoldDark,
+            ...TextStyle.center,
+            marginBottom: 10,
+          }}
+        >
+          Agrega una breve descripción del servicio que realizas
+        </ThemedText>
+        <TextInput
+          style={{ ...InputStyle.withBorder, ...InputStyle.bigBox }}
+          onChangeText={setGeneralDescription}
+          value={generalDescription}
+          multiline
+          numberOfLines={6}
+        />
+      </View>
       {isPendingLoad ? (
         <LoadingView />
       ) : (
-        <View>
+        <View style={{ width: "90%", marginHorizontal: "auto" }}>
           <View>
             <View style={localStyle.textDescription}>
               <ThemedText darkColor="black" style={{ fontWeight: "bold" }}>
