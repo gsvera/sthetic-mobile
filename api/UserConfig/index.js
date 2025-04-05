@@ -8,6 +8,9 @@ export const apiUserConfig = {
       `${BASE_URL}/get-location-by-user?id-user=${idUser}`
     );
   },
+  getPlanByUser: function (idUser) {
+    return axiosInstance.get(`${BASE_URL}/get-my-current-plan/${idUser}`);
+  },
   saveLocation: function (data) {
     return axiosInstance.post(`${BASE_URL}/save-location`, data);
   },

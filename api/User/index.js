@@ -5,7 +5,7 @@ const AUTH_BASE_URL = "/auth-user";
 
 export const apiUser = {
   saveUser: function (data) {
-    return axiosInstance.post(`${BASE_URL}/save`, data);
+    return axiosInstance.post(`${BASE_URL}/save/user-sthetic-work`, data);
   },
   findDuplicateUser: function (email, phone) {
     return axiosInstance.get(

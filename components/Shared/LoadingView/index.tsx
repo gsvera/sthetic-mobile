@@ -1,16 +1,20 @@
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
-export const LoadingView = () => {
+type loadingViewProps = {
+  styleProps?: {};
+};
+export const LoadingView = ({ styleProps }: loadingViewProps) => {
   return (
-    <View
-      style={{
-        height: "88%",
-        justifyContent: "center",
-      }}
-    >
+    <View style={styleProps || localStyle}>
       <ActivityIndicator size={"large"} />
     </View>
   );
 };
 
+const localStyle = StyleSheet.create({
+  contentLoader: {
+    height: "88%",
+    justifyContent: "center",
+  },
+});
 export default LoadingView;
