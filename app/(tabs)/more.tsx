@@ -24,6 +24,7 @@ import CameraCustom from "@/components/Modules/Settings/CameraCustom";
 import ServicesCatalog from "@/components/Modules/Settings/ServicesCatalog";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import TypeServices from "@/components/Modules/Settings/TypeServices";
+import MySupscription from "@/components/Modules/Settings/MySupscription";
 
 export default function More() {
   const navigation = useNavigation();
@@ -105,6 +106,13 @@ export default function More() {
       case COMPONENTS_SETINGS.SERVICES_CATALOG:
         return (
           <ServicesCatalog
+            returnBack={() => handleView("")}
+            idUser={dataUser?.id}
+          />
+        );
+      case COMPONENTS_SETINGS.MY_SUBSCRIPTION:
+        return (
+          <MySupscription
             returnBack={() => handleView("")}
             idUser={dataUser?.id}
           />
@@ -191,12 +199,15 @@ export default function More() {
                 </ThemedText>
               </View>
             </Pressable>
-            <Pressable style={localStyle.itemMenu} onPress={() => {}}>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => handleView(COMPONENTS_SETINGS.MY_SUBSCRIPTION)}
+            >
               <View style={localStyle.itemMenuText}>
                 <AntDesign name="idcard" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
                   {"    "}
-                  Mi subscripción xxxx
+                  Mi subscripción
                 </ThemedText>
               </View>
             </Pressable>

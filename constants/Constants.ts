@@ -14,7 +14,8 @@ export enum COMPONENTS_SETINGS {
     MY_LOCATION = 'myLocation',
     PROFILE_PICTURE = 'profilePicture',
     TYPE_SERVICES = 'typeServices',
-    SERVICES_CATALOG = 'services_catalog'
+    SERVICES_CATALOG = 'servicesCatalog',
+    MY_SUBSCRIPTION = 'mySupscription'
 }
 
 export enum TYPE_STATUS {

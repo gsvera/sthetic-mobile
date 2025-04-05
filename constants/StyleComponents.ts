@@ -76,11 +76,23 @@ export const TextStyle = StyleSheet.create({
     lightColor: {
         color: GlobalColors.whiteColor
     },
+    blueColor: {
+        color: GlobalColors.blueColor
+    },
+    redColor: {
+        color: GlobalColors.dangerColor
+    },
     bold: {
         fontWeight: 'bold'
     },
     center: {
         textAlign: 'center'
+    },
+    size20: {
+        fontSize: 20
+    },
+    size40: {
+        fontSize: 40
     }
 })
 
@@ -107,3 +119,15 @@ export const GeneralStyle = StyleSheet.create({
         paddingHorizontal: 10,
     }
 })
+
+export const GridStyle = StyleSheet.create({
+    rowSpaceBetween: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }
+})
+ export const MarginStyle = StyleSheet.create({
+    marginT10: {
+        marginTop: 10
+    }
+ })

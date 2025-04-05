@@ -19,11 +19,14 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
 import { useApiProvider } from "@/provider/InterceptorProvider";
 import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
+import ArrowBack from "@/components/Modules/Register/ArrowBack";
+import FormPay from "@/components/Modules/Register/FormPay";
 
 enum STEP_CREATION_PROFILE {
   FIELD_PROFILE = 1,
   SELECT_PLAN = 2,
   AGREE_CONDITIONS = 3,
+  FORM_PAY = 4,
 }
 
 export default function newAccount() {
@@ -32,6 +35,8 @@ export default function newAccount() {
   const [agreeConditions, setAgreeConditions] = useState(false);
   const [showMessageSucces, setShowMessageSuccess] = useState(false);
   const [planSelected, setPlanSelected] = useState<PlanCardProps | null>(null);
+  const [totalToPay, setTotalToPay] = useState(0);
+  const [coupon, setCoupon] = useState("");
   const [stepView, setStepView] = useState(STEP_CREATION_PROFILE.FIELD_PROFILE);
   const [personalInformation, setPersonalInformation] =
     useState<FormInputs | null>(null);
@@ -61,6 +66,7 @@ export default function newAccount() {
     setStoreSession({ key: KEY_STORE.userToken, value: data.items.token });
     setToken(data.items.token);
     setShowMessageSuccess(true);
+    setStepView(STEP_CREATION_PROFILE.FIELD_PROFILE);
   };
 
   const handlePersonalInformationStore = (personalInformation: FormInputs) => {
@@ -75,19 +81,24 @@ export default function newAccount() {
 
   const handleSelectedPlan = (plan: PlanCardProps) => {
     setPlanSelected(plan);
-    payPlan(plan);
-    // console.log("🚀 ~ handleSelectedPlan ~ plan:", plan);
-    // console.log("por aqui");
+    setStepView(STEP_CREATION_PROFILE.FORM_PAY);
+    // payPlan(plan);
   };
 
-  function payPlan(plan: PlanCardProps) {
-    if (plan && plan.price === 0) {
+  function payPlan() {
+    if (totalToPay === 0) {
       // EL ID PROFILE 2 ES PARA LOS QUE PRESENTAN SERVICIOS
       createUser({
         ...personalInformation,
         password: parsePasswordEncrypt(personalInformation?.password as string),
-        planSelect: plan.id,
+        planSelect: planSelected?.id,
         idProfile: 2,
+        paymentPlanDTO: {
+          planId: planSelected?.id,
+          amountPaid: totalToPay,
+          paymentMethod: "free",
+          codeCoupon: coupon,
+        },
       });
     } else {
       // aqui va la logica para pagar lo mas seguro PAYPAL o MERCADO PAGO hay que validar opciones
@@ -99,10 +110,7 @@ export default function newAccount() {
     setPersonalInformation(null);
     setPlanSelected(null);
     setAgreeConditions(false);
-    // console.log("no");
     navigation.navigate("login" as never);
-    // <Redirect href="/login" />;
-    // console.log("si");
   };
 
   return (
@@ -134,16 +142,10 @@ export default function newAccount() {
           )}
           {stepView === STEP_CREATION_PROFILE.AGREE_CONDITIONS && (
             <>
-              <TouchableOpacity
-                style={{ position: "fixed", left: 20, marginBottom: -25 }}
-                onPress={() => setStepView(STEP_CREATION_PROFILE.FIELD_PROFILE)}
-              >
-                <AntDesign
-                  name="arrowleft"
-                  size={24}
-                  color={GlobalColors.blackColor}
-                />
-              </TouchableOpacity>
+              <ArrowBack
+                view={STEP_CREATION_PROFILE.FIELD_PROFILE}
+                handleReturn={setStepView}
+              />
               <PoliticsAndConditions
                 handleAgreeTerms={handleAgreeConditions}
                 stateCheck={agreeConditions}
@@ -152,19 +154,27 @@ export default function newAccount() {
           )}
           {stepView === STEP_CREATION_PROFILE.SELECT_PLAN && (
             <>
-              <TouchableOpacity
-                style={{ position: "fixed", left: 20, marginBottom: -25 }}
-                onPress={() =>
-                  setStepView(STEP_CREATION_PROFILE.AGREE_CONDITIONS)
-                }
-              >
-                <AntDesign
-                  name="arrowleft"
-                  size={24}
-                  color={GlobalColors.blackColor}
-                />
-              </TouchableOpacity>
+              <ArrowBack
+                view={STEP_CREATION_PROFILE.AGREE_CONDITIONS}
+                handleReturn={setStepView}
+              />
               <Plan selectedPlan={handleSelectedPlan} />
+            </>
+          )}
+          {stepView === STEP_CREATION_PROFILE.FORM_PAY && (
+            <>
+              <ArrowBack
+                view={STEP_CREATION_PROFILE.SELECT_PLAN}
+                handleReturn={setStepView}
+              />
+              <FormPay
+                plan={planSelected}
+                totalToPay={totalToPay}
+                coupon={coupon}
+                changeTotalToPay={setTotalToPay}
+                changeCoupon={setCoupon}
+                handlePay={payPlan}
+              />
             </>
           )}
         </>

@@ -7,7 +7,8 @@ export const REACT_QUERY_KEYS = {
         getLocationByUser: (key:string) => `get-location-by-user${key}`
     },
     plan: {
-        getFilterData: (key:string) => `get-plan-filter-data-${key}`
+        getFilterData: (key:string) => `get-plan-filter-data-${key}`,
+        getByUser:(key:string) => `get-plan-by-user`
     },
     lada: {
         getFilterData: (key:string) => `get-lada-filter-data-${key}`
@@ -20,6 +21,9 @@ export const REACT_QUERY_KEYS = {
         services: {
             getByUserId: (key:string) => `get-catalog-user-service-by-id-${key}`,
             getToEdit: (key:number) => `get-catalog-user-service-to-edit-${key}`
+        },
+        coupon: {
+            getByCode: (key:string) => `get-coupon-by-code-${key}`
         }
     }
 }

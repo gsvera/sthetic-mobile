@@ -1,4 +1,5 @@
 import { GlobalColors } from "@/constants/Colors";
+import { convertCurrency } from "@/utils/GeneralUtils";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type BenefitsPlan = {
@@ -19,7 +20,9 @@ export const PlanCard = (detailPlan: PlanCardProps) => {
     <View style={localStyles.card}>
       <View style={localStyles.cardHeader}>
         <Text style={localStyles.title}>{detailPlan.name}</Text>
-        <Text style={localStyles.price}>${detailPlan.price} / mes</Text>
+        <Text style={localStyles.price}>
+          {convertCurrency(detailPlan.price, 0)} / mes
+        </Text>
       </View>
       <View style={localStyles.benefitsContainer}>
         {detailPlan.planDetails.map((benefit: BenefitsPlan) => (
@@ -33,7 +36,7 @@ export const PlanCard = (detailPlan: PlanCardProps) => {
         style={localStyles.button}
         onPress={() => detailPlan.onSelectPlan(detailPlan)}
       >
-        <Text style={localStyles.buttonText}>Suscribirse</Text>
+        <Text style={localStyles.buttonText}>Elegir</Text>
       </TouchableOpacity>
     </View>
   );
