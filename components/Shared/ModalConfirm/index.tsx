@@ -5,16 +5,22 @@ import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 
 type modalConfirmProps = {
   open: boolean;
-  message: string;
+  title?: string;
+  message?: string;
+  textBtnConfirm?: string;
   handleClose: () => void;
   handleConfirm: () => void;
+  IconModal?: JSX.Element;
 };
 
 export const ModalConfirm = ({
   open,
+  title,
   message,
   handleClose,
   handleConfirm,
+  IconModal,
+  textBtnConfirm,
 }: modalConfirmProps) => {
   return (
     <Modal animationType="slide" transparent={true} visible={open}>
@@ -26,17 +32,16 @@ export const ModalConfirm = ({
         }}
       >
         <View style={localStyle.contentModal}>
-          <ThemedText style={TextStyle.fontBoldDark}>{message}</ThemedText>
+          {IconModal && (
+            <View style={localStyle.contetIconModal}>{IconModal}</View>
+          )}
+          {title && (
+            <ThemedText style={localStyle.textTitle}>{title}</ThemedText>
+          )}
+          {message && (
+            <ThemedText style={TextStyle.darkColor}>{message}</ThemedText>
+          )}
           <View style={localStyle.contentBtns}>
-            <TouchableOpacity
-              style={{
-                ...ButtonGeneralStyle.btnSuccess,
-                ...ButtonGeneralStyle.btnBig,
-              }}
-              onPress={handleConfirm}
-            >
-              <ThemedText>Confirmar</ThemedText>
-            </TouchableOpacity>
             <TouchableOpacity
               style={{
                 ...ButtonGeneralStyle.btnCancel,
@@ -45,6 +50,15 @@ export const ModalConfirm = ({
               onPress={handleClose}
             >
               <ThemedText>Cancelar</ThemedText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                ...ButtonGeneralStyle.btnSuccess,
+                ...ButtonGeneralStyle.btnBig,
+              }}
+              onPress={handleConfirm}
+            >
+              <ThemedText>{textBtnConfirm || "Confirmar"}</ThemedText>
             </TouchableOpacity>
           </View>
         </View>
@@ -71,12 +85,23 @@ const localStyle = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-
+  textTitle: {
+    ...TextStyle.fontBoldDark,
+    ...TextStyle.center,
+    ...TextStyle.size20,
+    marginBottom: 10,
+  },
   contentBtns: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 20,
     marginBottom: 10,
+  },
+  contetIconModal: {
+    justifyContent: "center",
+    flexDirection: "row",
+    marginTop: 10,
+    marginBottom: 15,
   },
 });
 
