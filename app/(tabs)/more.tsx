@@ -25,11 +25,13 @@ import ServicesCatalog from "@/components/Modules/Settings/ServicesCatalog";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import TypeServices from "@/components/Modules/Settings/TypeServices";
 import MySupscription from "@/components/Modules/Settings/MySupscription";
+import ModalConfirm from "@/components/Shared/ModalConfirm";
 
 export default function More() {
   const navigation = useNavigation();
   const { setToken } = useApiProvider();
   const [viewComponent, setViewComponent] = useState<string>();
+  const [openModalDeleteAccount, setOpenModalDeleteAccount] = useState(false);
   // const [openModal, setOpenModal] = useState(false);
 
   const { data: dataUser, isFetching: loadingData } = useQuery({
@@ -45,6 +47,17 @@ export default function More() {
     onSuccess: (data: ResponseAPi) => handleSuccessLogout(data),
     onError: (err) => handleErrorLogout(err),
   });
+
+  const { mutate: deleteAccount } = useMutation({
+    mutationFn: () => apiUser.deleteAccount(dataUser?.id),
+    onSuccess: (data: ResponseAPi) => handleSuccessDeleteAccount(data.data),
+    onError: (err) => ErrorAlertMessage,
+  });
+
+  const handleSuccessDeleteAccount = (data: ObjectResponse) => {
+    if (data.error) return ErrorAlertMessage({ message: data.message });
+    deleteSession();
+  };
 
   const handleSuccessLogout = async (data: ResponseAPi) => {
     if (!data.data.error) {
@@ -134,6 +147,10 @@ export default function More() {
       textBtnConfirm: "Ok",
       handleConfirmAction: logoutSession,
     });
+  };
+
+  const handleDeleteAccount = () => {
+    deleteAccount();
   };
 
   return (
@@ -262,7 +279,10 @@ export default function More() {
             </Pressable>
           </View>
           <View style={localStyle.contentDivisor}>
-            <Pressable style={localStyle.itemMenu} onPress={() => {}}>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => setOpenModalDeleteAccount((v) => !v)}
+            >
               <View style={localStyle.itemMenuText}>
                 <AntDesign
                   name="delete"
@@ -273,7 +293,7 @@ export default function More() {
                 />
                 <ThemedText darkColor="black">
                   {"    "}
-                  Eliminar cuenta xxxx
+                  Eliminar cuenta
                 </ThemedText>
               </View>
             </Pressable>
@@ -283,6 +303,15 @@ export default function More() {
             open={openModal}
             handleCloseModal={handleOpenModal}
           /> */}
+          <ModalConfirm
+            open={openModalDeleteAccount}
+            title="¿Estás seguro de querer eliminar tu cuenta?"
+            message="Si continúas, perderas toda la informacion asociada a esta cuenta y no podrás recuperarla, esta acción no podra revertirse."
+            handleClose={() => setOpenModalDeleteAccount((v) => !v)}
+            handleConfirm={handleDeleteAccount}
+            textBtnConfirm="Eliminar cuenta"
+            IconModal={<AntDesign name="warning" size={35} color="red" />}
+          />
         </View>
       )}
     </View>
