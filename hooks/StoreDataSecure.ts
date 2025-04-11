@@ -2,6 +2,7 @@ import * as SecureStore from 'expo-secure-store';
 
 export const KEY_STORE = {
     userToken: 'userToken',
+    idUser: 'idUser',
     userData: 'userData',
     profilePicture: 'profilePicture'
 }

@@ -25,5 +25,13 @@ export const REACT_QUERY_KEYS = {
         coupon: {
             getByCode: (key:string) => `get-coupon-by-code-${key}`
         }
+    },
+    calendar: {
+        calendarByUser: {
+            getByIdUser: (key:string | undefined) => `get-calendar-by-user-id-${key}`
+        },
+        calendarException: {
+            getByUser: (key:string) => `get-calendar-exception-by-user-${key}`
+        }
     }
 }

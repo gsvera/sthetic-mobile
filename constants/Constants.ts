@@ -1,3 +1,5 @@
+import { weekDays } from "./GeneralTypes";
+
 export enum ROUTES {
     LOGIN = 'login'
 } ;
@@ -27,3 +29,27 @@ export enum TYPE_STATUS {
 export enum MAX_LENGTH {
     MAX_FILE_TO_UPLOAD = 5
 }
+
+export enum FORMAT_DATE {
+    GENERAL_EN = "YYYY-MM-DD",
+    TIME_STAMP = 'YYYY-MM-DDTHH:mm:ss'
+}
+
+export const WEEK_DAYS:weekDays[] = [
+    'Lunes',
+    'Martes', 
+    'Miércoles', 
+    'Jueves', 
+    'Viernes', 
+    'Sábado', 
+    'Domingo'
+];
+
+export const DEFAULT_VALUES_WEEK = WEEK_DAYS.map((day: string) => ({
+  day,
+  isActive: false,
+  startTime: "",
+  endTime: "",
+  duration: 0,
+  maxReservations: 0,
+}));

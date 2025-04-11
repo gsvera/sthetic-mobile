@@ -72,9 +72,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   };
 
   useEffect(() => {
-    console.log("🚀 ~ useEffect ~ dataLocation:", dataLocation);
     if (dataLocation?.items) {
-      console.log(dataLocation);
       setCurrentLocation({
         latitude: dataLocation?.items?.latitude,
         longitude: dataLocation?.items?.longitude,
