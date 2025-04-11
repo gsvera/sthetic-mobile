@@ -60,6 +60,26 @@ export const ButtonGeneralStyle = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
+    btnSuccessInervert: {
+        backgroundColor: GlobalColors.greenDarkColor,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 3,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    btnDanger: {
+        backgroundColor: GlobalColors.dangerColor,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 3,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
     btnBig: {
         width: '48%'
     }
@@ -68,6 +88,14 @@ export const ButtonGeneralStyle = StyleSheet.create({
 export const TextStyle = StyleSheet.create({
     fontBoldDark: {
         color: GlobalColors.blackColor,
+        fontWeight: 'bold'
+    },
+    fontBoldWhite: {
+        color: GlobalColors.whiteColor,
+        fontWeight: 'bold'
+    },
+    fontBoldBlue: {
+        color: GlobalColors.blueColor,
         fontWeight: 'bold'
     },
     darkColor: {
@@ -124,10 +152,15 @@ export const GridStyle = StyleSheet.create({
     rowSpaceBetween: {
         flexDirection: "row",
         justifyContent: "space-between",
-      }
-})
- export const MarginStyle = StyleSheet.create({
+    },
+    rowItemsVerticalCenter: {
+        alignItems: "center",
+        flexDirection: "row",
+    }
+});
+
+export const MarginStyle = StyleSheet.create({
     marginT10: {
         marginTop: 10
     }
- })
+});

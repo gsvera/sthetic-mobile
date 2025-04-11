@@ -1,0 +1,255 @@
+import { useContext, useEffect, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Calendar } from "react-native-calendars";
+import { AvailableByDay, exceptionDayType, weekDaysProps } from "./types";
+import { ThemedText } from "@/components/ThemedText";
+import {
+  ButtonGeneralStyle,
+  GridStyle,
+  TextStyle,
+} from "@/constants/StyleComponents";
+import AvailibleWeek from "./AvalibleWeek";
+import dayjs from "dayjs";
+import {
+  DEFAULT_VALUES_WEEK,
+  FORMAT_DATE,
+  TYPE_STATUS,
+} from "@/constants/Constants";
+import { MakeExceptionDay } from "./MakeExceptionDay";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
+import { apiCalendar } from "@/api/Calendar";
+import { getStoreSession, KEY_STORE } from "@/hooks/StoreDataSecure";
+import "dayjs/locale/es";
+import { convertDateToGeneralFormat } from "@/utils/GeneralUtils";
+import ExceptionDay from "./ExceptionDay";
+import GeneralButton from "@/components/Shared/GeneralButton";
+import { Feather } from "@expo/vector-icons";
+import ModalConfirm from "@/components/Shared/ModalConfirm";
+import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
+import { useNotificationProvider } from "@/provider/NotificationProvider";
+import { GlobalColors } from "@/constants/Colors";
+
+dayjs.locale("es"); // Esta config se debera establecer a futuro para ingles tambien
+
+export const AdminCalendarProvider = () => {
+  const { handleNotification } = useNotificationProvider();
+  const [openForm, setOpenForm] = useState(false);
+  const [openExceptionForm, setOpenExceptionForm] = useState(false);
+  const [openModalDeleteException, setOpenModalDeleteException] =
+    useState(false);
+  const [selectedDate, setSelectedDate] = useState<weekDaysProps | undefined>();
+  const [idUser, setIdUser] = useState("");
+
+  getStoreSession({ key: KEY_STORE.idUser }).then(
+    (value) => value && setIdUser(value)
+  );
+
+  const { data: dataCalendar = [], isFetching: isFetchingCalendar } = useQuery({
+    queryKey: [REACT_QUERY_KEYS.calendar.calendarByUser.getByIdUser(idUser)],
+    queryFn: () => apiCalendar.getCalendarByUser(idUser),
+    ...{
+      enabled: !!idUser,
+      select: (data: ResponseAPi) => data.data.items,
+    },
+  });
+
+  const { data: dataCalendarException, refetch: refetchCalendarException } =
+    useQuery({
+      queryKey: [REACT_QUERY_KEYS.calendar.calendarException.getByUser(idUser)],
+      queryFn: () =>
+        apiCalendar.getCalencarExceptionByUser(
+          idUser,
+          convertDateToGeneralFormat(
+            selectedDate?.dateString,
+            FORMAT_DATE.TIME_STAMP
+          )
+        ),
+      ...{
+        enabled: !!idUser && !!selectedDate?.dateString,
+        select: (data: ResponseAPi) => data.data.items as exceptionDayType,
+      },
+    });
+
+  const { mutate: deleteCalendarException } = useMutation({
+    mutationFn: (id: number) => apiCalendar.deleteCalendarException(id),
+    onSuccess: (data: ResponseAPi) =>
+      handleSuccessDeleteCalendarException(data.data),
+    onError: ErrorAlertMessage,
+  });
+
+  const handleSuccessDeleteCalendarException = (data: ObjectResponse) => {
+    if (data.error) return ErrorAlertMessage({ message: data.message });
+    handleNotification({
+      type: TYPE_STATUS.SUCCESS,
+      message: `Se elimino la excepcion del día ${selectedDate?.dateString}`,
+    });
+    setOpenModalDeleteException(false);
+    refetchCalendarException();
+  };
+
+  useEffect(() => {
+    refetchCalendarException();
+  }, [selectedDate?.dateString]);
+
+  useEffect(() => {
+    handleSelectedDate(dayjs().format(FORMAT_DATE.GENERAL_EN));
+  }, [isFetchingCalendar]);
+
+  const handleSelectedDate = (day: string) => {
+    const dateSelected = dayjs(day).format("dddd");
+
+    const daySaved: weekDaysProps = dataCalendar.find(
+      (item: weekDaysProps) =>
+        item.day.toLowerCase() === dateSelected.toLowerCase()
+    );
+    const foundDayDefault = DEFAULT_VALUES_WEEK.find(
+      (item: weekDaysProps) =>
+        item.day.toLowerCase() === dateSelected.toLowerCase()
+    );
+
+    if (daySaved) {
+      const updatedDay = {
+        ...daySaved,
+        dateString: day,
+        isActive: true,
+      };
+      setSelectedDate(updatedDay);
+    } else {
+      if (foundDayDefault) {
+        const defaultDay: weekDaysProps = foundDayDefault;
+        defaultDay.dateString = day;
+        setSelectedDate(defaultDay);
+      }
+    }
+  };
+
+  const handleDeleteException = () => {
+    if (dataCalendarException?.id)
+      return deleteCalendarException(dataCalendarException?.id);
+    else
+      ErrorAlertMessage({
+        message: "No se selecciono la exception correctamente",
+      });
+  };
+
+  return (
+    <View style={localStyle.contentCalendar}>
+      <View style={localStyle.contentBtn}>
+        <TouchableOpacity
+          style={ButtonGeneralStyle.btnInfo}
+          onPress={() => setOpenForm((v) => !v)}
+        >
+          <ThemedText style={TextStyle.bold}>
+            Registrar horarios semanal
+          </ThemedText>
+        </TouchableOpacity>
+      </View>
+      <Calendar
+        onDayPress={(day: any) => handleSelectedDate(day.dateString)}
+        markedDates={{
+          [selectedDate?.dateString as string]: {
+            selected: true,
+            selectedColor: GlobalColors.pinkColor,
+          },
+        }}
+      />
+      <ScrollView
+        style={{
+          flexGrow: 1,
+        }}
+      >
+        <View style={{ ...GridStyle.rowSpaceBetween, marginTop: 10 }}>
+          <View style={localStyle.contentDateSelected}>
+            <View>
+              <ThemedText style={TextStyle.fontBoldBlue}>
+                Día seleccionado:{" "}
+              </ThemedText>
+              <ThemedText style={TextStyle.darkColor}>
+                {selectedDate?.dateString || "ninguno"}
+              </ThemedText>
+            </View>
+          </View>
+          <View
+            style={{
+              alignItems: "center",
+              flexDirection: "row",
+            }}
+          >
+            <GeneralButton
+              styleBtn={ButtonGeneralStyle.btnCancel}
+              styleText={TextStyle.bold}
+              textBtn={
+                !dataCalendarException
+                  ? "Agregar excepción"
+                  : "Editar excepción"
+              }
+              handleOnPress={() => setOpenExceptionForm((v) => !v)}
+            />
+            {dataCalendarException && (
+              <GeneralButton
+                styleBtn={localStyle.btnDelete}
+                styleText={TextStyle.bold}
+                textBtn={<Feather name="trash" size={24} color="white" />}
+                handleOnPress={() => setOpenModalDeleteException((v) => !v)}
+              />
+            )}
+          </View>
+        </View>
+        {dataCalendarException && <ExceptionDay {...dataCalendarException} />}
+
+        <AvailibleWeek
+          open={openForm}
+          handleCloseModal={() => setOpenForm((v) => !v)}
+          idUser={idUser}
+          daysByweek={dataCalendar}
+        />
+      </ScrollView>
+      {selectedDate && (
+        <MakeExceptionDay
+          open={openExceptionForm}
+          day={selectedDate}
+          idUser={idUser}
+          handleCloseModal={() => setOpenExceptionForm((v) => !v)}
+          entityToEdit={dataCalendarException}
+        />
+      )}
+      <ModalConfirm
+        open={openModalDeleteException}
+        handleClose={() => setOpenModalDeleteException((v) => !v)}
+        handleConfirm={handleDeleteException}
+        title="Advertencia"
+        message="¿Estás seguro de querer borrar la exception del día?"
+        IconModal={<Feather name="trash" size={24} color="black" />}
+      />
+    </View>
+  );
+};
+
+export const localStyle = StyleSheet.create({
+  contentCalendar: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  contentBtn: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginVertical: 10,
+  },
+  contentDateSelected: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  btnDelete: {
+    ...ButtonGeneralStyle.btnDanger,
+    marginLeft: 5,
+  },
+});
+
+export default AdminCalendarProvider;

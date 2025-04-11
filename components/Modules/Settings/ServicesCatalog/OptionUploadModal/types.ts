@@ -1,8 +1,5 @@
-export type modalCustomProps = {
-    open: boolean;
-    handleCloseModal: () => void;    
-    idUser?: string;
-  };
+import { modalCustomProps } from "@/constants/GeneralTypes";
+
 
 export type modalCustomFormProps = modalCustomProps & {
   idEntity?: number;

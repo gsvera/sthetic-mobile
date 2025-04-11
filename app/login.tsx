@@ -65,6 +65,10 @@ export default function Login() {
       key: KEY_STORE.userToken,
       value: data.items?.token,
     });
+    setStoreSession({
+      key: KEY_STORE.idUser,
+      value: data.items?.idUser,
+    });
     setToken(data.items?.token);
     navigation.navigate("(tabs)" as never);
   };

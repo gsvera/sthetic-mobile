@@ -11,6 +11,11 @@ export type selectOptionType = {
 
 export type fileTypes = 'image' | 'video' | null;
 
+export type modalCustomProps = {
+    open: boolean;
+    handleCloseModal: () => void;    
+    idUser?: string;
+  };
 
 /**
  *  OBJECTS
@@ -34,3 +39,5 @@ export type UserPlan = {
     isActive: boolean;
     catalogPlanDTO: CatalogPlanDTO;
 }
+
+export type weekDays = 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes' | 'Sábado' | 'Domingo';

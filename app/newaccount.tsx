@@ -64,6 +64,7 @@ export default function newAccount() {
       return;
     }
     setStoreSession({ key: KEY_STORE.userToken, value: data.items.token });
+    setStoreSession({ key: KEY_STORE.idUser, value: data.items.idUser });
     setToken(data.items.token);
     setShowMessageSuccess(true);
     setStepView(STEP_CREATION_PROFILE.FIELD_PROFILE);
