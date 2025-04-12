@@ -3,8 +3,7 @@ import { GlobalColors } from "@/constants/Colors";
 import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { modalCustomProps } from "./types";
-import { fileTypes } from "@/constants/GeneralTypes";
+import { fileTypes, modalCustomProps } from "@/constants/GeneralTypes";
 
 type optionsUploadModal = modalCustomProps & {
   handleOpenTypeModalUpload: (data: fileTypes) => void;

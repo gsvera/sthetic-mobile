@@ -1,8 +1,8 @@
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
 import { ThemedText } from "@/components/ThemedText";
-import { ButtonStyle } from "@/constants/StyleComponents";
+import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { useEffect, useState } from "react";
-import { Button, Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
@@ -12,6 +12,8 @@ import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { TYPE_STATUS } from "@/constants/Constants";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
+import { ThemeColorsSthetic } from "@/constants/Colors";
+import GeneralButton from "@/components/Shared/GeneralButton";
 
 type myLocationProps = {
   idUser: string;
@@ -115,11 +117,8 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   return (
     <View>
       <SubHeaderReturn subtitle="Mi Ubicación" handleReturn={returnBack} />
-      <View style={{ width: "auto", height: "80%", padding: 10 }}>
-        <ThemedText
-          darkColor="black"
-          style={{ textAlign: "center", marginBottom: 10 }}
-        >
+      <View style={localStyle.contentBody}>
+        <ThemedText style={localStyle.textDescription}>
           Toque en el mapa la ubicacion de su local o negocio
         </ThemedText>
         <MapView
@@ -142,53 +141,47 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
             />
           )}
         </MapView>
-        <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+        <View style={localStyle.contentBtnLocation}>
           <Pressable
             onPress={handleDeviceLocation}
-            style={{
-              // position: "absolute",
-              zIndex: 9,
-              //   marginTop: -30,
-              padding: 5,
-              // borderColor: "black",
-              backgroundColor: "white",
-              //   width: 30,
-              top: -40,
-              right: 10,
-              //   borderBottomColor: "black",
-            }}
+            style={localStyle.btnLocation}
           >
             <FontAwesome6 name="location-crosshairs" size={24} color="black" />
           </Pressable>
         </View>
         <View>
           {loadingLocation && (
-            <ThemedText style={{ textAlign: "center" }} darkColor="black">
+            <ThemedText style={localStyle.textLoading}>
               Obteniendo la ubicación del dispositivo...
             </ThemedText>
           )}
           {isFetching && (
-            <ThemedText style={{ textAlign: "center" }} darkColor="black">
+            <ThemedText style={localStyle.textLoading}>
               Cargando ubicación...
             </ThemedText>
           )}
           {requiredLocation && (
-            <ThemedText style={{ textAlign: "center" }} darkColor="red">
+            <ThemedText style={localStyle.textError}>
               Debe marcar su ubicación.
             </ThemedText>
           )}
         </View>
       </View>
       <View style={{ padding: 5, width: "90%", marginHorizontal: "auto" }}>
-        <Button
-          title="Guardar mi ubicación"
-          color={
+        <GeneralButton
+          styleBtn={
             !enableBtn
-              ? ButtonStyle.btnSuccess.color
-              : ButtonStyle.btnDisabled.color
+              ? ButtonGeneralStyle.btnUpdateSthetic
+              : ButtonGeneralStyle.btnDisabledSthetic
           }
-          onPress={handleSubmitUpdateLocation}
-          disabled={enableBtn}
+          textBtn="Guardar mi ubicación"
+          styleText={{
+            color: !enableBtn
+              ? ThemeColorsSthetic.textLight
+              : ThemeColorsSthetic.muted,
+          }}
+          handleOnPress={handleSubmitUpdateLocation}
+          disabledBtn={enableBtn}
         />
       </View>
     </View>
@@ -202,6 +195,28 @@ const localStyle = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  contentBody: { width: "auto", height: "80%", padding: 10 },
+  textDescription: {
+    textAlign: "center",
+    marginBottom: 10,
+    color: ThemeColorsSthetic.textLabels,
+  },
+  contentBtnLocation: { flexDirection: "row", justifyContent: "flex-end" },
+  btnLocation: {
+    zIndex: 9,
+    padding: 5,
+    backgroundColor: "white",
+    top: -40,
+    right: 10,
+  },
+  textLoading: {
+    ...TextStyle.center,
+    color: ThemeColorsSthetic.muted,
+  },
+  textError: {
+    ...TextStyle.center,
+    color: ThemeColorsSthetic.textError,
   },
 });
 

@@ -1,10 +1,9 @@
-import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import {
   Container,
   GlobalColors,
   loginStyle,
-  textColors,
+  ThemeColorsSthetic,
 } from "@/constants/Colors";
 import { Link, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
@@ -15,7 +14,6 @@ import {
   ImageBackground,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -32,6 +30,7 @@ import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoSc
 import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
 import { loginData } from "@/constants/GeneralTypes";
 import { Ionicons } from "@expo/vector-icons";
+import { TextStyle } from "@/constants/StyleComponents";
 
 const schema = yup.object({
   username: yup.string().required("Ingrese un usuario valid"),
@@ -119,7 +118,9 @@ export default function Login() {
               )}
             />
             {errors.username && (
-              <Text style={textColors.errors}>{errors.username.message}</Text>
+              <ThemedText style={{ color: ThemeColorsSthetic.dangerColor }}>
+                {errors.username.message}
+              </ThemedText>
             )}
           </View>
           <View style={loginStyle.centerInput}>

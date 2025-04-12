@@ -1,10 +1,11 @@
 import { apiUser } from "@/api/User";
+import GeneralButton from "@/components/Shared/GeneralButton";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
 import { ThemedText } from "@/components/ThemedText";
-import { GlobalColors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { REGEX, TYPE_STATUS } from "@/constants/Constants";
-import { ButtonStyle, GeneralStyle } from "@/constants/StyleComponents";
+import { ButtonGeneralStyle, GeneralStyle } from "@/constants/StyleComponents";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
 import { Ionicons } from "@expo/vector-icons";
@@ -89,7 +90,7 @@ export const ChangePassword = ({ returnBack }: changePasswordProps) => {
             <Ionicons
               name={hiddenPass ? "eye-off" : "eye"}
               size={24}
-              color="gray"
+              color={ThemeColorsSthetic.accentReverse}
             />
           </TouchableOpacity>
         </View>
@@ -111,15 +112,20 @@ export const ChangePassword = ({ returnBack }: changePasswordProps) => {
           </ThemedText>
         </View>
         <View style={{ marginTop: 20 }}>
-          <Button
-            title="Actualizar datos"
-            color={
+          <GeneralButton
+            styleBtn={
               !enableBtn
-                ? ButtonStyle.btnSuccess.color
-                : ButtonStyle.btnDisabled.color
+                ? ButtonGeneralStyle.btnUpdateSthetic
+                : ButtonGeneralStyle.btnDisabledSthetic
             }
-            onPress={handleSubmitUpdate}
-            disabled={enableBtn}
+            textBtn="Actualizar contraseña"
+            styleText={{
+              color: !enableBtn
+                ? ThemeColorsSthetic.textLight
+                : ThemeColorsSthetic.muted,
+            }}
+            handleOnPress={handleSubmitUpdate}
+            disabledBtn={enableBtn}
           />
         </View>
       </View>
@@ -133,11 +139,11 @@ const localStyle = StyleSheet.create({
     paddingHorizontal: "10%",
   },
   label: {
-    color: GlobalColors.blackColor,
+    color: ThemeColorsSthetic.textLabels,
     fontWeight: "bold",
   },
   textObservation: {
-    color: GlobalColors.grayColor,
+    color: ThemeColorsSthetic.muted,
     fontSize: 14,
   },
   icon: {

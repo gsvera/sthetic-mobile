@@ -4,6 +4,7 @@ import PlanCard, { PlanCardProps } from "./PlanCard";
 import { useQuery } from "@tanstack/react-query";
 import { apiPlan } from "@/api/Plan";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 
 type PlanProps = {
   selectedPlan: (idPlan: PlanCardProps) => void;
@@ -36,7 +37,7 @@ export const Plan = ({ selectedPlan }: PlanProps) => {
         </ThemedText>
       </View>
       <View style={localStyles.constentScroll}>
-        <ScrollView contentContainerStyle={localStyles.scrollContainer}>
+        <ScrollView>
           <View style={localStyles.content}>
             {dataPlans.map((item: PlanCardProps) => (
               <View key={item.id}>
@@ -53,18 +54,13 @@ export const Plan = ({ selectedPlan }: PlanProps) => {
 export const localStyles = StyleSheet.create({
   subtitle: {
     fontSize: 20,
-    color: "black",
+    color: ThemeColorsSthetic.textTitle,
     fontWeight: "bold",
   },
   constentScroll: {
     height: 570,
   },
-  scrollContainer: {
-    // padding: 20,
-    // backgroundColor: "red",
-  },
   content: {
-    // height: 900,
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "center",

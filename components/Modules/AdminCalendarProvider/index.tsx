@@ -34,7 +34,7 @@ import { Feather } from "@expo/vector-icons";
 import ModalConfirm from "@/components/Shared/ModalConfirm";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { GlobalColors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 
 dayjs.locale("es"); // Esta config se debera establecer a futuro para ingles tambien
 
@@ -142,21 +142,19 @@ export const AdminCalendarProvider = () => {
   return (
     <View style={localStyle.contentCalendar}>
       <View style={localStyle.contentBtn}>
-        <TouchableOpacity
-          style={ButtonGeneralStyle.btnInfo}
-          onPress={() => setOpenForm((v) => !v)}
-        >
-          <ThemedText style={TextStyle.bold}>
-            Registrar horarios semanal
-          </ThemedText>
-        </TouchableOpacity>
+        <GeneralButton
+          styleBtn={ButtonGeneralStyle.btnActionSthetic}
+          styleText={TextStyle.bold}
+          textBtn="Registrar horarios semanal"
+          handleOnPress={() => setOpenForm((v) => !v)}
+        />
       </View>
       <Calendar
         onDayPress={(day: any) => handleSelectedDate(day.dateString)}
         markedDates={{
           [selectedDate?.dateString as string]: {
             selected: true,
-            selectedColor: GlobalColors.pinkColor,
+            selectedColor: ThemeColorsSthetic.accent,
           },
         }}
       />
@@ -168,10 +166,10 @@ export const AdminCalendarProvider = () => {
         <View style={{ ...GridStyle.rowSpaceBetween, marginTop: 10 }}>
           <View style={localStyle.contentDateSelected}>
             <View>
-              <ThemedText style={TextStyle.fontBoldBlue}>
+              <ThemedText style={TextStyle.label}>
                 Día seleccionado:{" "}
               </ThemedText>
-              <ThemedText style={TextStyle.darkColor}>
+              <ThemedText style={TextStyle.value}>
                 {selectedDate?.dateString || "ninguno"}
               </ThemedText>
             </View>
@@ -183,7 +181,7 @@ export const AdminCalendarProvider = () => {
             }}
           >
             <GeneralButton
-              styleBtn={ButtonGeneralStyle.btnCancel}
+              styleBtn={ButtonGeneralStyle.btnActionSthetic}
               styleText={TextStyle.bold}
               textBtn={
                 !dataCalendarException
@@ -226,7 +224,7 @@ export const AdminCalendarProvider = () => {
         handleConfirm={handleDeleteException}
         title="Advertencia"
         message="¿Estás seguro de querer borrar la exception del día?"
-        IconModal={<Feather name="trash" size={24} color="black" />}
+        IconModal={<Feather name="trash" size={35} color="black" />}
       />
     </View>
   );
@@ -247,7 +245,7 @@ export const localStyle = StyleSheet.create({
     alignItems: "center",
   },
   btnDelete: {
-    ...ButtonGeneralStyle.btnDanger,
+    ...ButtonGeneralStyle.btnDeleteSthetic,
     marginLeft: 5,
   },
 });

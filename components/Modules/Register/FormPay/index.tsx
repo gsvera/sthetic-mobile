@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import { PlanCardProps } from "../Plan/PlanCard";
 import { ThemedText } from "@/components/ThemedText";
 import {
@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { apiCoupon } from "@/api/Coupon";
 import LoadingView from "@/components/Shared/LoadingView";
+import GeneralButton from "@/components/Shared/GeneralButton";
 
 type formPayProps = {
   plan: PlanCardProps | null;
@@ -75,18 +76,23 @@ export const FormPay = ({
         width: "90%",
       }}
     >
-      <View style={localStyle.rowContent}>
-        <ThemedText style={localStyle.textLabel}>Plan seleccionado:</ThemedText>
-        <ThemedText style={localStyle.textValue}>{plan?.name}</ThemedText>
+      <View>
+        <ThemedText style={TextStyle.titleRegister}>
+          Confirme su compra
+        </ThemedText>
       </View>
       <View style={localStyle.rowContent}>
-        <ThemedText style={localStyle.textLabel}>Costo:</ThemedText>
-        <ThemedText style={localStyle.textValue}>
+        <ThemedText style={TextStyle.label}>Plan seleccionado:</ThemedText>
+        <ThemedText style={TextStyle.value}>{plan?.name}</ThemedText>
+      </View>
+      <View style={localStyle.rowContent}>
+        <ThemedText style={TextStyle.label}>Costo:</ThemedText>
+        <ThemedText style={TextStyle.value}>
           {plan?.price && convertCurrency(plan?.price, 0)}
         </ThemedText>
       </View>
       <View style={localStyle.rowContent}>
-        <ThemedText style={localStyle.textLabel}>¿Tiene un cupon?</ThemedText>
+        <ThemedText style={TextStyle.label}>¿Tiene un cupon?</ThemedText>
         <TextInput style={localStyle.inputCoupon} onChangeText={changeCoupon} />
       </View>
 
@@ -95,14 +101,14 @@ export const FormPay = ({
       ) : couponData ? (
         <View style={localStyle.rowContent}>
           <View>
-            <ThemedText style={localStyle.textLabel}>Descuento de:</ThemedText>
+            <ThemedText style={TextStyle.label}>Descuento de:</ThemedText>
             {couponData.error && (
               <ThemedText style={TextStyle.redColor}>
                 {couponData.message}
               </ThemedText>
             )}
           </View>
-          <ThemedText style={localStyle.textValue}>
+          <ThemedText style={TextStyle.value}>
             {couponData?.items?.discountAmount &&
               convertCurrency(couponData?.items?.discountAmount, 0)}
           </ThemedText>
@@ -112,15 +118,18 @@ export const FormPay = ({
       )}
 
       <View style={localStyle.rowContent}>
-        <ThemedText style={localStyle.textLabel}>Total a pagar:</ThemedText>
-        <ThemedText style={localStyle.textValue}>
+        <ThemedText style={TextStyle.label}>Total a pagar:</ThemedText>
+        <ThemedText style={TextStyle.value}>
           {totalToPay && convertCurrency(totalToPay, 0)}
         </ThemedText>
       </View>
       <View style={localStyle.rowContent}>
-        <TouchableOpacity style={localStyle.btnPay} onPress={handlePay}>
-          <ThemedText>Pagar</ThemedText>
-        </TouchableOpacity>
+        <GeneralButton
+          textBtn="Pagar"
+          styleText={TextStyle.bold}
+          styleBtn={localStyle.btnPay}
+          handleOnPress={handlePay}
+        />
       </View>
     </View>
   );
@@ -133,22 +142,15 @@ const localStyle = StyleSheet.create({
     height: 40,
     alignItems: "center",
   },
-  textLabel: {
-    ...TextStyle.fontBoldDark,
-    ...TextStyle.size20,
-  },
-  textValue: {
-    ...TextStyle.blueColor,
-    ...TextStyle.size20,
-  },
   inputCoupon: {
     ...InputStyle.withBorder,
+    ...TextStyle.value,
     padding: 5,
     fontSize: 18,
     width: 100,
   },
   btnPay: {
-    ...ButtonGeneralStyle.btnSuccess,
+    ...ButtonGeneralStyle.btnSaveSthetic,
     marginHorizontal: "auto",
     width: "90%",
   },

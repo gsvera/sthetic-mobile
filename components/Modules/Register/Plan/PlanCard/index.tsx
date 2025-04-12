@@ -1,6 +1,8 @@
-import { GlobalColors } from "@/constants/Colors";
+import GeneralButton from "@/components/Shared/GeneralButton";
+import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
+import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { convertCurrency } from "@/utils/GeneralUtils";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 type BenefitsPlan = {
   id: number;
@@ -31,13 +33,12 @@ export const PlanCard = (detailPlan: PlanCardProps) => {
           </Text>
         ))}
       </View>
-
-      <TouchableOpacity
-        style={localStyles.button}
-        onPress={() => detailPlan.onSelectPlan(detailPlan)}
-      >
-        <Text style={localStyles.buttonText}>Elegir</Text>
-      </TouchableOpacity>
+      <GeneralButton
+        textBtn="Elegir"
+        styleText={TextStyle.bold}
+        styleBtn={ButtonGeneralStyle.btnSaveSthetic}
+        handleOnPress={() => detailPlan.onSelectPlan(detailPlan)}
+      />
     </View>
   );
 };
@@ -69,20 +70,20 @@ export const localStyles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
-    color: GlobalColors.blackColor,
+    color: ThemeColorsSthetic.textOre,
   },
   price: {
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 15,
-    color: GlobalColors.cianColor,
+    color: ThemeColorsSthetic.textLabels,
   },
   benefitsContainer: {
     marginBottom: 20,
   },
   benefit: {
     fontSize: 16,
-    color: GlobalColors.grayColor,
+    color: ThemeColorsSthetic.muted,
     marginBottom: 5,
     textAlign: "center",
   },

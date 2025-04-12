@@ -1,10 +1,4 @@
-import {
-  Button,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { functionServicesType } from "../types";
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
 import { useEffect, useMemo, useState } from "react";
@@ -15,7 +9,7 @@ import Checkbox from "expo-checkbox";
 import { ThemedText } from "@/components/ThemedText";
 import { selectOptionType } from "@/constants/GeneralTypes";
 import {
-  ButtonStyle,
+  ButtonGeneralStyle,
   InputStyle,
   TextStyle,
 } from "@/constants/StyleComponents";
@@ -23,6 +17,8 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { TYPE_STATUS } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
+import { ThemeColorsSthetic } from "@/constants/Colors";
+import GeneralButton from "@/components/Shared/GeneralButton";
 
 export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
   const { handleNotification } = useNotificationProvider();
@@ -139,13 +135,7 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
     <View>
       <SubHeaderReturn subtitle="Tipo de servicios" handleReturn={returnBack} />
       <View style={{ width: "90%", marginHorizontal: "auto", paddingTop: 10 }}>
-        <ThemedText
-          style={{
-            ...TextStyle.fontBoldDark,
-            ...TextStyle.center,
-            marginBottom: 10,
-          }}
-        >
+        <ThemedText style={localStyle.label}>
           Agrega una breve descripción del servicio que realizas
         </ThemedText>
         <TextInput
@@ -162,7 +152,7 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
         <View style={{ width: "90%", marginHorizontal: "auto" }}>
           <View>
             <View style={localStyle.textDescription}>
-              <ThemedText darkColor="black" style={{ fontWeight: "bold" }}>
+              <ThemedText style={localStyle.label}>
                 Debe seleccionar al menos un tipo de servicio que ofrece
               </ThemedText>
             </View>
@@ -174,7 +164,7 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
                   style={localStyle.contentElement}
                 >
                   <Checkbox value={item.checked} />
-                  <ThemedText darkColor="black">
+                  <ThemedText style={localStyle.listValue}>
                     {"   "}
                     {item.value}
                   </ThemedText>
@@ -182,16 +172,21 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
               );
             })}
           </View>
-          <View style={ButtonStyle.contentBtn}>
-            <Button
-              title="Guardar"
-              color={
-                selectedKeys.length > 0
-                  ? ButtonStyle.btnSuccess.color
-                  : ButtonStyle.btnDisabled.color
+          <View style={localStyle.contentBtn}>
+            <GeneralButton
+              styleBtn={
+                !disabledBtn
+                  ? ButtonGeneralStyle.btnUpdateSthetic
+                  : ButtonGeneralStyle.btnDisabledSthetic
               }
-              disabled={disabledBtn}
-              onPress={handleSaveTypeServices}
+              textBtn="Guardar"
+              styleText={{
+                color: !disabledBtn
+                  ? ThemeColorsSthetic.textLight
+                  : ThemeColorsSthetic.muted,
+              }}
+              handleOnPress={handleSaveTypeServices}
+              disabledBtn={disabledBtn}
             />
           </View>
         </View>
@@ -210,6 +205,15 @@ const localStyle = StyleSheet.create({
     padding: 10,
     borderTopWidth: 1,
   },
+  label: {
+    ...TextStyle.bold,
+    color: ThemeColorsSthetic.textLabels,
+    marginBottom: 10,
+  },
+  listValue: {
+    color: ThemeColorsSthetic.text,
+  },
+  contentBtn: { marginTop: 20, paddingHorizontal: 20 },
 });
 
 export default TypeServices;

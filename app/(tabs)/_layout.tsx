@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
-import { Colors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   getStoreSession,
@@ -30,7 +30,8 @@ export default function TabLayout() {
     <SafeAreaView style={localStyle.container}>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          tabBarActiveTintColor: ThemeColorsSthetic.accent,
+          tabBarActiveBackgroundColor: ThemeColorsSthetic.backgroundLigth,
           headerShown: false,
           tabBarButton: HapticTab,
           tabBarBackground: TabBarBackground,
@@ -47,9 +48,15 @@ export default function TabLayout() {
           name="index"
           options={{
             title: "Inicio",
-            tabBarIcon: ({ color }) => (
-              // <Entypo name="home" size={28} color={color} />
-              <MaterialIcons name="schedule-send" size={24} color={color} />
+            tabBarLabelStyle: { fontSize: 14, fontWeight: "bold" },
+            tabBarIcon: ({ color, focused }) => (
+              <MaterialIcons
+                name="schedule-send"
+                size={28}
+                color={
+                  focused ? ThemeColorsSthetic.accent : ThemeColorsSthetic.muted
+                }
+              />
             ),
           }}
         />
@@ -57,8 +64,15 @@ export default function TabLayout() {
           name="calendar"
           options={{
             title: "Calendario",
-            tabBarIcon: ({ color }) => (
-              <AntDesign name="calendar" size={24} color={color} />
+            tabBarLabelStyle: { fontSize: 14, fontWeight: "bold" },
+            tabBarIcon: ({ color, focused }) => (
+              <AntDesign
+                name="calendar"
+                size={28}
+                color={
+                  focused ? ThemeColorsSthetic.accent : ThemeColorsSthetic.muted
+                }
+              />
             ),
           }}
         />
@@ -66,9 +80,15 @@ export default function TabLayout() {
           name="more"
           options={{
             title: "Más",
-            tabBarIcon: ({ color }) => (
-              // <AntDesign name="setting" size={28} color={color} />
-              <FontAwesome6 name="bars" size={24} color={color} />
+            tabBarLabelStyle: { fontSize: 14, fontWeight: "bold" },
+            tabBarIcon: ({ color, focused }) => (
+              <FontAwesome6
+                name="bars"
+                size={28}
+                color={
+                  focused ? ThemeColorsSthetic.accent : ThemeColorsSthetic.muted
+                }
+              />
             ),
           }}
         />

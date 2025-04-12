@@ -15,6 +15,8 @@ import {
   convertCurrency,
   convertDateToGeneralFormat,
 } from "@/utils/GeneralUtils";
+import { ThemeColorsSthetic } from "@/constants/Colors";
+import GeneralButton from "@/components/Shared/GeneralButton";
 
 export const MySupscription = ({
   idUser,
@@ -87,9 +89,12 @@ export const MySupscription = ({
           </View>
         </View>
         <View style={localStyle.contentBtn}>
-          <TouchableOpacity style={localStyle.btnPay}>
-            <ThemedText>Pagar</ThemedText>
-          </TouchableOpacity>
+          <GeneralButton
+            textBtn="Pagar"
+            styleText={{ fontWeight: "bold" }}
+            styleBtn={localStyle.btnPay}
+            handleOnPress={() => {}}
+          />
         </View>
       </View>
     </View>
@@ -109,22 +114,22 @@ const localStyle = StyleSheet.create({
   },
   titlePlan: {
     ...TextStyle.center,
-    ...TextStyle.blueColor,
     ...TextStyle.bold,
     ...TextStyle.size40,
+    color: ThemeColorsSthetic.textOre,
   },
   textLabelTitle: {
     ...TextStyle.center,
-    ...TextStyle.fontBoldDark,
     ...TextStyle.size20,
+    color: ThemeColorsSthetic.textTitle,
   },
   textLabel: {
-    ...TextStyle.fontBoldDark,
     ...TextStyle.size20,
+    ...TextStyle.label,
   },
   textValue: {
-    ...TextStyle.darkColor,
     ...TextStyle.size20,
+    color: ThemeColorsSthetic.text,
   },
   contentBtn: {
     width: "80%",
@@ -136,7 +141,7 @@ const localStyle = StyleSheet.create({
     marginHorizontal: "auto",
   },
   btnPay: {
-    ...ButtonGeneralStyle.btnAction,
+    ...ButtonGeneralStyle.btnSaveSthetic,
     width: "80%",
   },
 });

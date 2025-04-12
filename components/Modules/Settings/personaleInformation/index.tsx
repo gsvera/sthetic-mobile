@@ -1,12 +1,17 @@
 import { apiLada } from "@/api/Lada";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { apiUser } from "@/api/User";
+import GeneralButton from "@/components/Shared/GeneralButton";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { SubHeaderReturn } from "@/components/Shared/SubHeaderReturn";
 import { ThemedText } from "@/components/ThemedText";
-import { GlobalColors, textColors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { REGEX, TYPE_STATUS } from "@/constants/Constants";
-import { ButtonStyle, GeneralStyle } from "@/constants/StyleComponents";
+import {
+  ButtonGeneralStyle,
+  GeneralStyle,
+  TextStyle,
+} from "@/constants/StyleComponents";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -155,7 +160,9 @@ export const PersonalInformation = ({
               )}
             />
             {errors.firstName && (
-              <Text style={textColors.errors}>{errors.firstName.message}</Text>
+              <Text style={TextStyle.textError}>
+                {errors.firstName.message}
+              </Text>
             )}
           </View>
           <View style={{ marginVertical: 10 }}>
@@ -174,7 +181,9 @@ export const PersonalInformation = ({
               )}
             />
             {errors.firstName && (
-              <Text style={textColors.errors}>{errors.firstName.message}</Text>
+              <Text style={TextStyle.textError}>
+                {errors.firstName.message}
+              </Text>
             )}
           </View>
           <View style={{ marginVertical: 10 }}>
@@ -216,7 +225,9 @@ export const PersonalInformation = ({
                   )}
                 />
                 {errors.phone && (
-                  <Text style={textColors.errors}>{errors.phone.message}</Text>
+                  <Text style={TextStyle.textError}>
+                    {errors.phone.message}
+                  </Text>
                 )}
               </View>
             </View>
@@ -238,24 +249,28 @@ export const PersonalInformation = ({
               )}
             />
             {errors.email && (
-              <Text style={textColors.errors}>{errors.email.message}</Text>
+              <Text style={TextStyle.textError}>{errors.email.message}</Text>
             )}
           </View>
           <View style={localStyle.contentButton}>
-            <Button
-              title="Actualizar datos"
-              color={
+            <GeneralButton
+              styleBtn={
                 !disableButton
-                  ? ButtonStyle.btnSuccess.color
-                  : ButtonStyle.btnDisabled.color
+                  ? ButtonGeneralStyle.btnUpdateSthetic
+                  : ButtonGeneralStyle.btnDisabledSthetic
               }
-              onPress={handleSubmit(handleUpdatePersonalInformation)}
-              disabled={disableButton}
+              textBtn="Actualizar datos"
+              styleText={{
+                color: !disableButton
+                  ? ThemeColorsSthetic.textLight
+                  : ThemeColorsSthetic.muted,
+              }}
+              handleOnPress={handleSubmit(handleUpdatePersonalInformation)}
+              disabledBtn={disableButton}
             />
           </View>
         </View>
       </View>
-      {/* )} */}
     </View>
   );
 };
@@ -264,7 +279,7 @@ const localStyle = StyleSheet.create({
   label: {
     fontSize: 18,
     fontWeight: "bold",
-    color: GlobalColors.blueColor,
+    color: ThemeColorsSthetic.textLabels,
     marginBottom: 10,
   },
   contentButton: {

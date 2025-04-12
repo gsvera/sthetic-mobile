@@ -8,16 +8,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  formProjectToImgtype,
-  modalCustomFormProps,
-  modalCustomProps,
-} from "../types";
+import { formProjectToImgtype, modalCustomFormProps } from "../types";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { Controller, useForm } from "react-hook-form";
-import { ButtonStyle, GeneralStyle } from "@/constants/StyleComponents";
-import { GlobalColors, textColors } from "@/constants/Colors";
+import {
+  ButtonStyle,
+  GeneralStyle,
+  TextStyle,
+} from "@/constants/StyleComponents";
+import {
+  GlobalColors,
+  textColors,
+  ThemeColorsSthetic,
+} from "@/constants/Colors";
 import { StyleSheet } from "react-native";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -143,7 +147,7 @@ export const UploadVideoModal = ({
           )}
         />
         {errors.nameService && (
-          <Text style={textColors.errors}>{errors.nameService.message}</Text>
+          <Text style={TextStyle.textError}>{errors.nameService.message}</Text>
         )}
       </View>
       <View style={{ paddingHorizontal: 15 }}>
@@ -199,7 +203,7 @@ export const UploadVideoModal = ({
       <View style={localStyle.headClose}>
         <Button
           title="Abrir galeria"
-          color={ButtonStyle.btnInfo.color}
+          color={ThemeColorsSthetic.action}
           onPress={showFileManager}
         />
       </View>

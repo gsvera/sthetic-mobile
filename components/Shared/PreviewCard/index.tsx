@@ -1,10 +1,11 @@
 import { ThemedText } from "@/components/ThemedText";
-import { GlobalColors, textColors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { convertCurrency } from "@/utils/GeneralUtils";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import ImageWithOptions from "../ImageWithOptions";
 import VideoWithOptions from "../VideoWithOptions";
+import GeneralButton from "../GeneralButton";
 
 type detailPrevieCardType = {
   id: number;
@@ -57,26 +58,22 @@ export const PreviewCard = (element: previewCardProps) => {
         />
       )} */}
 
-      <ThemedText style={localStyle.titlePreviewCard} darkColor="black">
+      <ThemedText style={localStyle.titlePreviewCard}>
         {element.nameService}
       </ThemedText>
-      <ThemedText style={TextStyle.fontBoldDark}>Archivos:</ThemedText>
-      <ThemedText style={TextStyle.darkColor}>
-        {element.totalElement}
-      </ThemedText>
-      <ThemedText style={TextStyle.fontBoldDark}>Rango de precios:</ThemedText>
-      <ThemedText style={TextStyle.darkColor}>
+      <ThemedText style={localStyle.label}>Archivos:</ThemedText>
+      <ThemedText style={localStyle.value}>{element.totalElement}</ThemedText>
+      <ThemedText style={localStyle.label}>Rango de precios:</ThemedText>
+      <ThemedText style={localStyle.value}>
         {element.minPrice && convertCurrency(element.minPrice)} -{" "}
         {element.maxPrice && convertCurrency(element.maxPrice)}
       </ThemedText>
-      <TouchableOpacity
-        style={{ ...ButtonGeneralStyle.btnInfo, ...localStyle.widthBtn }}
-        onPress={handleEditProject}
-      >
-        <ThemedText style={{ ...TextStyle.lightColor, ...TextStyle.bold }}>
-          Editar
-        </ThemedText>
-      </TouchableOpacity>
+      <GeneralButton
+        styleBtn={localStyle.btnEdit}
+        textBtn="Actualizar datos"
+        styleText={TextStyle.bold}
+        handleOnPress={handleEditProject}
+      />
     </View>
   );
 };
@@ -91,10 +88,17 @@ const localStyle = StyleSheet.create({
     height: 150,
   },
   titlePreviewCard: {
-    fontWeight: "bold",
-    color: GlobalColors.blueColor,
+    color: ThemeColorsSthetic.text,
   },
-  widthBtn: {
+  label: {
+    ...TextStyle.bold,
+    color: ThemeColorsSthetic.textLabels,
+  },
+  value: {
+    color: ThemeColorsSthetic.text,
+  },
+  btnEdit: {
+    ...ButtonGeneralStyle.btnActionSthetic,
     width: "80%",
     marginVertical: 5,
     marginHorizontal: "auto",

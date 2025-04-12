@@ -1,14 +1,7 @@
 import { DEFAULT_VALUES_WEEK, TYPE_STATUS } from "@/constants/Constants";
 import { modalCustomProps } from "@/constants/GeneralTypes";
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  ScrollView,
-  Modal,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, ScrollView, Modal, Pressable, StyleSheet } from "react-native";
 import { weekDaysProps } from "../types";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
@@ -19,6 +12,8 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import AvailableTimeCard from "../AvailableTimeCard";
+import { ThemeColorsSthetic } from "@/constants/Colors";
+import GeneralButton from "@/components/Shared/GeneralButton";
 
 type availableWeekProps = modalCustomProps & {
   daysByweek: weekDaysProps[];
@@ -132,11 +127,15 @@ export const AvailibleWeek = ({
       <View style={localStyle.contentBody}>
         <View style={localStyle.contentBtnClose}>
           <Pressable onPress={handleCloseModal}>
-            <SimpleLineIcons name="close" size={24} color="black" />
+            <SimpleLineIcons
+              name="close"
+              size={24}
+              color={ThemeColorsSthetic.accentReverse}
+            />
           </Pressable>
         </View>
         <View style={{ marginBottom: 10 }}>
-          <ThemedText type="subtitle" style={localStyle.title}>
+          <ThemedText type="subtitle" style={TextStyle.titleModal}>
             Disponibilidad semanal
           </ThemedText>
         </View>
@@ -151,14 +150,12 @@ export const AvailibleWeek = ({
         ))}
       </ScrollView>
       <View style={localStyle.contentBtnSave}>
-        <TouchableOpacity
-          style={localStyle.btnSave}
-          onPress={handleSaveCalendar}
-        >
-          <ThemedText style={TextStyle.fontBoldWhite}>
-            Guardar configuración semanal
-          </ThemedText>
-        </TouchableOpacity>
+        <GeneralButton
+          styleBtn={localStyle.btnSave}
+          textBtn="Actualizar datos"
+          styleText={TextStyle.bold}
+          handleOnPress={handleSaveCalendar}
+        />
       </View>
     </Modal>
   );
@@ -173,10 +170,6 @@ const localStyle = StyleSheet.create({
   contentBody: {
     paddingHorizontal: 15,
   },
-  title: {
-    ...TextStyle.fontBoldDark,
-    ...TextStyle.center,
-  },
   contentBtnSave: {
     marginTop: 10,
     marginBottom: 20,
@@ -184,7 +177,7 @@ const localStyle = StyleSheet.create({
     justifyContent: "center",
   },
   btnSave: {
-    ...ButtonGeneralStyle.btnSuccessInervert,
+    ...ButtonGeneralStyle.btnUpdateSthetic,
     width: "70%",
   },
   cardRowItem: {

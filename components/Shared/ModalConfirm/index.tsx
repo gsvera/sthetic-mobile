@@ -1,7 +1,8 @@
 import { ThemedText } from "@/components/ThemedText";
-import { GlobalColors } from "@/constants/Colors";
+import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
 import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
-import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
+import GeneralButton from "../GeneralButton";
 
 type modalConfirmProps = {
   open: boolean;
@@ -23,7 +24,7 @@ export const ModalConfirm = ({
   textBtnConfirm,
 }: modalConfirmProps) => {
   return (
-    <Modal animationType="slide" transparent={true} visible={open}>
+    <Modal animationType="fade" transparent={true} visible={open}>
       <View
         style={localStyle.modalView}
         onStartShouldSetResponder={() => {
@@ -39,27 +40,21 @@ export const ModalConfirm = ({
             <ThemedText style={localStyle.textTitle}>{title}</ThemedText>
           )}
           {message && (
-            <ThemedText style={TextStyle.darkColor}>{message}</ThemedText>
+            <ThemedText style={localStyle.textMessage}>{message}</ThemedText>
           )}
           <View style={localStyle.contentBtns}>
-            <TouchableOpacity
-              style={{
-                ...ButtonGeneralStyle.btnCancel,
-                ...ButtonGeneralStyle.btnBig,
-              }}
-              onPress={handleClose}
-            >
-              <ThemedText>Cancelar</ThemedText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                ...ButtonGeneralStyle.btnSuccess,
-                ...ButtonGeneralStyle.btnBig,
-              }}
-              onPress={handleConfirm}
-            >
-              <ThemedText>{textBtnConfirm || "Confirmar"}</ThemedText>
-            </TouchableOpacity>
+            <GeneralButton
+              styleBtn={localStyle.btnCancel}
+              styleText={TextStyle.bold}
+              handleOnPress={handleClose}
+              textBtn="Cancelar"
+            />
+            <GeneralButton
+              styleBtn={localStyle.btnConfirm}
+              styleText={TextStyle.bold}
+              handleOnPress={handleConfirm}
+              textBtn={textBtnConfirm || "Confirmar"}
+            />
           </View>
         </View>
       </View>
@@ -70,6 +65,9 @@ export const ModalConfirm = ({
 const localStyle = StyleSheet.create({
   modalView: {
     flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // <-- fondo negro con opacidad
+    justifyContent: "center",
+    alignItems: "center",
   },
   contentModal: {
     width: "80%",
@@ -86,16 +84,25 @@ const localStyle = StyleSheet.create({
     elevation: 5,
   },
   textTitle: {
-    ...TextStyle.fontBoldDark,
     ...TextStyle.center,
     ...TextStyle.size20,
+    ...TextStyle.bold,
+    color: ThemeColorsSthetic.textLabels,
     marginBottom: 10,
   },
+  textMessage: {
+    color: ThemeColorsSthetic.text,
+  },
   contentBtns: {
-    flexDirection: "row",
-    justifyContent: "space-around",
     marginTop: 20,
     marginBottom: 10,
+  },
+  btnCancel: {
+    ...ButtonGeneralStyle.btnCancelSthetic,
+    marginBottom: 10,
+  },
+  btnConfirm: {
+    ...ButtonGeneralStyle.btnSaveSthetic,
   },
   contetIconModal: {
     justifyContent: "center",

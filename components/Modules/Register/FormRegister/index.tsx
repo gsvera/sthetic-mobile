@@ -1,8 +1,7 @@
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
-import { GlobalColors, textColors } from "@/constants/Colors";
 import { REGEX } from "@/constants/Constants";
-import { ButtonStyle } from "@/constants/StyleComponents";
+import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@tanstack/react-query";
@@ -21,6 +20,8 @@ import { Picker } from "@react-native-picker/picker";
 import * as yup from "yup";
 import { apiUser } from "@/api/User";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
+import GeneralButton from "@/components/Shared/GeneralButton";
+import { ThemedText } from "@/components/ThemedText";
 
 const schema = yup.object().shape({
   firstName: yup
@@ -142,6 +143,11 @@ export const FormRegister = ({
   return (
     <ContentKeyboardAutoScroll>
       <View style={localStyles.ContentForm}>
+        <View>
+          <ThemedText style={TextStyle.titleRegister}>
+            Ingrese sus datos
+          </ThemedText>
+        </View>
         <View style={localStyles.contentInput}>
           <Text style={localStyles.label}>* Nombre(s)</Text>
           <Controller
@@ -158,7 +164,7 @@ export const FormRegister = ({
             )}
           />
           {errors.firstName && (
-            <Text style={textColors.errors}>{errors.firstName.message}</Text>
+            <Text style={TextStyle.textError}>{errors.firstName.message}</Text>
           )}
         </View>
         <View style={localStyles.contentInput}>
@@ -177,7 +183,7 @@ export const FormRegister = ({
             )}
           />
           {errors.lastName && (
-            <Text style={textColors.errors}>{errors.lastName.message}</Text>
+            <Text style={TextStyle.textError}>{errors.lastName.message}</Text>
           )}
         </View>
         <View style={localStyles.contentInput}>
@@ -237,10 +243,10 @@ export const FormRegister = ({
             />
           </View>
           {errors.lada && (
-            <Text style={textColors.errors}>{errors.lada.message}</Text>
+            <Text style={TextStyle.textError}>{errors.lada.message}</Text>
           )}
           {errors.phone && (
-            <Text style={textColors.errors}>{errors.phone.message}</Text>
+            <Text style={TextStyle.textError}>{errors.phone.message}</Text>
           )}
         </View>
         <View style={localStyles.contentInput}>
@@ -260,7 +266,7 @@ export const FormRegister = ({
             )}
           />
           {errors.email && (
-            <Text style={textColors.errors}>{errors.email.message}</Text>
+            <Text style={TextStyle.textError}>{errors.email.message}</Text>
           )}
         </View>
         <View style={localStyles.contentInput}>
@@ -292,7 +298,7 @@ export const FormRegister = ({
             )}
           />
           {errors.password && (
-            <Text style={textColors.errors}>{errors.password.message}</Text>
+            <Text style={TextStyle.textError}>{errors.password.message}</Text>
           )}
         </View>
         <View style={localStyles.contentInput}>
@@ -324,16 +330,17 @@ export const FormRegister = ({
             )}
           />
           {errors.confirmPassword && (
-            <Text style={textColors.errors}>
+            <Text style={TextStyle.textError}>
               {errors.confirmPassword.message}
             </Text>
           )}
         </View>
         <View style={localStyles.contentButton}>
-          <Button
-            title="Confirmar datos"
-            color={ButtonStyle.btnSuccess.color}
-            onPress={handleSubmit(handleSavePersonalData)}
+          <GeneralButton
+            textBtn="Confirmar datos"
+            styleText={TextStyle.bold}
+            styleBtn={ButtonGeneralStyle.btnSaveSthetic}
+            handleOnPress={handleSubmit(handleSavePersonalData)}
           />
         </View>
       </View>
@@ -354,12 +361,11 @@ const localStyles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    color: GlobalColors.pinkColor,
-    fontWeight: "bold",
-    fontSize: 16,
+    ...TextStyle.label,
     marginBottom: 10,
   },
   input: {
+    ...TextStyle.value,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -377,7 +383,7 @@ const localStyles = StyleSheet.create({
     marginLeft: 10,
   },
   contentButton: {
-    marginTop: 15,
+    marginVertical: 15,
     width: "80%",
   },
 });

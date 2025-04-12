@@ -1,10 +1,9 @@
 import {
-  ButtonStyle,
+  ButtonGeneralStyle,
   GeneralStyle,
   TextStyle,
 } from "@/constants/StyleComponents";
 import {
-  Button,
   Modal,
   StyleSheet,
   Text,
@@ -22,13 +21,14 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { GlobalColors, textColors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import ImageWithOptions from "@/components/Shared/ImageWithOptions";
 import { useQuery } from "@tanstack/react-query";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import apiCatalogUserService from "@/api/CatalogUserService";
 import { MAX_LENGTH } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
+import GeneralButton from "@/components/Shared/GeneralButton";
 
 const schema = yup.object().shape({
   nameService: yup.string().required("Campo obligatorio"),
@@ -178,13 +178,22 @@ export const UploadImageModal = ({
     <Modal animationType="slide" transparent={false} visible={open}>
       <View style={localStyle.headClose}>
         <TouchableOpacity onPress={handleClose}>
-          <SimpleLineIcons name="close" size={24} color="black" />
+          <SimpleLineIcons
+            name="close"
+            size={24}
+            color={ThemeColorsSthetic.accentReverse}
+          />
         </TouchableOpacity>
       </View>
       {loadingData ? (
         <LoadingView />
       ) : (
         <View>
+          <ThemedText style={localStyle.titleModal}>
+            {!idEntity
+              ? "Agregar catalogo de servicio"
+              : "Editar catalogo de servicio"}
+          </ThemedText>
           <View style={{ paddingHorizontal: 15, marginBottom: 10 }}>
             <ThemedText style={localStyle.labelInput}>
               * Descripción de la galeria
@@ -204,7 +213,7 @@ export const UploadImageModal = ({
               )}
             />
             {errors.nameService && (
-              <Text style={textColors.errors}>
+              <Text style={TextStyle.textError}>
                 {errors.nameService.message}
               </Text>
             )}
@@ -225,7 +234,7 @@ export const UploadImageModal = ({
             >
               <View style={{ width: "48%" }}>
                 <View>
-                  <ThemedText darkColor="black">De:</ThemedText>
+                  <ThemedText style={localStyle.subLabel}>De:</ThemedText>
                   <Controller
                     control={control}
                     name="minPrice"
@@ -243,7 +252,7 @@ export const UploadImageModal = ({
               </View>
               <View style={{ width: "48%" }}>
                 <View>
-                  <ThemedText darkColor="black">A:</ThemedText>
+                  <ThemedText style={localStyle.subLabel}>A:</ThemedText>
                   <Controller
                     control={control}
                     name="maxPrice"
@@ -262,15 +271,13 @@ export const UploadImageModal = ({
             </View>
           </View>
           <View style={localStyle.headClose}>
-            <Button
-              title="Abrir galeria"
-              color={ButtonStyle.btnInfo.color}
-              onPress={showFileManager}
+            <GeneralButton
+              textBtn="Abrir galeria"
+              styleBtn={ButtonGeneralStyle.btnActionSthetic}
+              handleOnPress={showFileManager}
             />
           </View>
-          <View
-            style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap" }}
-          >
+          <View style={localStyle.contentListImg}>
             {listImage.map((item) => (
               <View key={item.key}>
                 <ImageWithOptions
@@ -287,16 +294,21 @@ export const UploadImageModal = ({
               archivos*
             </ThemedText>
           </View>
-          <View style={ButtonStyle.contentBtn}>
-            <Button
-              title="Guardar"
-              color={
-                disableBtn
-                  ? ButtonStyle.btnDisabled.color
-                  : ButtonStyle.btnSuccess.color
+          <View style={ButtonGeneralStyle.contentBtnSthetic}>
+            <GeneralButton
+              styleBtn={
+                !disableBtn
+                  ? ButtonGeneralStyle.btnUpdateSthetic
+                  : ButtonGeneralStyle.btnDisabledSthetic
               }
-              disabled={disableBtn}
-              onPress={handleSubmit(handleSaveCatalogUserService)}
+              textBtn="Actualizar datos"
+              styleText={{
+                color: !disableBtn
+                  ? ThemeColorsSthetic.textLight
+                  : ThemeColorsSthetic.muted,
+              }}
+              handleOnPress={handleSubmit(handleSaveCatalogUserService)}
+              disabledBtn={disableBtn}
             />
           </View>
         </View>
@@ -312,10 +324,10 @@ const localStyle = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
   },
-  contentImg: {
-    width: 100,
-    height: 100,
-    margin: 10,
+  titleModal: {
+    ...TextStyle.titleModal,
+    marginTop: 20,
+    marginBottom: 30,
   },
   removeIconImg: {
     position: "absolute",
@@ -328,11 +340,19 @@ const localStyle = StyleSheet.create({
     height: "100%",
   },
   labelInput: {
-    color: GlobalColors.blueColor,
+    color: ThemeColorsSthetic.textLabels,
     fontWeight: "bold",
   },
   textNote: {
     marginTop: 15,
+  },
+  subLabel: {
+    color: ThemeColorsSthetic.textLabels,
+  },
+  contentListImg: {
+    marginTop: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
 });
 

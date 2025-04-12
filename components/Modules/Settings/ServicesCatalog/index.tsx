@@ -1,8 +1,8 @@
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "@/components/ThemedText";
-import { GlobalColors } from "@/constants/Colors";
+import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
 import { functionServicesType } from "../types";
 import { useCallback, useState } from "react";
 import { OptionUploadModal } from "./OptionUploadModal";
@@ -19,6 +19,8 @@ import ModalConfirm from "@/components/Shared/ModalConfirm";
 import { fileTypes } from "@/constants/GeneralTypes";
 import UploadVideoModal from "./OptionUploadModal/UploadVideoModal";
 import { ButtonGeneralStyle } from "@/constants/StyleComponents";
+import GeneralButton from "@/components/Shared/GeneralButton";
+import { Feather } from "@expo/vector-icons";
 
 /**
  * ESTE ARCHIVO TIENE COMENTADO LAS OPCIONES PARA SUBIR VIDEO PARA UN FUTURO
@@ -141,23 +143,27 @@ export const ServicesCatalog = ({
         handleReturn={returnBack}
       />
       <View style={localStyle.contentBtnAdd}>
-        <TouchableOpacity
-          style={ButtonGeneralStyle.btnAction}
-          // onPress={handleOpenModalOption} // Cuando mejore el proyecto habilitaremos la opcion de subir videos ;-)
-          onPress={() => handleOpenTypeModalUpload("image")}
-        >
-          <View style={localStyle.btnContent}>
-            <ThemedText
-              lightColor="white"
-              style={{
-                fontWeight: "bold",
-              }}
-            >
-              Agregar portafolio{"  "}
-            </ThemedText>
-            <MaterialIcons name="add-photo-alternate" size={22} color="white" />
-          </View>
-        </TouchableOpacity>
+        <GeneralButton
+          styleBtn={localStyle.btnUpload}
+          textBtn={
+            <View style={localStyle.btnContent}>
+              <ThemedText
+                lightColor="white"
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Agregar portafolio{"  "}
+              </ThemedText>
+              <MaterialIcons
+                name="add-photo-alternate"
+                size={22}
+                color="white"
+              />
+            </View>
+          }
+          handleOnPress={() => handleOpenTypeModalUpload("image")}
+        />
       </View>
       {isPendingLoad ? (
         <LoadingView />
@@ -205,9 +211,13 @@ export const ServicesCatalog = ({
       /> */}
       <ModalConfirm
         open={openModalConfirm}
+        message="¿Estás seguro de eliminar el projecto, esta acción no se podra revertir?"
+        title="Eliminar proyector"
         handleClose={handleOpenModalConfirm}
         handleConfirm={handleConfirmDelete}
-        message="¿Estás seguro de eliminar el projecto, esta acción no se podra revertir?"
+        IconModal={
+          <Feather name="trash" size={35} color={ThemeColorsSthetic.delete} />
+        }
       />
     </View>
   );
@@ -229,12 +239,18 @@ const localStyle = StyleSheet.create({
   },
   btnContent: {
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
   },
   scrollViewGallery: {
     height: "80%",
     paddingHorizontal: 10,
     marginTop: 10,
+  },
+  btnUpload: {
+    ...ButtonGeneralStyle.btnUpdateSthetic,
+    paddingVertical: 10,
+    width: 170,
   },
 });
 

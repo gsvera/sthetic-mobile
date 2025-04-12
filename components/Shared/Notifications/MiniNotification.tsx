@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
-import { GlobalColors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { TYPE_STATUS } from "@/constants/Constants";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 import { ReactNode, useEffect, useState } from "react";
@@ -20,12 +20,12 @@ export default function MiniNotification({
   useEffect(() => {
     switch (type) {
       case TYPE_STATUS.SUCCESS: {
-        setBgColor(GlobalColors.successNotification);
+        setBgColor(ThemeColorsSthetic.successNotification);
         setIcon(<Entypo name="check" size={20} color="white" />);
         break;
       }
       case TYPE_STATUS.UPDATE: {
-        setBgColor(GlobalColors.updateNotification);
+        setBgColor(ThemeColorsSthetic.updateNotification);
         setIcon(
           <MaterialIcons
             name="published-with-changes"
@@ -36,7 +36,7 @@ export default function MiniNotification({
         break;
       }
       case TYPE_STATUS.ERROR: {
-        setBgColor(GlobalColors.errorNotification);
+        setBgColor(ThemeColorsSthetic.errorNotification);
         setIcon(<AntDesign name="closecircleo" size={20} color="white" />);
         break;
       }
@@ -56,14 +56,16 @@ export default function MiniNotification({
 const localStyle = StyleSheet.create({
   backgroundContent: {
     borderRadius: 5,
-    maxWidth: "65%",
-    top: 50,
-    paddingVertical: 5,
+    maxWidth: "100%",
+    top: 40,
+    paddingVertical: 15,
     paddingHorizontal: 15,
     right: 10,
+    left: 10,
     position: "absolute",
     zIndex: 1000,
     alignItems: "center",
+    justifyContent: "center",
     flexDirection: "row",
   },
 });
