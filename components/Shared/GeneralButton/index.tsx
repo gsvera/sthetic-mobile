@@ -4,7 +4,8 @@ import { TouchableOpacity } from "react-native";
 type generalButtonProps = {
   styleBtn: {};
   textBtn: string | React.ReactNode;
-  styleText: {};
+  styleText?: {};
+  disabledBtn?: boolean;
   handleOnPress: (value?: any) => void;
 };
 
@@ -13,9 +14,14 @@ export const GeneralButton = ({
   textBtn,
   styleText,
   handleOnPress,
+  disabledBtn = false,
 }: generalButtonProps) => {
   return (
-    <TouchableOpacity style={styleBtn} onPress={handleOnPress}>
+    <TouchableOpacity
+      style={styleBtn}
+      onPress={handleOnPress}
+      disabled={disabledBtn}
+    >
       <ThemedText style={styleText}>{textBtn}</ThemedText>
     </TouchableOpacity>
   );

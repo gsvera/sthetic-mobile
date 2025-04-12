@@ -8,6 +8,9 @@ import { StyleSheet } from "react-native";
 const tintColorLight = '#dc0088';
 const tintColorDark = '#dc0088';
 
+/**
+ * @deprecated Antiguos colores ya no se deben utilizar mejor utilizar @constant ThemeColorsSthetic
+ */
 export enum GlobalColors {
   pinkColor = "#dc0088",
   blueColor = "#003a85",
@@ -24,6 +27,127 @@ export enum GlobalColors {
   updateNotification = '#3867fc',
   errorNotification = '#ff4d4d'
 }
+
+/**
+ * @param primary - Color primario, botones, acentos
+ * @param secondary - Fondo principal o secciones
+ * @param accent - Íconos, detalles premium
+ * @param accentReverse - Aporta contraste sin ser negro, ideal para íconos o textos destacados
+ * @param background - Backgrounds, tarjetas
+ * @param backgroundStrong - Background oscuro
+ * @param text - Texto principal
+ * @param textLight - Texto invertido
+ * @param textOre - Texto color oro para fondos oscuros y claros
+ * @param textLabels - Texto para labels con fondo claro
+ * @param textError - Texto para marcar errores
+ * @param muted -Texto secundario / descripciones
+ * @param disabled - Para elementos deshabilitados
+ * @param update - Para elementos | botones que realicen acciones de actualizar
+ * @param save - Para elemento | botones que realicen accion de guardar
+ * @param delete - para elemento | botones que realicen accion de borrar
+ * @param action - para elementos | botones que realicen acciones pero no de tipo crud
+ * @param cancel - para elementos | boton que realicen cancelacion de una accion
+ * @param textTitle - Azul acero para titulos con fondos claros
+ * @param successNotification - para notificaciones exitosas
+ * @param updateNotification - para notificaciones de actualizacion
+ * @param errorNotification - para notificaciones de error
+ * @param dangerColor - colores de error o advertencia de peligro o de acciones que son de riesgo
+ * 
+ */
+export enum ThemeColorsSthetic  {
+  /**
+   * Color primario, botones, acentos
+   */
+    primary = '#EFB8C8', 
+    /**
+     * Fondo principal o secciones
+     */
+    secondary = '#F3E8FF', 
+    /**
+     * Íconos, detalles premium
+     */
+    accent = '#D4AF37',
+    /**
+     * Aporta contraste sin ser negro, ideal para íconos o textos destacados
+     */
+    accentReverse = '#593D63',
+    /**
+     * Backgrounds, tarjetas
+     */
+    backgroundLigth = '#F5F5F5',
+    /**
+     * Background oscuro
+     */
+    backgroundStrong = '#2B2B2B',
+    /**
+     * 	Texto principal
+     */
+    text = '#2E2E2E',
+    /**
+     * Texto invertido
+     */
+    textLight = '#FFFFFF',
+    /**
+     * Texto color oro para fondos oscuros y claros
+     */
+    textOre = "#D4AF37",
+    /**
+     * Texto para labels con fondo claro
+     */
+    textLabels = "#964F4C",
+    /**
+     *  Texto para marcar errores
+     */
+    textError = "#A4161A",
+    /**
+     * Azul acero para titulos con fondos claros
+     */
+    textTitle = '#3E5C76',
+    /**
+     * 	Texto secundario / descripciones
+     */
+    muted = '#8D8D8D',
+    /**
+     * Para elementos deshabilitados
+     */
+    disabled = '#CFCFCF',
+    /**
+     * para elementos | botones que realicen acciones de actualizar
+     */
+    update = '#4A3F35',
+    /**
+     * Para elemento | botones que realicen accion de guardar
+     */
+    save = '#D4AF37',
+    /**
+     * para elemento | botones que realicen accion de borrar
+     */
+    delete = '#964F4C',
+    /**
+     * para elementos | botones que realicen acciones pero no de tipo crud
+     */
+    action= '#3C3C3C',
+    /**
+     * para elementos | boton que realicen cancelacion de una accion
+     */
+    cancel = "#5e5e5e",
+    /**
+     * para notificaciones exitosas
+     */
+    successNotification = '#3B7A57',
+    /**
+     * para notificaciones de actualizacion
+     */
+    updateNotification = '#2C3E50',
+    /**
+     * para notificaciones de error
+     */
+    errorNotification = '#B04A4A',
+    /**
+     * colores de error o advertencia de peligro o de acciones que son de riesgo
+     */
+    dangerColor = '#ff4d4d'
+};
 
 export const textColors = {
   errors: {

@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Checkbox from "expo-checkbox";
-import { GlobalColors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 
 type PoliticstAndConditionsProps = {
   stateCheck: boolean;
@@ -83,16 +83,16 @@ export const localStyles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
-    color: GlobalColors.blackColor,
+    color: ThemeColorsSthetic.textTitle,
     fontWeight: "bold",
   },
   text: {
-    color: GlobalColors.blackColor,
+    color: ThemeColorsSthetic.text,
     marginBottom: 15,
     textAlign: "justify",
   },
   textAgree: {
-    color: GlobalColors.blueColor,
+    color: ThemeColorsSthetic.textLabels,
     fontWeight: "bold",
     marginLeft: 10,
   },

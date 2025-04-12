@@ -1,5 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
-import { GlobalColors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 
@@ -18,9 +18,15 @@ export const SubHeaderReturn = ({
         style={localStyle.touchSubtitle}
         onPress={() => handleReturn()}
       >
-        <AntDesign name="arrowleft" size={24} color={GlobalColors.whiteColor} />
+        <AntDesign
+          name="arrowleft"
+          size={24}
+          color={ThemeColorsSthetic.textOre}
+        />
         <View style={{ marginLeft: 10 }}>
-          <ThemedText type="subtitle">{subtitle}</ThemedText>
+          <ThemedText type="subtitle" style={localStyle.subtitle}>
+            {subtitle}
+          </ThemedText>
         </View>
       </TouchableOpacity>
     </View>
@@ -30,7 +36,7 @@ export const SubHeaderReturn = ({
 const localStyle = StyleSheet.create({
   content: {
     height: 80,
-    backgroundColor: GlobalColors.pinkColor,
+    backgroundColor: ThemeColorsSthetic.backgroundStrong,
     alignItems: "center",
     flexDirection: "row",
     paddingLeft: 10,
@@ -39,6 +45,9 @@ const localStyle = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     left: 20,
+  },
+  subtitle: {
+    color: ThemeColorsSthetic.textOre,
   },
 });
 

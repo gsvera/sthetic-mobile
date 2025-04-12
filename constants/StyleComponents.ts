@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { GlobalColors } from "./Colors";
+import { GlobalColors, ThemeColorsSthetic } from "./Colors";
 
 /**
  * @deprecated Viejos estilos, mejor utilizar ButtonGeneralStyle
@@ -82,7 +82,70 @@ export const ButtonGeneralStyle = StyleSheet.create({
     },
     btnBig: {
         width: '48%'
-    }
+    },
+    btnSaveSthetic: {
+        backgroundColor: ThemeColorsSthetic.save,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 12,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    btnUpdateSthetic: {
+        backgroundColor: ThemeColorsSthetic.update,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 12,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    btnDeleteSthetic: {
+        backgroundColor: ThemeColorsSthetic.delete,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 12,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    btnDisabledSthetic: {
+        backgroundColor: ThemeColorsSthetic.disabled,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 12,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    btnCancelSthetic: {
+        backgroundColor: ThemeColorsSthetic.cancel,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 12,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    btnActionSthetic: {
+        backgroundColor: ThemeColorsSthetic.action,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 12,
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    contentBtnSthetic: {
+        marginTop: 20, paddingHorizontal: 20 
+   }
 })
 
 export const TextStyle = StyleSheet.create({
@@ -121,6 +184,30 @@ export const TextStyle = StyleSheet.create({
     },
     size40: {
         fontSize: 40
+    },
+    titleRegister: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: ThemeColorsSthetic.textTitle
+    }, 
+    titleModal: {
+        fontWeight: 'bold',
+        fontSize: 24,
+        color: ThemeColorsSthetic.textTitle,
+        textAlign: 'center'
+    },
+    label: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: ThemeColorsSthetic.textLabels 
+    },
+    value: {
+        fontSize: 17,
+        color: ThemeColorsSthetic.text
+    },
+    textError: {
+        color: ThemeColorsSthetic.dangerColor
     }
 })
 

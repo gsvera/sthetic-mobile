@@ -1,3 +1,4 @@
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import Feather from "@expo/vector-icons/Feather";
 import { Image, Pressable, StyleSheet, View } from "react-native";
@@ -24,9 +25,13 @@ export const ImageWithOptions = ({
     <View style={styleImg || localStyle.contentImg}>
       <Pressable style={localStyle.removeIconImg} onPress={handleRemovePicture}>
         {iconDelete === "trash" ? (
-          <Feather name="trash" size={24} color="red" />
+          <Feather name="trash" size={24} color={ThemeColorsSthetic.delete} />
         ) : (
-          <SimpleLineIcons name="close" size={24} color="black" />
+          <SimpleLineIcons
+            name="close"
+            size={24}
+            color={ThemeColorsSthetic.accentReverse}
+          />
         )}
       </Pressable>
       <Image style={localStyle.image} source={{ uri: uri }} />

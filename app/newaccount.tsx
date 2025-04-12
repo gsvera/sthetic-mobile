@@ -1,7 +1,7 @@
 import React from "react";
 import Plan from "@/components/Modules/Register/Plan";
 import { ThemedText } from "@/components/ThemedText";
-import { Container, GlobalColors } from "@/constants/Colors";
+import { Container, ThemeColorsSthetic } from "@/constants/Colors";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Alert, TouchableOpacity, View } from "react-native";
@@ -11,7 +11,7 @@ import FormRegister, {
   FormInputs,
 } from "@/components/Modules/Register/FormRegister";
 import { PlanCardProps } from "@/components/Modules/Register/Plan/PlanCard";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiUser } from "@/api/User";
 import PoliticsAndConditions from "@/components/Modules/Register/PoliticsAndConditions";
 import SuccessNotification from "@/components/Shared/Notifications/SuccessNotification";
@@ -21,6 +21,7 @@ import { useApiProvider } from "@/provider/InterceptorProvider";
 import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
 import ArrowBack from "@/components/Modules/Register/ArrowBack";
 import FormPay from "@/components/Modules/Register/FormPay";
+import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 
 enum STEP_CREATION_PROFILE {
   FIELD_PROFILE = 1,
@@ -30,6 +31,7 @@ enum STEP_CREATION_PROFILE {
 }
 
 export default function newAccount() {
+  const queryClient = useQueryClient();
   const navigation = useNavigation();
   const { setToken } = useApiProvider();
   const [agreeConditions, setAgreeConditions] = useState(false);
@@ -83,7 +85,10 @@ export default function newAccount() {
   const handleSelectedPlan = (plan: PlanCardProps) => {
     setPlanSelected(plan);
     setStepView(STEP_CREATION_PROFILE.FORM_PAY);
-    // payPlan(plan);
+    setCoupon("");
+    queryClient.removeQueries({
+      queryKey: [REACT_QUERY_KEYS.catalogs.coupon.getByCode("get-coupon")],
+    });
   };
 
   function payPlan() {
@@ -131,7 +136,7 @@ export default function newAccount() {
               onPress={() => handleCancel()}
               name="close"
               size={24}
-              color={GlobalColors.blackColor}
+              color={ThemeColorsSthetic.accentReverse}
             />
           </View>
           <ThemedText style={localStyles.title}>Crear cuenta nueva</ThemedText>
@@ -191,6 +196,6 @@ const localStyles = StyleSheet.create({
     fontSize: 25,
     height: 50,
     paddingTop: 10,
-    color: GlobalColors.blueColor,
+    color: ThemeColorsSthetic.textTitle,
   },
 });

@@ -25,6 +25,8 @@ import { FORMAT_DATE, TYPE_STATUS } from "@/constants/Constants";
 import { convertDateToGeneralFormat } from "@/utils/GeneralUtils";
 import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
+import { ThemeColorsSthetic } from "@/constants/Colors";
+import GeneralButton from "@/components/Shared/GeneralButton";
 
 type exceptionDayProps = modalCustomProps & {
   day: weekDaysProps;
@@ -66,13 +68,12 @@ export const MakeExceptionDay = ({
         REACT_QUERY_KEYS.calendar.calendarException.getByUser(idUser as string),
       ],
     });
-    setCommentsException("");
-    handleCloseModal();
+    handleCloseModalException();
   };
 
   useEffect(() => {
     handleMakeExceptionDay(day);
-    if (entityToEdit) {
+    if (entityToEdit && open) {
       handleMakeExceptionDay(entityToEdit);
       setCommentsException(entityToEdit.comments);
     }
@@ -80,6 +81,12 @@ export const MakeExceptionDay = ({
 
   const handleMakeExceptionDay = (day: weekDaysProps) => {
     setLocalDay((value) => ({ ...value, ...day }));
+  };
+
+  const handleCloseModalException = () => {
+    handleMakeExceptionDay(day);
+    setCommentsException("");
+    handleCloseModal();
   };
 
   const handleSaveException = () => {
@@ -129,12 +136,16 @@ export const MakeExceptionDay = ({
       <ContentKeyboardAutoScroll>
         <View style={localStyle.contentBody}>
           <View style={localStyle.contentBtnClose}>
-            <Pressable onPress={handleCloseModal}>
-              <SimpleLineIcons name="close" size={24} color="black" />
+            <Pressable onPress={handleCloseModalException}>
+              <SimpleLineIcons
+                name="close"
+                size={24}
+                color={ThemeColorsSthetic.accentReverse}
+              />
             </Pressable>
           </View>
           <View style={{ marginBottom: 10 }}>
-            <ThemedText style={localStyle.title}>
+            <ThemedText style={TextStyle.titleModal}>
               Cambio de horario para el día {day.dateString}
             </ThemedText>
           </View>
@@ -154,12 +165,12 @@ export const MakeExceptionDay = ({
               numberOfLines={6}
             />
             <View style={localStyle.contentSaveBtn}>
-              <TouchableOpacity
-                style={ButtonGeneralStyle.btnSuccess}
-                onPress={handleSaveException}
-              >
-                <ThemedText>Guardar excepción</ThemedText>
-              </TouchableOpacity>
+              <GeneralButton
+                styleBtn={ButtonGeneralStyle.btnUpdateSthetic}
+                textBtn="Guardar exception"
+                styleText={TextStyle.bold}
+                handleOnPress={handleSaveException}
+              />
             </View>
           </View>
         </View>
@@ -182,12 +193,13 @@ const localStyle = StyleSheet.create({
     ...TextStyle.center,
   },
   label: {
-    ...TextStyle.fontBoldDark,
+    ...TextStyle.label,
     ...TextStyle.center,
   },
   inputComments: {
     ...InputStyle.withBorder,
     ...InputStyle.bigBox,
+    ...TextStyle.value,
     marginTop: 10,
   },
   contentSaveBtn: {

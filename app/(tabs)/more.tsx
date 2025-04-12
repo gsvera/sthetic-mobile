@@ -1,6 +1,6 @@
 import { View, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
-import { GlobalColors } from "@/constants/Colors";
+import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 import {
   ErrorAlertMessage,
@@ -26,12 +26,14 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import TypeServices from "@/components/Modules/Settings/TypeServices";
 import MySupscription from "@/components/Modules/Settings/MySupscription";
 import ModalConfirm from "@/components/Shared/ModalConfirm";
+import { TextStyle } from "@/constants/StyleComponents";
 
 export default function More() {
   const navigation = useNavigation();
   const { setToken } = useApiProvider();
   const [viewComponent, setViewComponent] = useState<string>();
   const [openModalDeleteAccount, setOpenModalDeleteAccount] = useState(false);
+  const [openModaloLogout, setOpenModalLogout] = useState(false);
   // const [openModal, setOpenModal] = useState(false);
 
   const { data: dataUser, isFetching: loadingData } = useQuery({
@@ -171,8 +173,10 @@ export default function More() {
               />
             </TouchableOpacity>
             <View style={{ marginLeft: 10 }}>
-              <ThemedText>Bienvenido!</ThemedText>
-              <ThemedText style={{ fontWeight: "bold" }}>
+              <ThemedText style={{ color: ThemeColorsSthetic.textOre }}>
+                Bienvenido!
+              </ThemedText>
+              <ThemedText style={localStyle.name}>
                 {dataUser?.firstName} {dataUser?.lastName}
               </ThemedText>
             </View>
@@ -268,7 +272,10 @@ export default function More() {
             </Pressable>
           </View>
           <View style={localStyle.contentDivisor}>
-            <Pressable style={localStyle.itemMenu} onPress={handleLogout}>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => setOpenModalLogout(true)}
+            >
               <View style={localStyle.itemMenuText}>
                 <MaterialIcons name="logout" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
@@ -288,7 +295,7 @@ export default function More() {
                   name="delete"
                   style={{
                     ...localStyle.iconItem,
-                    color: GlobalColors.dangerColor,
+                    color: ThemeColorsSthetic.dangerColor,
                   }}
                 />
                 <ThemedText darkColor="black">
@@ -310,7 +317,28 @@ export default function More() {
             handleClose={() => setOpenModalDeleteAccount((v) => !v)}
             handleConfirm={handleDeleteAccount}
             textBtnConfirm="Eliminar cuenta"
-            IconModal={<AntDesign name="warning" size={35} color="red" />}
+            IconModal={
+              <AntDesign
+                name="warning"
+                size={35}
+                color={ThemeColorsSthetic.dangerColor}
+              />
+            }
+          />
+          <ModalConfirm
+            open={openModaloLogout}
+            title={"Cerrar sesión"}
+            message={"¿Quieres cerrar la sesión de tu cuenta?"}
+            handleClose={() => setOpenModalLogout((v) => !v)}
+            handleConfirm={logoutSession}
+            textBtnConfirm="Cerrar sesión"
+            IconModal={
+              <MaterialIcons
+                name="logout"
+                size={35}
+                color={ThemeColorsSthetic.accentReverse}
+              />
+            }
           />
         </View>
       )}
@@ -330,13 +358,13 @@ const localStyle = StyleSheet.create({
     height: 48,
   },
   iconItem: {
-    color: GlobalColors.blackColor,
+    color: ThemeColorsSthetic.accentReverse,
     marginLeft: 15,
     fontSize: 22,
   },
   contentHeader: {
     height: 100,
-    backgroundColor: GlobalColors.pinkColor,
+    backgroundColor: ThemeColorsSthetic.backgroundStrong,
     alignItems: "center",
     flexDirection: "row",
     paddingLeft: 10,
@@ -345,5 +373,10 @@ const localStyle = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50, // Hace que la imagen sea circular
+  },
+  name: {
+    ...TextStyle.bold,
+    ...TextStyle.size20,
+    color: ThemeColorsSthetic.textOre,
   },
 });

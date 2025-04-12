@@ -4,7 +4,7 @@ import { weekDaysProps } from "../types";
 import { GridStyle, TextStyle } from "@/constants/StyleComponents";
 import { ThemedText } from "@/components/ThemedText";
 import { Switch } from "react-native";
-import { GlobalColors } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -73,34 +73,30 @@ export const AvailableTimeCard = ({
           <View style={GridStyle.rowSpaceBetween}>
             <View style={localStyle.cardRowItem}>
               <Pressable onPress={() => handleShowTimePicker("start")}>
-                <ThemedText style={TextStyle.fontBoldDark}>
+                <ThemedText style={TextStyle.label}>
                   Hora inicio:{" "}
                   {!day.startTime && (
                     <Feather name="alert-circle" size={24} color="red" />
                   )}
                 </ThemedText>
-                <ThemedText style={TextStyle.darkColor}>
-                  {day.startTime}
-                </ThemedText>
+                <ThemedText style={TextStyle.value}>{day.startTime}</ThemedText>
               </Pressable>
             </View>
             <View style={localStyle.cardRowItem}>
               <Pressable onPress={() => handleShowTimePicker("end")}>
-                <ThemedText style={TextStyle.fontBoldDark}>
+                <ThemedText style={TextStyle.label}>
                   Hora inicio:{" "}
                   {!day.endTime && (
                     <Feather name="alert-circle" size={24} color="red" />
                   )}
                 </ThemedText>
-                <ThemedText style={TextStyle.darkColor}>
-                  {day.endTime}
-                </ThemedText>
+                <ThemedText style={TextStyle.value}>{day.endTime}</ThemedText>
               </Pressable>
             </View>
           </View>
           <View style={{ ...GridStyle.rowSpaceBetween, marginTop: 10 }}>
             <View style={localStyle.cardRowItem}>
-              <ThemedText style={TextStyle.fontBoldDark}>
+              <ThemedText style={TextStyle.label}>
                 Duración (min) promedio citas:{" "}
                 {day.duration === 0 && (
                   <Feather name="alert-circle" size={24} color="red" />
@@ -110,11 +106,11 @@ export const AvailableTimeCard = ({
                 value={day.duration.toString()}
                 keyboardType="numeric"
                 onChangeText={(text) => handleTimeAppointment(text)}
-                style={{ borderBottomWidth: 1, marginVertical: 6 }}
+                style={localStyle.inputCard}
               />
             </View>
             <View style={localStyle.cardRowItem}>
-              <ThemedText style={TextStyle.fontBoldDark}>
+              <ThemedText style={TextStyle.label}>
                 Máx citas por rango de tiempo:{" "}
                 {day.maxReservations === 0 && (
                   <Feather name="alert-circle" size={24} color="red" />
@@ -124,7 +120,7 @@ export const AvailableTimeCard = ({
                 value={day.maxReservations.toString()}
                 keyboardType="numeric"
                 onChangeText={(text) => handleMaxReservations(text)}
-                style={{ borderBottomWidth: 1, marginVertical: 6 }}
+                style={localStyle.inputCard}
               />
             </View>
           </View>
@@ -146,18 +142,21 @@ const localStyle = StyleSheet.create({
   cardItem: {
     marginBottom: 20,
     padding: 30,
-    borderRadius: 5,
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowColor: GlobalColors.pinkColor,
-    elevation: 5,
+    borderColor: ThemeColorsSthetic.text,
+    elevation: 2,
   },
   titleDay: {
-    ...TextStyle.fontBoldBlue,
     ...TextStyle.size20,
+    color: ThemeColorsSthetic.textLabels,
+    fontWeight: "bold",
   },
   cardRowItem: {
     width: "45%",
+  },
+  inputCard: {
+    ...TextStyle.value,
+    borderBottomWidth: 1,
+    marginVertical: 6,
   },
 });
 export default AvailableTimeCard;

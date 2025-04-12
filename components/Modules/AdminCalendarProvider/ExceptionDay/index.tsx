@@ -1,5 +1,6 @@
 import { exceptionDayType } from "../types";
 import { ThemedText } from "@/components/ThemedText";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { GridStyle, MarginStyle, TextStyle } from "@/constants/StyleComponents";
 import { StyleSheet, View } from "react-native";
 
@@ -10,48 +11,46 @@ export const ExceptionDay = (exceptionDay: exceptionDayType) => {
         <ThemedText style={localStyle.textTitle}>Excepción activa</ThemedText>
       </View>
       <View style={localStyle.rowElement}>
-        <ThemedText style={TextStyle.fontBoldBlue}>Estatus:</ThemedText>
-        <ThemedText style={TextStyle.darkColor}>
+        <ThemedText style={TextStyle.label}>Estatus:</ThemedText>
+        <ThemedText style={TextStyle.value}>
           {exceptionDay.isActive ? "Abierto" : "Cerrado"}
         </ThemedText>
       </View>
       {exceptionDay.isActive && (
         <View>
           <View style={localStyle.rowElement}>
-            <ThemedText style={TextStyle.fontBoldBlue}>Inicio:</ThemedText>
-            <ThemedText style={TextStyle.darkColor}>
+            <ThemedText style={TextStyle.label}>Inicio:</ThemedText>
+            <ThemedText style={TextStyle.value}>
               {exceptionDay.startTime}
             </ThemedText>
           </View>
           <View style={localStyle.rowElement}>
-            <ThemedText style={TextStyle.fontBoldBlue}>Fin:</ThemedText>
-            <ThemedText style={TextStyle.darkColor}>
+            <ThemedText style={TextStyle.label}>Fin:</ThemedText>
+            <ThemedText style={TextStyle.value}>
               {exceptionDay.endTime}
             </ThemedText>
           </View>
           <View style={localStyle.rowElement}>
-            <ThemedText style={TextStyle.fontBoldBlue}>
+            <ThemedText style={TextStyle.label}>
               Duración (min) promedio citas:
             </ThemedText>
-            <ThemedText style={TextStyle.darkColor}>
+            <ThemedText style={TextStyle.value}>
               {exceptionDay.duration}
             </ThemedText>
           </View>
           <View style={localStyle.rowElement}>
-            <ThemedText style={TextStyle.fontBoldBlue}>
+            <ThemedText style={TextStyle.label}>
               Máx citas por rango de tiempo:
             </ThemedText>
-            <ThemedText style={TextStyle.darkColor}>
+            <ThemedText style={TextStyle.value}>
               {exceptionDay.maxReservations}
             </ThemedText>
           </View>
         </View>
       )}
       <View style={localStyle.borderComments}>
-        <ThemedText style={TextStyle.fontBoldBlue}>Comentarios:</ThemedText>
-        <ThemedText style={TextStyle.darkColor}>
-          {exceptionDay.comments}
-        </ThemedText>
+        <ThemedText style={TextStyle.label}>Comentarios:</ThemedText>
+        <ThemedText style={TextStyle.value}>{exceptionDay.comments}</ThemedText>
       </View>
     </View>
   );
@@ -59,9 +58,10 @@ export const ExceptionDay = (exceptionDay: exceptionDayType) => {
 
 const localStyle = StyleSheet.create({
   textTitle: {
-    ...TextStyle.fontBoldDark,
     ...TextStyle.center,
     ...TextStyle.size20,
+    color: ThemeColorsSthetic.text,
+    fontWeight: "bold",
   },
   rowElement: {
     ...GridStyle.rowSpaceBetween,
