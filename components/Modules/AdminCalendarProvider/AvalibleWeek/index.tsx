@@ -153,7 +153,7 @@ export const AvailibleWeek = ({
         <GeneralButton
           styleBtn={localStyle.btnSave}
           textBtn="Actualizar datos"
-          styleText={TextStyle.bold}
+          styleText={TextStyle.fontBoldWhite}
           handleOnPress={handleSaveCalendar}
         />
       </View>

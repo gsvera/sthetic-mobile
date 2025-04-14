@@ -45,13 +45,13 @@ export const ModalConfirm = ({
           <View style={localStyle.contentBtns}>
             <GeneralButton
               styleBtn={localStyle.btnCancel}
-              styleText={TextStyle.bold}
+              styleText={TextStyle.fontBoldWhite}
               handleOnPress={handleClose}
               textBtn="Cancelar"
             />
             <GeneralButton
               styleBtn={localStyle.btnConfirm}
-              styleText={TextStyle.bold}
+              styleText={TextStyle.fontBoldWhite}
               handleOnPress={handleConfirm}
               textBtn={textBtnConfirm || "Confirmar"}
             />

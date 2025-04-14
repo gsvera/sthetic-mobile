@@ -126,7 +126,7 @@ export const FormPay = ({
       <View style={localStyle.rowContent}>
         <GeneralButton
           textBtn="Pagar"
-          styleText={TextStyle.bold}
+          styleText={TextStyle.fontBoldWhite}
           styleBtn={localStyle.btnPay}
           handleOnPress={handlePay}
         />

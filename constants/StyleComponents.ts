@@ -249,5 +249,8 @@ export const GridStyle = StyleSheet.create({
 export const MarginStyle = StyleSheet.create({
     marginT10: {
         marginTop: 10
+    },
+    marginT20: {
+        marginTop: 20
     }
 });

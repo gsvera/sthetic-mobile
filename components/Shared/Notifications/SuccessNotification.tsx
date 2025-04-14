@@ -1,4 +1,4 @@
-import { GlobalColors } from "@/constants/Colors";
+import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import { ThemedText } from "../../ThemedText";
@@ -10,7 +10,7 @@ export default function SuccessNotification() {
         <AntDesign
           name="checkcircle"
           size={60}
-          color={GlobalColors.whiteColor}
+          color={ThemeColorsSthetic.textLight}
         />
         <ThemedText type="subtitle" style={localStyles.textSuccess}>
           Su cuenta ha sido creada con exito
@@ -22,7 +22,7 @@ export default function SuccessNotification() {
 
 const localStyles = StyleSheet.create({
   backgroundContent: {
-    backgroundColor: GlobalColors.greenColor,
+    backgroundColor: ThemeColorsSthetic.successNotification,
     width: "100%",
     height: "100%",
     bottom: 0,
@@ -40,7 +40,7 @@ const localStyles = StyleSheet.create({
     flex: 1,
   },
   textSuccess: {
-    color: GlobalColors.whiteColor,
+    color: ThemeColorsSthetic.textLight,
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 15,

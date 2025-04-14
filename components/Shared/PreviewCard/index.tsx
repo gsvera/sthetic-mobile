@@ -71,7 +71,7 @@ export const PreviewCard = (element: previewCardProps) => {
       <GeneralButton
         styleBtn={localStyle.btnEdit}
         textBtn="Actualizar datos"
-        styleText={TextStyle.bold}
+        styleText={TextStyle.fontBoldWhite}
         handleOnPress={handleEditProject}
       />
     </View>

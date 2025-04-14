@@ -1,6 +1,7 @@
 export type loginData = {
     username: string;
     password: string;
+    isProvider?: boolean;
 }
 
 export type selectOptionType = {

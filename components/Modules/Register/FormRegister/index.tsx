@@ -338,7 +338,7 @@ export const FormRegister = ({
         <View style={localStyles.contentButton}>
           <GeneralButton
             textBtn="Confirmar datos"
-            styleText={TextStyle.bold}
+            styleText={TextStyle.fontBoldWhite}
             styleBtn={ButtonGeneralStyle.btnSaveSthetic}
             handleOnPress={handleSubmit(handleSavePersonalData)}
           />
