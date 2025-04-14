@@ -47,7 +47,7 @@ export default function MiniNotification({
     <View style={{ ...localStyle.backgroundContent, backgroundColor: bgColor }}>
       <View>{icon}</View>
       <View style={{ marginLeft: 10 }}>
-        <ThemedText style={{ fontSize: 17 }}>{message}</ThemedText>
+        <ThemedText style={localStyle.textNotification}>{message}</ThemedText>
       </View>
     </View>
   );
@@ -67,5 +67,9 @@ const localStyle = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+  },
+  textNotification: {
+    fontSize: 17,
+    color: ThemeColorsSthetic.textLight,
   },
 });

@@ -272,6 +272,7 @@ export const UploadImageModal = ({
           </View>
           <View style={localStyle.headClose}>
             <GeneralButton
+              styleText={TextStyle.fontBoldWhite}
               textBtn="Abrir galeria"
               styleBtn={ButtonGeneralStyle.btnActionSthetic}
               handleOnPress={showFileManager}

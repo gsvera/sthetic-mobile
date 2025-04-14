@@ -102,6 +102,7 @@ export const MakeExceptionDay = ({
         });
       }
     }
+
     const dateFormat = convertDateToGeneralFormat(
       localDay?.dateString,
       FORMAT_DATE.TIME_STAMP
@@ -168,7 +169,7 @@ export const MakeExceptionDay = ({
               <GeneralButton
                 styleBtn={ButtonGeneralStyle.btnUpdateSthetic}
                 textBtn="Guardar exception"
-                styleText={TextStyle.bold}
+                styleText={TextStyle.fontBoldWhite}
                 handleOnPress={handleSaveException}
               />
             </View>

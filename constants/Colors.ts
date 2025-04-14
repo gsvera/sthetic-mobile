@@ -58,7 +58,7 @@ export enum ThemeColorsSthetic  {
   /**
    * Color primario, botones, acentos
    */
-    primary = '#EFB8C8', 
+    primary = '#C2185B', 
     /**
      * Fondo principal o secciones
      */

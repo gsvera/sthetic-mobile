@@ -91,7 +91,7 @@ export const MySupscription = ({
         <View style={localStyle.contentBtn}>
           <GeneralButton
             textBtn="Pagar"
-            styleText={{ fontWeight: "bold" }}
+            styleText={TextStyle.fontBoldWhite}
             styleBtn={localStyle.btnPay}
             handleOnPress={() => {}}
           />

@@ -144,7 +144,7 @@ export const AdminCalendarProvider = () => {
       <View style={localStyle.contentBtn}>
         <GeneralButton
           styleBtn={ButtonGeneralStyle.btnActionSthetic}
-          styleText={TextStyle.bold}
+          styleText={TextStyle.fontBoldWhite}
           textBtn="Registrar horarios semanal"
           handleOnPress={() => setOpenForm((v) => !v)}
         />
@@ -182,7 +182,7 @@ export const AdminCalendarProvider = () => {
           >
             <GeneralButton
               styleBtn={ButtonGeneralStyle.btnActionSthetic}
-              styleText={TextStyle.bold}
+              styleText={TextStyle.fontBoldWhite}
               textBtn={
                 !dataCalendarException
                   ? "Agregar excepción"

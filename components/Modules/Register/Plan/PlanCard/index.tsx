@@ -35,7 +35,7 @@ export const PlanCard = (detailPlan: PlanCardProps) => {
       </View>
       <GeneralButton
         textBtn="Elegir"
-        styleText={TextStyle.bold}
+        styleText={TextStyle.fontBoldWhite}
         styleBtn={ButtonGeneralStyle.btnSaveSthetic}
         handleOnPress={() => detailPlan.onSelectPlan(detailPlan)}
       />
