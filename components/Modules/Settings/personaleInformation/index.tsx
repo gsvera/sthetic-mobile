@@ -17,7 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, View, TextInput, Text, Button } from "react-native";
+import { StyleSheet, View, TextInput, Text, ScrollView } from "react-native";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -137,140 +137,142 @@ export const PersonalInformation = ({
   };
 
   return (
-    <View>
+    <View style={{ height: "100%" }}>
       <SubHeaderReturn
         subtitle="Mis datos personales"
         handleReturn={returnBack}
       />
-      <View style={{ justifyContent: "center", flexDirection: "row" }}>
-        <View style={{ width: "80%", paddingTop: 20 }}>
-          <View style={{ marginVertical: 10 }}>
-            <ThemedText style={localStyle.label}>* Nombre(s)</ThemedText>
-            <Controller
-              control={control}
-              name="firstName"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={GeneralStyle.simpleInput}
-                  placeholder="Ingrese su nombre"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
+      <ScrollView>
+        <View style={localStyle.contentForm}>
+          <View style={{ width: "80%", paddingTop: 20 }}>
+            <View style={{ marginVertical: 10 }}>
+              <ThemedText style={localStyle.label}>* Nombre(s)</ThemedText>
+              <Controller
+                control={control}
+                name="firstName"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={GeneralStyle.simpleInput}
+                    placeholder="Ingrese su nombre"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
+              {errors.firstName && (
+                <Text style={TextStyle.textError}>
+                  {errors.firstName.message}
+                </Text>
               )}
-            />
-            {errors.firstName && (
-              <Text style={TextStyle.textError}>
-                {errors.firstName.message}
-              </Text>
-            )}
-          </View>
-          <View style={{ marginVertical: 10 }}>
-            <ThemedText style={localStyle.label}>* Apellido(s)</ThemedText>
-            <Controller
-              control={control}
-              name="lastName"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={GeneralStyle.simpleInput}
-                  placeholder="Ingrese su apellido"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
+            </View>
+            <View style={{ marginVertical: 10 }}>
+              <ThemedText style={localStyle.label}>* Apellido(s)</ThemedText>
+              <Controller
+                control={control}
+                name="lastName"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={GeneralStyle.simpleInput}
+                    placeholder="Ingrese su apellido"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
+              {errors.firstName && (
+                <Text style={TextStyle.textError}>
+                  {errors.firstName.message}
+                </Text>
               )}
-            />
-            {errors.firstName && (
-              <Text style={TextStyle.textError}>
-                {errors.firstName.message}
-              </Text>
-            )}
-          </View>
-          <View style={{ marginVertical: 10 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <View style={{ width: "35%" }}>
-                <ThemedText style={localStyle.label}>Lada</ThemedText>
-                {/* <Controller
+            </View>
+            <View style={{ marginVertical: 10 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={{ width: "35%" }}>
+                  <ThemedText style={localStyle.label}>Lada</ThemedText>
+                  {/* <Controller
                     control={control}
                     name="lada"
                     render={({ field: { value } }) => ( */}
-                <TextInput
-                  style={GeneralStyle.simpleInput}
-                  value={lada}
-                  editable={false}
-                  selectTextOnFocus={false}
-                />
-                {/* )}
+                  <TextInput
+                    style={GeneralStyle.simpleInput}
+                    value={lada}
+                    editable={false}
+                    selectTextOnFocus={false}
+                  />
+                  {/* )}
                   /> */}
-              </View>
-              <View style={{ width: "60%" }}>
-                <ThemedText style={localStyle.label}>* Telefono</ThemedText>
-                <Controller
-                  control={control}
-                  name="phone"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      style={GeneralStyle.simpleInput}
-                      placeholder="Ingrese su numero de telefono"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      maxLength={13}
-                    />
+                </View>
+                <View style={{ width: "60%" }}>
+                  <ThemedText style={localStyle.label}>* Telefono</ThemedText>
+                  <Controller
+                    control={control}
+                    name="phone"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        style={GeneralStyle.simpleInput}
+                        placeholder="Ingrese su numero de telefono"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        maxLength={13}
+                      />
+                    )}
+                  />
+                  {errors.phone && (
+                    <Text style={TextStyle.textError}>
+                      {errors.phone.message}
+                    </Text>
                   )}
-                />
-                {errors.phone && (
-                  <Text style={TextStyle.textError}>
-                    {errors.phone.message}
-                  </Text>
-                )}
+                </View>
               </View>
             </View>
-          </View>
-          <View style={{ marginVertical: 10 }}>
-            <ThemedText style={localStyle.label}>* Email</ThemedText>
-            <Controller
-              control={control}
-              name="email"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={GeneralStyle.simpleInput}
-                  placeholder="Ingrese su email"
-                  keyboardType="email-address"
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                />
+            <View style={{ marginVertical: 10 }}>
+              <ThemedText style={localStyle.label}>* Email</ThemedText>
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={GeneralStyle.simpleInput}
+                    placeholder="Ingrese su email"
+                    keyboardType="email-address"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                  />
+                )}
+              />
+              {errors.email && (
+                <Text style={TextStyle.textError}>{errors.email.message}</Text>
               )}
-            />
-            {errors.email && (
-              <Text style={TextStyle.textError}>{errors.email.message}</Text>
-            )}
-          </View>
-          <View style={localStyle.contentButton}>
-            <GeneralButton
-              styleBtn={
-                !disableButton
-                  ? ButtonGeneralStyle.btnUpdateSthetic
-                  : ButtonGeneralStyle.btnDisabledSthetic
-              }
-              textBtn="Actualizar datos"
-              styleText={{
-                color: !disableButton
-                  ? ThemeColorsSthetic.textLight
-                  : ThemeColorsSthetic.muted,
-              }}
-              handleOnPress={handleSubmit(handleUpdatePersonalInformation)}
-              disabledBtn={disableButton}
-            />
+            </View>
+            <View style={localStyle.contentButton}>
+              <GeneralButton
+                styleBtn={
+                  !disableButton
+                    ? ButtonGeneralStyle.btnUpdateSthetic
+                    : ButtonGeneralStyle.btnDisabledSthetic
+                }
+                textBtn="Actualizar datos"
+                styleText={{
+                  color: !disableButton
+                    ? ThemeColorsSthetic.textLight
+                    : ThemeColorsSthetic.muted,
+                }}
+                handleOnPress={handleSubmit(handleUpdatePersonalInformation)}
+                disabledBtn={disableButton}
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -284,6 +286,11 @@ const localStyle = StyleSheet.create({
   },
   contentButton: {
     marginTop: 15,
+  },
+  contentForm: {
+    justifyContent: "center",
+    flexDirection: "row",
+    marginBottom: 10,
   },
 });
 
