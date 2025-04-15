@@ -1,4 +1,10 @@
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { functionServicesType } from "../types";
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
 import { useEffect, useMemo, useState } from "react";
@@ -96,19 +102,28 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
   const listOption = useMemo(
     () =>
       listCatalogType.length > 0
-        ? listCatalogType.map((item: any) => {
-            let checked = false;
+        ? listCatalogType
+            .map((item: any) => {
+              let checked = false;
 
-            for (let i = 0; i < selectedKeys.length; i++) {
-              if (selectedKeys[i] === item?.id) checked = true;
-            }
+              for (let i = 0; i < selectedKeys.length; i++) {
+                if (selectedKeys[i] === item?.id) checked = true;
+              }
 
-            return {
-              key: item?.id,
-              value: item?.typeServiceNameEs,
-              checked,
-            };
-          })
+              return {
+                key: item?.id,
+                value: item?.typeServiceNameEs,
+                checked,
+                descriptionEs: item?.descriptionEs,
+              };
+            })
+            .sort(function (a: selectOptionType, b: selectOptionType) {
+              if (a.checked !== b.checked) {
+                return a.checked ? -1 : 1;
+              }
+              if (a.value) return a.value.localeCompare(b.value);
+              return a;
+            })
         : [],
     [listCatalogType, selectedKeys]
   );
@@ -156,21 +171,28 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
                 Debe seleccionar al menos un tipo de servicio que ofrece
               </ThemedText>
             </View>
-            {listOption.map((item: selectOptionType) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => handleSelectItem(item.key as number)}
-                  key={item.key}
-                  style={localStyle.contentElement}
-                >
-                  <Checkbox value={item.checked} />
-                  <ThemedText style={localStyle.listValue}>
-                    {"   "}
-                    {item.value}
-                  </ThemedText>
-                </TouchableOpacity>
-              );
-            })}
+            <ScrollView style={{ height: "52%" }}>
+              {listOption.map((item: selectOptionType) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => handleSelectItem(item.key as number)}
+                    key={item.key}
+                    style={localStyle.contentElement}
+                  >
+                    <Checkbox value={item.checked} />
+                    <View>
+                      <ThemedText style={TextStyle.fontBoldDark}>
+                        {"   "}
+                        {item.value}
+                      </ThemedText>
+                      <ThemedText style={localStyle.descriptionType}>
+                        {item.descriptionEs}
+                      </ThemedText>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
           </View>
           <View style={localStyle.contentBtn}>
             <GeneralButton
@@ -212,6 +234,10 @@ const localStyle = StyleSheet.create({
   },
   listValue: {
     color: ThemeColorsSthetic.text,
+  },
+  descriptionType: {
+    color: ThemeColorsSthetic.muted,
+    fontSize: 15,
   },
   contentBtn: { marginTop: 20, paddingHorizontal: 20 },
 });

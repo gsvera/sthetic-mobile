@@ -7,6 +7,7 @@ export type loginData = {
 export type selectOptionType = {
     key: number | string,
     value: string,
+    descriptionEs?: string,
     checked?: boolean
 }
 

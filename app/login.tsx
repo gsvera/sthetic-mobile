@@ -114,7 +114,7 @@ export default function Login() {
                   style={styles.logo}
                 />
               </View>
-              <ThemedText style={styles.title}>Iniciar sesión</ThemedText>
+              <ThemedText style={styles.title}>Sthetic Worker</ThemedText>
               <View style={styles.centerInput}>
                 <Controller
                   control={control}
@@ -215,7 +215,8 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     marginBottom: 60,
     textAlign: "center",
-    fontSize: 30,
+    fontSize: 35,
+    fontWeight: "bold",
     color: ThemeColorsSthetic.primary,
   },
   centerInput: {
