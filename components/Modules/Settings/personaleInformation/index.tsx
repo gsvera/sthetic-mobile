@@ -255,16 +255,10 @@ export const PersonalInformation = ({
             </View>
             <View style={localStyle.contentButton}>
               <GeneralButton
-                styleBtn={
-                  !disableButton
-                    ? ButtonGeneralStyle.btnUpdateSthetic
-                    : ButtonGeneralStyle.btnDisabledSthetic
-                }
+                styleBtn={ButtonGeneralStyle.btnUpdateSthetic}
                 textBtn="Actualizar datos"
                 styleText={{
-                  color: !disableButton
-                    ? ThemeColorsSthetic.textLight
-                    : ThemeColorsSthetic.muted,
+                  color: ThemeColorsSthetic.textLight,
                 }}
                 handleOnPress={handleSubmit(handleUpdatePersonalInformation)}
                 disabledBtn={disableButton}

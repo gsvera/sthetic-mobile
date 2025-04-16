@@ -1,4 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
+import { ThemeColorsSthetic } from "@/constants/Colors";
+import { ButtonGeneralStyle } from "@/constants/StyleComponents";
 import { TouchableOpacity } from "react-native";
 
 type generalButtonProps = {
@@ -18,11 +20,13 @@ export const GeneralButton = ({
 }: generalButtonProps) => {
   return (
     <TouchableOpacity
-      style={styleBtn}
+      style={!disabledBtn ? styleBtn : ButtonGeneralStyle.btnDisabledSthetic}
       onPress={handleOnPress}
       disabled={disabledBtn}
     >
-      <ThemedText style={styleText}>{textBtn}</ThemedText>
+      <ThemedText style={!disabledBtn ? styleText : ThemeColorsSthetic.muted}>
+        {textBtn}
+      </ThemedText>
     </TouchableOpacity>
   );
 };

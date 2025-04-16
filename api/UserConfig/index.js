@@ -8,6 +8,9 @@ export const apiUserConfig = {
       `${BASE_URL}/get-location-by-user?id-user=${idUser}`
     );
   },
+  getInfoCompany: function (idUser) {
+    return axiosInstance.get(`${BASE_URL}/get-info-company-by-user/${idUser}`);
+  },
   getPlanByUser: function (idUser) {
     return axiosInstance.get(`${BASE_URL}/get-my-current-plan/${idUser}`);
   },
@@ -16,6 +19,9 @@ export const apiUserConfig = {
   },
   saveProfilePicture: function (data) {
     return axiosInstance.put(`${BASE_URL}/save-profile-picture`, data);
+  },
+  updateInfoCompany: function (data) {
+    return axiosInstance.put(`${BASE_URL}/update-info-company`, data);
   },
 };
 

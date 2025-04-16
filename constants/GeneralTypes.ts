@@ -42,4 +42,15 @@ export type UserPlan = {
     catalogPlanDTO: CatalogPlanDTO;
 }
 
+export type InfoCompanyType = {
+    id: number;
+    idUser: string;
+    generalDescription: string;
+    companyName: string;
+    companyPicture?: string;
+    facebook?: string;
+    instagram?: string;
+    webPage?: string;
+}
+
 export type weekDays = 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes' | 'Sábado' | 'Domingo';

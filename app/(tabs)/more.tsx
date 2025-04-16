@@ -27,6 +27,7 @@ import TypeServices from "@/components/Modules/Settings/TypeServices";
 import MySupscription from "@/components/Modules/Settings/MySupscription";
 import ModalConfirm from "@/components/Shared/ModalConfirm";
 import { TextStyle } from "@/constants/StyleComponents";
+import MyCompany from "@/components/Modules/Settings/MyCompany";
 
 export default function More() {
   const navigation = useNavigation();
@@ -102,13 +103,13 @@ export default function More() {
         return <ChangePassword returnBack={() => handleView("")} />;
       case COMPONENTS_SETINGS.MY_LOCATION:
         return (
-          <MyLocation returnBack={() => handleView("")} idUser={dataUser?.id} />
+          <MyLocation idUser={dataUser?.id} returnBack={() => handleView("")} />
         );
       case COMPONENTS_SETINGS.PROFILE_PICTURE:
         return (
           <CameraCustom
-            returnBack={() => handleView("")}
             idUser={dataUser?.id}
+            returnBack={() => handleView("")}
           />
         );
       case COMPONENTS_SETINGS.TYPE_SERVICES:
@@ -121,16 +122,20 @@ export default function More() {
       case COMPONENTS_SETINGS.SERVICES_CATALOG:
         return (
           <ServicesCatalog
-            returnBack={() => handleView("")}
             idUser={dataUser?.id}
+            returnBack={() => handleView("")}
           />
         );
       case COMPONENTS_SETINGS.MY_SUBSCRIPTION:
         return (
           <MySupscription
-            returnBack={() => handleView("")}
             idUser={dataUser?.id}
+            returnBack={() => handleView("")}
           />
+        );
+      case COMPONENTS_SETINGS.MY_COMPANY:
+        return (
+          <MyCompany idUser={dataUser?.id} returnBack={() => handleView("")} />
         );
       default:
         return <View></View>;
@@ -210,18 +215,6 @@ export default function More() {
             </Pressable>
             <Pressable
               style={localStyle.itemMenu}
-              onPress={() => handleView(COMPONENTS_SETINGS.MY_LOCATION)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <Entypo name="location" style={localStyle.iconItem} />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Mi ubicación
-                </ThemedText>
-              </View>
-            </Pressable>
-            <Pressable
-              style={localStyle.itemMenu}
               onPress={() => handleView(COMPONENTS_SETINGS.MY_SUBSCRIPTION)}
             >
               <View style={localStyle.itemMenuText}>
@@ -232,14 +225,41 @@ export default function More() {
                 </ThemedText>
               </View>
             </Pressable>
-          </View>
-          <View style={localStyle.contentDivisor}>
             <Pressable style={localStyle.itemMenu} onPress={() => {}}>
               <View style={localStyle.itemMenuText}>
                 <AntDesign name="bells" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
                   {"    "}
                   Notificaciones xxxx
+                </ThemedText>
+              </View>
+            </Pressable>
+          </View>
+          <View style={localStyle.contentDivisor}>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => handleView(COMPONENTS_SETINGS.MY_COMPANY)}
+            >
+              <View style={localStyle.itemMenuText}>
+                <MaterialIcons
+                  name="work-outline"
+                  style={localStyle.iconItem}
+                />
+                <ThemedText darkColor="black">
+                  {"    "}
+                  Información de negocio
+                </ThemedText>
+              </View>
+            </Pressable>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => handleView(COMPONENTS_SETINGS.MY_LOCATION)}
+            >
+              <View style={localStyle.itemMenuText}>
+                <Entypo name="location" style={localStyle.iconItem} />
+                <ThemedText darkColor="black">
+                  {"    "}
+                  Mi ubicación
                 </ThemedText>
               </View>
             </Pressable>
