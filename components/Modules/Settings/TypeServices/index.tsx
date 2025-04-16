@@ -29,7 +29,6 @@ import GeneralButton from "@/components/Shared/GeneralButton";
 export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
   const { handleNotification } = useNotificationProvider();
   const [selectedKeys, setSelectedKeys] = useState<number[]>([]);
-  const [generalDescription, setGeneralDescription] = useState("");
 
   const { data: listCatalogType = [], isPending: isPendingCatalogType } =
     useQuery({
@@ -74,18 +73,13 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
   };
 
   useEffect(() => {
-    if (descriptionService) {
-      setGeneralDescription(
-        descriptionService?.descriptionService?.generalDescription
-      );
-      if (descriptionService?.listType?.length > 0) {
-        const keysByUser = [];
-        const arrItems = descriptionService.listType;
-        for (let i = 0; i < arrItems.length; i++) {
-          keysByUser.push(arrItems[i]?.idTypeService);
-        }
-        setSelectedKeys(keysByUser);
+    if (descriptionService?.listType?.length > 0) {
+      const keysByUser = [];
+      const arrItems = descriptionService.listType;
+      for (let i = 0; i < arrItems.length; i++) {
+        keysByUser.push(arrItems[i]?.idTypeService);
       }
+      setSelectedKeys(keysByUser);
     }
   }, [descriptionService]);
 
@@ -94,10 +88,7 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
     [isPendingByUser, isPendingCatalogType]
   );
 
-  const disabledBtn = useMemo(
-    () => selectedKeys.length === 0 || !generalDescription,
-    [selectedKeys, generalDescription]
-  );
+  const disabledBtn = useMemo(() => selectedKeys.length === 0, [selectedKeys]);
 
   const listOption = useMemo(
     () =>
@@ -142,25 +133,12 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
     saveTypeServices({
       idUser,
       idsType: selectedKeys.toString(),
-      generalDescription,
     });
   };
 
   return (
     <View>
       <SubHeaderReturn subtitle="Tipo de servicios" handleReturn={returnBack} />
-      <View style={{ width: "90%", marginHorizontal: "auto", paddingTop: 10 }}>
-        <ThemedText style={localStyle.label}>
-          Agrega una breve descripción del servicio que realizas
-        </ThemedText>
-        <TextInput
-          style={{ ...InputStyle.withBorder, ...InputStyle.bigBox }}
-          onChangeText={setGeneralDescription}
-          value={generalDescription}
-          multiline
-          numberOfLines={6}
-        />
-      </View>
       {isPendingLoad ? (
         <LoadingView />
       ) : (
@@ -171,7 +149,7 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
                 Debe seleccionar al menos un tipo de servicio que ofrece
               </ThemedText>
             </View>
-            <ScrollView style={{ height: "52%" }}>
+            <ScrollView style={{ height: "68%" }}>
               {listOption.map((item: selectOptionType) => {
                 return (
                   <TouchableOpacity

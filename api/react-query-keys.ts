@@ -4,7 +4,8 @@ export const REACT_QUERY_KEYS = {
         getDataUser: (key: string) => `get-data-user-${key}`,
     },
     userConfig: {
-        getLocationByUser: (key:string) => `get-location-by-user${key}`
+        getLocationByUser: (key:string) => `get-location-by-user${key}`,
+        getInfoCompanyByUer: (key:string) => `get-info-company-by-user-${key}`
     },
     plan: {
         getFilterData: (key:string) => `get-plan-filter-data-${key}`,
