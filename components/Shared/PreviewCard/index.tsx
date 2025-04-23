@@ -58,7 +58,7 @@ export const PreviewCard = (element: previewCardProps) => {
         />
       )} */}
 
-      <ThemedText style={localStyle.titlePreviewCard}>
+      <ThemedText style={localStyle.titlePreviewCard} numberOfLines={2}>
         {element.nameService}
       </ThemedText>
       <ThemedText style={localStyle.label}>Archivos:</ThemedText>
@@ -80,11 +80,12 @@ export const PreviewCard = (element: previewCardProps) => {
 
 const localStyle = StyleSheet.create({
   previewCard: {
-    width: "50%",
+    width: "45%",
     marginVertical: 10,
+    marginHorizontal: "auto",
   },
   previewCardImage: {
-    width: 150,
+    width: "100%",
     height: 150,
   },
   titlePreviewCard: {

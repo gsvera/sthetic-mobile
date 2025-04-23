@@ -243,7 +243,7 @@ const localStyle = StyleSheet.create({
     alignItems: "center",
   },
   scrollViewGallery: {
-    height: "80%",
+    height: "79%",
     paddingHorizontal: 10,
     marginTop: 10,
   },

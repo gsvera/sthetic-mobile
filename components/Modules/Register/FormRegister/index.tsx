@@ -220,7 +220,7 @@ export const FormRegister = ({
                       <Picker.Item
                         key={item?.id}
                         label={item?.lada}
-                        value={item?.id}
+                        value={item?.lada}
                       />
                     ))}
                   </Picker>
