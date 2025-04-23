@@ -55,20 +55,25 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
 
   const { mutate: saveLocation } = useMutation({
     mutationFn: (data: dataLocationType) => apiUserConfig.saveLocation(data),
-    onSuccess: (response: ResponseAPi) => handleSaveResponse(response),
+    onSuccess: (data: ResponseAPi) => handleSaveResponse(data.data),
     onError: (err) => ErrorAlertMessage,
   });
 
-  const handleSaveResponse = (data: ResponseAPi) => {
+  const handleSaveResponse = (data: ObjectResponse) => {
     setRequiredLocation(false);
     setEnableBtn(false);
-    if (!data.data.error) {
+    if (!data.error) {
       queryClient.invalidateQueries({
         queryKey: [REACT_QUERY_KEYS.userConfig.getLocationByUser(idUser)],
       });
       handleNotification({
         type: TYPE_STATUS.SUCCESS,
-        message: data.data.message,
+        message: data.message,
+      });
+    } else {
+      handleNotification({
+        type: TYPE_STATUS.ERROR,
+        message: data.message,
       });
     }
   };

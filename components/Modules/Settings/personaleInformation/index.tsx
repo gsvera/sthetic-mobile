@@ -65,7 +65,7 @@ export const PersonalInformation = ({
   const [disableButton, setDisableButton] = useState(true);
   const queryClient = useQueryClient();
   const initFormData = formDataInformation;
-  const [lada, setLada] = useState(); // PENDIENTE A REVISAR: DEBE ESTAS CON EL useform PERO POR EL MOMENTO NO SE VA A EDITAR
+  const [lada, setLada] = useState(""); // PENDIENTE A REVISAR: DEBE ESTAS CON EL useform PERO POR EL MOMENTO NO SE VA A EDITAR
   const {
     control,
     handleSubmit,
@@ -112,12 +112,16 @@ export const PersonalInformation = ({
 
   // EFFECTS
   useEffect(() => {
-    if (dataLada && initFormData.lada) {
-      const findLada = dataLada?.find(
-        (item: any) => item?.id == initFormData.lada
-      );
-      setLada(findLada?.lada);
-    }
+    // ESTE SE DEBE MODIFICA PARA SETEAR EL LADA DE ACUERDO A CATALOGO Y AL VALOR POR EL MOMENTO SE SETEA DIRECTO
+
+    // if (dataLada && initFormData.lada) {
+    //   const findLada = dataLada?.find(
+    //     (item: any) => item?.id == initFormData.lada
+    //   );
+    //   setLada(findLada?.lada);
+    // }
+
+    setLada(initFormData.lada);
   }, [initFormData.lada, dataLada]);
 
   useEffect(() => {

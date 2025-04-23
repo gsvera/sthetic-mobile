@@ -202,13 +202,14 @@ export const UploadImageModal = ({
               control={control}
               name="nameService"
               render={({ field: { onChange, onBlur, value } }) => (
+                // <View style={InputStyle.withBorder}>
                 <TextInput
                   style={GeneralStyle.simpleInput}
-                  placeholder="Agregue una descripción"
+                  placeholder="Agregue una descripción o nombre"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  maxLength={200}
+                  maxLength={100}
                 />
               )}
             />
@@ -320,15 +321,15 @@ export const UploadImageModal = ({
 
 const localStyle = StyleSheet.create({
   headClose: {
-    paddingTop: 20,
-    paddingRight: 20,
+    paddingTop: 15,
+    paddingRight: 15,
     flexDirection: "row",
     justifyContent: "flex-end",
   },
   titleModal: {
     ...TextStyle.titleModal,
-    marginTop: 20,
-    marginBottom: 30,
+    marginTop: 5,
+    marginBottom: 20,
   },
   removeIconImg: {
     position: "absolute",
@@ -354,6 +355,12 @@ const localStyle = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     flexWrap: "wrap",
+  },
+  suffix: {
+    color: ThemeColorsSthetic.muted,
+    fontSize: 15,
+    textAlign: "right",
+    marginTop: -10,
   },
 });
 
