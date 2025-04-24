@@ -25,7 +25,11 @@ export const REACT_QUERY_KEYS = {
         },
         coupon: {
             getByCode: (key:string) => `get-coupon-by-code-${key}`
-        }
+        },        
+    },
+    menuServices: {
+        getServiceById: (key: number | undefined) => `get-menu-service-by-id-${key}`,
+        getByUserId: (key: string | undefined) => `get-menu-services-by-user-id-${key}`
     },
     calendar: {
         calendarByUser: {

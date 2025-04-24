@@ -52,6 +52,7 @@ export enum GlobalColors {
  * @param updateNotification - para notificaciones de actualizacion
  * @param errorNotification - para notificaciones de error
  * @param dangerColor - colores de error o advertencia de peligro o de acciones que son de riesgo
+ * @param shadowBackground - Shadow background para modales
  * 
  */
 export enum ThemeColorsSthetic  {
@@ -146,7 +147,11 @@ export enum ThemeColorsSthetic  {
     /**
      * colores de error o advertencia de peligro o de acciones que son de riesgo
      */
-    dangerColor = '#ff4d4d'
+    dangerColor = '#ff4d4d',
+    /**
+     * Shadow background para modales
+     */
+    shadowBackground = "rgba(0, 0, 0, 0.5)"
 };
 
 export const textColors = {

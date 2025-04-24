@@ -17,6 +17,7 @@ export enum COMPONENTS_SETINGS {
     PROFILE_PICTURE = 'profilePicture',
     TYPE_SERVICES = 'typeServices',
     SERVICES_CATALOG = 'servicesCatalog',
+    PORFTOLIO_SERVICES = 'portfolioServices',
     MY_SUBSCRIPTION = 'mySupscription',
     MY_COMPANY = 'myCompany'
 }

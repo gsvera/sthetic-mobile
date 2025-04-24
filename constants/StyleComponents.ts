@@ -240,6 +240,10 @@ export const GridStyle = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
     },
+    rowFlexEnd: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+    },
     rowItemsVerticalCenter: {
         alignItems: "center",
         flexDirection: "row",
