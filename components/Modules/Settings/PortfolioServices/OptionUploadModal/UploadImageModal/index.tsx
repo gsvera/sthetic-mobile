@@ -29,6 +29,7 @@ import apiCatalogUserService from "@/api/CatalogUserService";
 import { MAX_LENGTH } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
 import GeneralButton from "@/components/Shared/GeneralButton";
+import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
 
 const schema = yup.object().shape({
   nameService: yup.string().required("Campo obligatorio"),
@@ -176,23 +177,15 @@ export const UploadImageModal = ({
 
   return (
     <Modal animationType="slide" transparent={false} visible={open}>
-      <View style={localStyle.headClose}>
-        <TouchableOpacity onPress={handleClose}>
-          <SimpleLineIcons
-            name="close"
-            size={24}
-            color={ThemeColorsSthetic.accentReverse}
-          />
-        </TouchableOpacity>
-      </View>
+      <ButtonCloseModal handleOnPress={handleClose} />
       {loadingData ? (
         <LoadingView />
       ) : (
         <View>
           <ThemedText style={localStyle.titleModal}>
             {!idEntity
-              ? "Agregar catalogo de servicio"
-              : "Editar catalogo de servicio"}
+              ? "Agregar portafolio de servicio"
+              : "Editar portafolio de servicio"}
           </ThemedText>
           <View style={{ paddingHorizontal: 15, marginBottom: 10 }}>
             <ThemedText style={localStyle.labelInput}>

@@ -1,6 +1,7 @@
 import * as FileSystem from 'expo-file-system';
 import CryptoJS from "crypto-js";
 import dayjs from "dayjs";
+import { REGEX } from '@/constants/Constants';
 
 const secretKeyPass = process.env.EXPO_PUBLIC_SECRET_KEY;
 
@@ -42,6 +43,16 @@ export const convertCurrency = (n:number | undefined, digits: number = 2) => {
     return currencyLocal.format(n);
   }
 };
+
+/**
+ * Convierte el numero tipo string a tipo number, validando que el dato que se pase sea un numero y en todo caso retorna 0
+ * @param n @type string
+ * @returns number
+ */
+export const convertStringToNumber = (n:string) => {
+  if(REGEX.ONLY_NUMBER.test(n)) return parseInt(n);
+  return 0
+}
 
 /**
  * Convierte a base 64 los videos

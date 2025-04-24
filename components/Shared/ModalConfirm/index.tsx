@@ -65,7 +65,7 @@ export const ModalConfirm = ({
 const localStyle = StyleSheet.create({
   modalView: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // <-- fondo negro con opacidad
+    backgroundColor: ThemeColorsSthetic.shadowBackground, // <-- fondo negro con opacidad
     justifyContent: "center",
     alignItems: "center",
   },

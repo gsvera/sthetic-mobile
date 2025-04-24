@@ -53,4 +53,12 @@ export type InfoCompanyType = {
     webPage?: string;
 }
 
+export type CatalogService = {
+    id: number;
+    idUser: string;
+    nameService: string;
+    price: number;
+    people: number
+}
+
 export type weekDays = 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes' | 'Sábado' | 'Domingo';

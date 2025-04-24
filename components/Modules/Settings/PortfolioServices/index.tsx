@@ -28,7 +28,7 @@ import { Feather } from "@expo/vector-icons";
  * @returns
  */
 
-export const ServicesCatalog = ({
+export const PortfolioServices = ({
   returnBack,
   idUser,
 }: functionServicesType) => {
@@ -139,7 +139,7 @@ export const ServicesCatalog = ({
   return (
     <View>
       <SubHeaderReturn
-        subtitle="Catálogo de servicios"
+        subtitle="Portafolio de servicios"
         handleReturn={returnBack}
       />
       <View style={localStyle.contentBtnAdd}>
@@ -254,4 +254,4 @@ const localStyle = StyleSheet.create({
   },
 });
 
-export default ServicesCatalog;
+export default PortfolioServices;

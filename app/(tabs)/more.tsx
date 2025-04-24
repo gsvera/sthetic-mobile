@@ -1,7 +1,12 @@
 import { View, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
-import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Entypo,
+  FontAwesome5,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import {
   ErrorAlertMessage,
   PromtConfirm,
@@ -21,13 +26,14 @@ import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import ChangePassword from "@/components/Modules/Settings/ChangePassword";
 import MyLocation from "@/components/Modules/Settings/MyLocation";
 import CameraCustom from "@/components/Modules/Settings/CameraCustom";
-import ServicesCatalog from "@/components/Modules/Settings/ServicesCatalog";
+import { PortfolioServices } from "@/components/Modules/Settings/PortfolioServices";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import TypeServices from "@/components/Modules/Settings/TypeServices";
 import MySupscription from "@/components/Modules/Settings/MySupscription";
 import ModalConfirm from "@/components/Shared/ModalConfirm";
 import { TextStyle } from "@/constants/StyleComponents";
 import MyCompany from "@/components/Modules/Settings/MyCompany";
+import CatalogServices from "@/components/Modules/Settings/CatalogServices";
 
 export default function More() {
   const navigation = useNavigation();
@@ -121,7 +127,14 @@ export default function More() {
         );
       case COMPONENTS_SETINGS.SERVICES_CATALOG:
         return (
-          <ServicesCatalog
+          <CatalogServices
+            idUser={dataUser?.id}
+            returnBack={() => handleView("")}
+          />
+        );
+      case COMPONENTS_SETINGS.PORFTOLIO_SERVICES:
+        return (
+          <PortfolioServices
             idUser={dataUser?.id}
             returnBack={() => handleView("")}
           />
@@ -280,13 +293,28 @@ export default function More() {
               onPress={() => handleView(COMPONENTS_SETINGS.SERVICES_CATALOG)}
             >
               <View style={localStyle.itemMenuText}>
+                <FontAwesome5
+                  name="clipboard-list"
+                  style={localStyle.iconItem}
+                />
+                <ThemedText darkColor="black">
+                  {"    "}
+                  Catalogo de servicios
+                </ThemedText>
+              </View>
+            </Pressable>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => handleView(COMPONENTS_SETINGS.PORFTOLIO_SERVICES)}
+            >
+              <View style={localStyle.itemMenuText}>
                 <MaterialCommunityIcons
                   name="book-open-page-variant-outline"
                   style={localStyle.iconItem}
                 />
                 <ThemedText darkColor="black">
                   {"    "}
-                  Catálogo de servicios
+                  Portafolio de servicios
                 </ThemedText>
               </View>
             </Pressable>

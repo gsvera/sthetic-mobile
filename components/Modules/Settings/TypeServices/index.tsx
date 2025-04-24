@@ -146,7 +146,8 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
           <View>
             <View style={localStyle.textDescription}>
               <ThemedText style={localStyle.label}>
-                Debe seleccionar al menos un tipo de servicio que ofrece
+                Debe seleccionar al menos un tipo de servicio que ofrece, esto
+                ayuda al cliente para realizar búsquedas mas precisas.
               </ThemedText>
             </View>
             <ScrollView style={{ height: "68%" }}>
@@ -209,6 +210,7 @@ const localStyle = StyleSheet.create({
     ...TextStyle.bold,
     color: ThemeColorsSthetic.textLabels,
     marginBottom: 10,
+    textAlign: "justify",
   },
   listValue: {
     color: ThemeColorsSthetic.text,
