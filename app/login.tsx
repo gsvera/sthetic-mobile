@@ -130,7 +130,7 @@ export default function Login() {
                   style={styles.logo}
                 />
               </View>
-              <ThemedText style={styles.title}>Sthetic Worker</ThemedText>
+              <ThemedText style={styles.title}>Meredith Worker</ThemedText>
               <View style={styles.centerInput}>
                 <Controller
                   control={control}
