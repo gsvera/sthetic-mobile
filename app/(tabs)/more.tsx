@@ -34,6 +34,8 @@ import ModalConfirm from "@/components/Shared/ModalConfirm";
 import { TextStyle } from "@/constants/StyleComponents";
 import MyCompany from "@/components/Modules/Settings/MyCompany";
 import CatalogServices from "@/components/Modules/Settings/CatalogServices";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import LoadingView from "@/components/Shared/LoadingView";
 
 export default function More() {
   const navigation = useNavigation();
@@ -43,23 +45,23 @@ export default function More() {
   const [openModaloLogout, setOpenModalLogout] = useState(false);
   // const [openModal, setOpenModal] = useState(false);
 
-  const { data: dataUser, isFetching: loadingData } = useQuery({
+  const { data: dataUser, isFetching: isFetchingData } = useQuery({
     queryKey: [REACT_QUERY_KEYS.user.getDataUser("personal-information")],
     queryFn: () => apiUser.getDataUser(),
     ...{
-      select: (data: ResponseAPi) => data.data.items,
+      select: (data: ResponseApi) => data.data.items,
     },
   });
 
   const { mutate: logoutSession } = useMutation({
     mutationFn: () => apiUser.logout(),
-    onSuccess: (data: ResponseAPi) => handleSuccessLogout(data),
+    onSuccess: (data: ResponseApi) => handleSuccessLogout(data),
     onError: (err) => handleErrorLogout(err),
   });
 
   const { mutate: deleteAccount } = useMutation({
     mutationFn: () => apiUser.deleteAccount(dataUser?.id),
-    onSuccess: (data: ResponseAPi) => handleSuccessDeleteAccount(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessDeleteAccount(data.data),
     onError: (err) => ErrorAlertMessage,
   });
 
@@ -68,7 +70,7 @@ export default function More() {
     deleteSession();
   };
 
-  const handleSuccessLogout = async (data: ResponseAPi) => {
+  const handleSuccessLogout = async (data: ResponseApi) => {
     if (!data.data.error) {
       deleteSession();
     }
@@ -194,9 +196,13 @@ export default function More() {
               <ThemedText style={{ color: ThemeColorsSthetic.textOre }}>
                 Bienvenido!
               </ThemedText>
-              <ThemedText style={localStyle.name}>
-                {dataUser?.firstName} {dataUser?.lastName}
-              </ThemedText>
+              {isFetchingData ? (
+                <LoadingView />
+              ) : (
+                <ThemedText style={localStyle.name}>
+                  {dataUser?.firstName} {dataUser?.lastName}
+                </ThemedText>
+              )}
             </View>
           </View>
           <View style={localStyle.contentDivisor}>

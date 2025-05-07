@@ -30,6 +30,7 @@ import { MAX_LENGTH } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
+import { ResponseApi } from "@/api/responseApi";
 
 const schema = yup.object().shape({
   nameService: yup.string().required("Campo obligatorio"),
@@ -69,7 +70,7 @@ export const UploadImageModal = ({
     queryFn: () => apiCatalogUserService.getToEditCatalogService(idEntity),
     ...{
       enabled: !!idEntity,
-      select: (data: ResponseAPi) => data.data.items,
+      select: (data: ResponseApi) => data.data.items,
     },
   });
 

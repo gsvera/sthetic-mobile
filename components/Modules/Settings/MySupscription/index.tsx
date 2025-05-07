@@ -17,6 +17,7 @@ import {
 } from "@/utils/GeneralUtils";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
+import { ResponseApi } from "@/api/responseApi";
 
 export const MySupscription = ({
   idUser,
@@ -26,7 +27,7 @@ export const MySupscription = ({
     queryKey: [REACT_QUERY_KEYS.plan.getByUser(idUser as string)],
     queryFn: () => apiUserConfig.getPlanByUser(idUser),
     ...{
-      select: (data: ResponseAPi) => data.data.items as UserPlan,
+      select: (data: ResponseApi) => data.data.items as UserPlan,
     },
   });
 

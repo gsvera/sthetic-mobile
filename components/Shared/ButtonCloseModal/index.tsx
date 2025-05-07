@@ -28,7 +28,7 @@ const localStyle = StyleSheet.create({
   contentHeader: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    marginTop: 15,
+    marginTop: 10,
     marginBottom: 5,
     paddingRight: 10,
   },

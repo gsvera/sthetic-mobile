@@ -14,6 +14,7 @@ import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import AvailableTimeCard from "../AvailableTimeCard";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 type availableWeekProps = modalCustomProps & {
   daysByweek: weekDaysProps[];
@@ -64,7 +65,7 @@ export const AvailibleWeek = ({
 
   const { mutate: saveCalendar } = useMutation({
     mutationFn: (data: any) => apiCalendar.saveCalendar(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessSaveCalendar(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessSaveCalendar(data.data),
     onError: ErrorAlertMessage,
   });
 

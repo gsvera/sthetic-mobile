@@ -1,11 +1,11 @@
 import { AdminCalendarProvider } from "@/components/Modules/AdminCalendarProvider";
 import { Container } from "@/constants/Colors";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 
 export default function Calendar() {
   return (
-    <SafeAreaView style={Container.container}>
+    <View style={Container.container}>
       <AdminCalendarProvider />
-    </SafeAreaView>
+    </View>
   );
 }

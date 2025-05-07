@@ -22,6 +22,7 @@ import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
 import ArrowBack from "@/components/Modules/Register/ArrowBack";
 import FormPay from "@/components/Modules/Register/FormPay";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 enum STEP_CREATION_PROFILE {
   FIELD_PROFILE = 1,
@@ -56,7 +57,7 @@ export default function newAccount() {
 
   const { mutate: createUser } = useMutation({
     mutationFn: (data: any) => apiUser.saveUser(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessSaveUser(data?.data),
+    onSuccess: (data: ResponseApi) => handleSuccessSaveUser(data?.data),
     onError: (err) => ErrorAlertMessage,
   });
 

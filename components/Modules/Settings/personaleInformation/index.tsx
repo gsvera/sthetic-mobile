@@ -1,5 +1,6 @@
 import { apiLada } from "@/api/Lada";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
+import { ResponseApi } from "@/api/responseApi";
 import { apiUser } from "@/api/User";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
@@ -81,18 +82,18 @@ export const PersonalInformation = ({
     queryKey: [REACT_QUERY_KEYS.lada.getFilterData("personal-information")],
     queryFn: () => apiLada.getFilterData(),
     ...{
-      select: (data: ResponseAPi) => data.data.items,
+      select: (data: ResponseApi) => data.data.items,
     },
   });
 
   const { mutate: updatePersonalInformation } = useMutation({
     mutationFn: (data: formPersonalInformation) =>
       apiUser.updatePersonalInformation(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessUpdate(data),
+    onSuccess: (data: ResponseApi) => handleSuccessUpdate(data),
     onError: (err) => ErrorAlertMessage,
   });
 
-  const handleSuccessUpdate = (data: ResponseAPi) => {
+  const handleSuccessUpdate = (data: ResponseApi) => {
     if (data.data.error) {
       handleNotification({
         type: TYPE_STATUS.ERROR,

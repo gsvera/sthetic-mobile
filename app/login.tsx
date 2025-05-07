@@ -9,7 +9,6 @@ import { Link, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-  Button,
   Image,
   ImageBackground,
   Pressable,
@@ -18,7 +17,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useMutation } from "@tanstack/react-query";
@@ -36,6 +35,8 @@ import {
   TextStyle,
 } from "@/constants/StyleComponents";
 import GeneralButton from "@/components/Shared/GeneralButton";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import LoadingView from "@/components/Shared/LoadingView";
 
 const schema = yup.object({
   username: yup.string().required("Ingrese un usuario valid"),
@@ -44,7 +45,8 @@ const schema = yup.object({
 
 export default function Login() {
   const navigation = useNavigation();
-  const { setToken } = useApiProvider();
+  const insets = useSafeAreaInsets();
+  const { setToken, token } = useApiProvider();
   const {
     control,
     handleSubmit,
@@ -53,15 +55,17 @@ export default function Login() {
     resolver: yupResolver(schema),
   });
   const [hiddenPass, setHiddenPass] = useState(true);
+  const [loadingSession, setLoadingSession] = useState(false);
 
   const { mutate: login } = useMutation({
     mutationFn: (data: loginData) => apiUser.login(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessLogin(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessLogin(data.data),
     onError: (error: any) => handleError(error),
   });
 
   const handleSuccessLogin = (data: ObjectResponse) => {
     if (data.error) {
+      setLoadingSession(false);
       ErrorAlertMessage({ message: data.message });
       return;
     }
@@ -74,10 +78,14 @@ export default function Login() {
       value: data.items?.idUser,
     });
     setToken(data.items?.token);
-    navigation.navigate("(tabs)" as never);
+    setTimeout(() => {
+      setLoadingSession(false);
+      navigation.navigate("(tabs)" as never);
+    }, 1500);
   };
 
   const handleError = (error: any) => {
+    setLoadingSession(false);
     ErrorAlertMessage({
       message:
         "Hubo un problema al querer inciar sesión, por favor intentelo mas tarde",
@@ -88,16 +96,24 @@ export default function Login() {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 
+  useEffect(() => {
+    if (token) {
+      setLoadingSession(false);
+      navigation.navigate("(tabs)" as never);
+    }
+  }, [token]);
+
   const imageBg = require("@/assets/images/background.webp");
 
   const onSubmit = (data: loginData) => {
     setToken(null);
+    setLoadingSession(true);
     const passwordEncrypt = parsePasswordEncrypt(data.password);
     login({ ...data, password: passwordEncrypt, isProvider: true });
   };
 
   return (
-    <SafeAreaView style={Container.containerLogin}>
+    <View style={{ flex: 1, paddingTop: insets.top }}>
       <ImageBackground source={imageBg} style={styles.imgBg}>
         <ContentKeyboardAutoScroll>
           <View
@@ -175,7 +191,9 @@ export default function Login() {
                   styleBtn={ButtonGeneralStyle.btnSaveSthetic}
                   styleText={TextStyle.fontBoldWhite}
                   handleOnPress={handleSubmit(onSubmit)}
+                  disabledBtn={loadingSession}
                 />
+                {loadingSession && <LoadingView />}
                 <View style={MarginStyle.marginT20}>
                   <ThemedText style={styles.textInteraction} onPress={() => {}}>
                     ¿Has olvidado la contraseña?
@@ -193,7 +211,7 @@ export default function Login() {
           </View>
         </ContentKeyboardAutoScroll>
       </ImageBackground>
-    </SafeAreaView>
+    </View>
   );
 }
 

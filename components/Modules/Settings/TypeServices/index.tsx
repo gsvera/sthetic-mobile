@@ -14,17 +14,14 @@ import { apiTypeService } from "@/api/TypeService";
 import Checkbox from "expo-checkbox";
 import { ThemedText } from "@/components/ThemedText";
 import { selectOptionType } from "@/constants/GeneralTypes";
-import {
-  ButtonGeneralStyle,
-  InputStyle,
-  TextStyle,
-} from "@/constants/StyleComponents";
+import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { TYPE_STATUS } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
   const { handleNotification } = useNotificationProvider();
@@ -37,7 +34,7 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
       ],
       queryFn: () => apiTypeService.getAll(),
       ...{
-        select: (data: ResponseAPi) => data.data.items,
+        select: (data: ResponseApi) => data.data.items,
       },
     });
 
@@ -48,13 +45,13 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
       ],
       queryFn: () => apiTypeService.getByUser(idUser),
       ...{
-        select: (data: ResponseAPi) => data.data.items,
+        select: (data: ResponseApi) => data.data.items,
       },
     });
 
   const { mutate: saveTypeServices } = useMutation({
     mutationFn: (data: any) => apiTypeService.saveTypeServiceByUser(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessSaveTypeServices(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessSaveTypeServices(data.data),
     onError: (error) => ErrorAlertMessage,
   });
 
@@ -150,7 +147,7 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
                 ayuda al cliente para realizar búsquedas mas precisas.
               </ThemedText>
             </View>
-            <ScrollView style={{ height: "68%" }}>
+            <ScrollView style={{ height: "65%" }}>
               {listOption.map((item: selectOptionType) => {
                 return (
                   <TouchableOpacity
@@ -219,7 +216,7 @@ const localStyle = StyleSheet.create({
     color: ThemeColorsSthetic.muted,
     fontSize: 15,
   },
-  contentBtn: { marginTop: 20, paddingHorizontal: 20 },
+  contentBtn: { marginTop: 25, paddingHorizontal: 20 },
 });
 
 export default TypeServices;

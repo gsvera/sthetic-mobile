@@ -7,7 +7,7 @@ import { functionServicesType } from "../types";
 import { useCallback, useState } from "react";
 import { OptionUploadModal } from "./OptionUploadModal";
 import { UploadImageModal } from "./OptionUploadModal/UploadImageModal";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import apiCatalogUserService from "@/api/CatalogUserService";
 import PreviewCard, { previewCardProps } from "@/components/Shared/PreviewCard";
@@ -21,6 +21,7 @@ import UploadVideoModal from "./OptionUploadModal/UploadVideoModal";
 import { ButtonGeneralStyle } from "@/constants/StyleComponents";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { Feather } from "@expo/vector-icons";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 /**
  * ESTE ARCHIVO TIENE COMENTADO LAS OPCIONES PARA SUBIR VIDEO PARA UN FUTURO
@@ -48,27 +49,27 @@ export const PortfolioServices = ({
     ],
     queryFn: () => apiCatalogUserService.getCatalogServiceByUser(idUser),
     ...{
-      select: (data: ResponseAPi) => data.data.items,
+      select: (data: ResponseApi) => data.data.items,
     },
   });
 
   const { mutate: saveCatalogService } = useMutation({
     mutationFn: (data: any) => apiCatalogUserService.saveCatalogService(data),
-    onSuccess: (data: ResponseAPi) =>
+    onSuccess: (data: ResponseApi) =>
       handleSuccessSaveCatalogService(data.data),
     onError: (err) => ErrorAlertMessage,
   });
 
   const { mutate: updateCatalogService } = useMutation({
     mutationFn: (data: any) => apiCatalogUserService.updateCatalogService(data),
-    onSuccess: (data: ResponseAPi) =>
+    onSuccess: (data: ResponseApi) =>
       handleSuccessUpdateCatalogService(data.data),
     onError: (err) => ErrorAlertMessage,
   });
 
   const { mutate: deleteProject } = useMutation({
     mutationFn: (data: any) => apiCatalogUserService.deleteProject(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessDeleteProject(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessDeleteProject(data.data),
     onError: (err) => ErrorAlertMessage,
   });
 

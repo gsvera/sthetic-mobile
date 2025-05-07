@@ -29,6 +29,8 @@ const ApiRequestProvider = ({ children }) => {
 
   const interceptResponseErrorHandler = useCallback((error) => {
     const { status: statusCode, data, headers } = error?.response ?? {};
+    console.log("🚀 ~ interceptResponseErrorHandler ~ data:", data);
+    console.log("🚀 ~ interceptResponseErrorHandler ~ statusCode:", statusCode);
     if (statusCode === 403 && token) {
       console.log("🚀 ~ interceptResponseErrorHandler ~ error:", error);
       // PARA MANEJO DE ERRORES
@@ -62,7 +64,9 @@ const ApiRequestProvider = ({ children }) => {
   }, [interceptRequestHandler, interceptResponseErrorHandler, token]);
 
   return (
-    <InterceptorAxiosProvider.Provider value={{ axiosInstances, setToken }}>
+    <InterceptorAxiosProvider.Provider
+      value={{ axiosInstances, setToken, token }}
+    >
       {children}
     </InterceptorAxiosProvider.Provider>
   );

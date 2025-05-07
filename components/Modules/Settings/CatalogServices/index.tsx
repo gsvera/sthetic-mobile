@@ -17,6 +17,7 @@ import ModalConfirm from "@/components/Shared/ModalConfirm";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { TYPE_STATUS } from "@/constants/Constants";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 export const CatalogServices = ({
   returnBack,
@@ -32,14 +33,14 @@ export const CatalogServices = ({
       queryKey: [REACT_QUERY_KEYS.menuServices.getByUserId(idUser)],
       queryFn: () => apiMenuService.getListMenuServicesByUser(idUser),
       ...{
-        select: (data: ResponseAPi) => data.data.items as Array<CatalogService>,
+        select: (data: ResponseApi) => data.data.items as Array<CatalogService>,
         enabled: !!idUser,
       },
     });
 
   const { mutate: deleteMenuService } = useMutation({
     mutationFn: () => apiMenuService.deleteMenuService(idUser, idMenuService),
-    onSuccess: (data: ResponseAPi) => handleSuccessDeleteMenuService(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessDeleteMenuService(data.data),
     onError: ErrorAlertMessage,
   });
 

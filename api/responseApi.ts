@@ -1,14 +1,14 @@
 
-type ObjectResponse = {
+export type ObjectResponse = {
     error: boolean;
     items: object[] | any;
     message: string;
 }
 
-type ResponseAPi = {
+export type ResponseApi = {
     data: ObjectResponse    
 }
 
 type ResponseManualApi = {
-    data: ResponseAPi
+    data: ResponseApi
 }
