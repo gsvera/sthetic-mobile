@@ -127,12 +127,13 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
             </View>
           </View>
         ) : (
-          <CameraView
-            ref={cameraRef}
-            style={localStyles.camera}
-            facing={facing}
-            mirror={facing === "front"}
-          >
+          <>
+            <CameraView
+              ref={cameraRef}
+              style={localStyles.camera}
+              facing={facing}
+              mirror={facing === "front"}
+            />
             <View style={localStyles.btnContainerOption}>
               <TouchableOpacity
                 style={localStyles.btnOptionCamera}
@@ -157,7 +158,7 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
                 />
               </TouchableOpacity>
             </View>
-          </CameraView>
+          </>
         )}
       </View>
     </View>
@@ -187,8 +188,7 @@ const localStyles = StyleSheet.create({
     position: "absolute",
     bottom: 70,
     flexDirection: "row",
-    alignContent: "flex-end",
-    alignSelf: "flex-end",
+    alignSelf: "center",
   },
   btnOptionCamera: {
     alignSelf: "flex-end",

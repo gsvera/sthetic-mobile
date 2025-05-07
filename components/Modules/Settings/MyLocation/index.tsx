@@ -3,10 +3,17 @@ import { ThemedText } from "@/components/ThemedText";
 import {
   ButtonGeneralStyle,
   GridStyle,
+  InputStyle,
   TextStyle,
 } from "@/constants/StyleComponents";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
@@ -49,6 +56,7 @@ type dataLocationType = currentLocationType & {
   idMunicipality?: number;
   auxState?: string;
   auxMunicipality?: string;
+  reference?: string;
 };
 
 // SE DEBE PONER UNA LOCACION DEFAULT POR MUNICIPIO
@@ -76,6 +84,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
     });
   const [currentLocation, setCurrentLocation] =
     useState<currentLocationType>(defaultCoordinate);
+  const [reference, setReference] = useState("");
 
   const queryClient = useQueryClient();
 
@@ -144,6 +153,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
         latitude: dataLocation?.latitude,
         longitude: dataLocation?.longitude,
       });
+      if (dataLocation?.reference) setReference(dataLocation?.reference);
     }
   }, [dataLocation]);
 
@@ -223,6 +233,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
         idMunicipality: municiaplitySelected?.id,
         auxState: dataLocationAux?.auxState,
         auxMunicipality: dataLocationAux?.auxMunicipality,
+        reference,
         idUser,
       });
     } else {
@@ -249,106 +260,131 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   return (
     <View>
       <SubHeaderReturn subtitle="Mi Ubicación" handleReturn={returnBack} />
-      <View style={localStyle.contentBody}>
-        <ThemedText style={localStyle.textDescription}>
-          Seleccione el estado y municipio y/o toque en el mapa la ubicacion de
-          su local o negocio para ser mas preciso
-        </ThemedText>
-        <View style={localStyle.rowInput}>
-          <ThemedText style={TextStyle.label}>Estado: </ThemedText>
-          <Pressable
-            style={localStyle.boxData}
-            onPress={() => setOpenSelectStateModal(true)}
-          >
-            <ThemedText style={TextStyle.value}>
-              {stateSelected
-                ? stateSelected.stateName
-                : !dataLocationAux?.auxState
-                ? "Seleccione una opción"
-                : dataLocationAux?.auxState}
-            </ThemedText>
-          </Pressable>
-        </View>
-        <View style={localStyle.rowInput}>
-          <ThemedText style={TextStyle.label}>Municipio: </ThemedText>
-          <Pressable
-            style={localStyle.boxData}
-            onPress={() => setOpenSelectMunicipalityModal(true)}
-          >
-            <ThemedText style={TextStyle.value}>
-              {municiaplitySelected
-                ? municiaplitySelected?.municipalityName
-                : !dataLocationAux?.auxMunicipality
-                ? "Seleccione una opción"
-                : dataLocationAux?.auxMunicipality}
-            </ThemedText>
-          </Pressable>
-        </View>
-        {/* <AndroidMaps /> */}
-        <MapView
-          style={localStyle.map}
-          ref={mapRef}
-          // UBICACIONES POR DEFAULT DE CANCUN
-          initialRegion={{
-            latitude: 21.1739744,
-            longitude: -86.8745216,
-            latitudeDelta: 0.02,
-            longitudeDelta: 0.02,
-          }}
-          onPress={handlePickLotacion}
-        >
-          {/* Agregar un marcador */}
-          {currentLocation && (
-            <Marker
-              coordinate={currentLocation}
-              title="Ubicación marcada"
-              // description="Esta es una descripción de la ubicación"
+      <ScrollView style={{ height: "100%" }}>
+        <View style={localStyle.contentBody}>
+          <ThemedText style={localStyle.textDescription}>
+            Seleccione el estado y municipio y/o toque en el mapa la ubicacion
+            de su local o negocio para ser mas preciso
+          </ThemedText>
+          <View style={localStyle.rowInput}>
+            <ThemedText style={TextStyle.label}>Estado: </ThemedText>
+            <Pressable
+              style={localStyle.boxData}
+              onPress={() => setOpenSelectStateModal(true)}
+            >
+              <ThemedText style={TextStyle.value}>
+                {stateSelected
+                  ? stateSelected.stateName
+                  : !dataLocationAux?.auxState
+                  ? "Seleccione una opción"
+                  : dataLocationAux?.auxState}
+              </ThemedText>
+            </Pressable>
+          </View>
+          <View style={localStyle.rowInput}>
+            <ThemedText style={TextStyle.label}>Municipio: </ThemedText>
+            <Pressable
+              style={localStyle.boxData}
+              onPress={() => setOpenSelectMunicipalityModal(true)}
+            >
+              <ThemedText style={TextStyle.value}>
+                {municiaplitySelected
+                  ? municiaplitySelected?.municipalityName
+                  : !dataLocationAux?.auxMunicipality
+                  ? "Seleccione una opción"
+                  : dataLocationAux?.auxMunicipality}
+              </ThemedText>
+            </Pressable>
+          </View>
+          <View>
+            <ThemedText style={TextStyle.label}>* Referencia:</ThemedText>
+            <TextInput
+              style={localStyle.referenceInput}
+              onChangeText={setReference}
+              maxLength={100}
+              value={reference}
+              multiline
+              numberOfLines={2}
             />
-          )}
-        </MapView>
-        <View style={localStyle.contentBtnLocation}>
-          <Pressable
-            onPress={handleDeviceLocation}
-            style={localStyle.btnLocation}
+          </View>
+          <MapView
+            style={localStyle.map}
+            ref={mapRef}
+            // UBICACIONES POR DEFAULT DE CANCUN
+            initialRegion={{
+              latitude: 21.1739744,
+              longitude: -86.8745216,
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
+            }}
+            onPress={handlePickLotacion}
           >
-            <FontAwesome6 name="location-crosshairs" size={24} color="black" />
-          </Pressable>
-        </View>
-        <View>
-          {loadingLocation && (
-            <ThemedText style={localStyle.textLoading}>
-              Obteniendo la ubicación del dispositivo...
-            </ThemedText>
-          )}
-          {loadingData && (
-            <ThemedText style={localStyle.textLoading}>
-              Cargando ubicación...
-            </ThemedText>
-          )}
+            {/* Agregar un marcador */}
+            {currentLocation && (
+              <Marker
+                coordinate={currentLocation}
+                title="Ubicación marcada"
+                // description="Esta es una descripción de la ubicación"
+              />
+            )}
+          </MapView>
+          <View style={localStyle.contentBtnLocation}>
+            <Pressable
+              onPress={handleDeviceLocation}
+              style={localStyle.btnLocation}
+            >
+              <FontAwesome6
+                name="location-crosshairs"
+                size={24}
+                color="black"
+              />
+            </Pressable>
+          </View>
+          <View>
+            {loadingLocation && (
+              <ThemedText style={localStyle.textLoading}>
+                Obteniendo la ubicación del dispositivo...
+              </ThemedText>
+            )}
+            {loadingData && (
+              <ThemedText style={localStyle.textLoading}>
+                Cargando ubicación...
+              </ThemedText>
+            )}
+          </View>
+
           {requiredLocation && (
             <ThemedText style={localStyle.textError}>
-              Debe marcar su ubicación.
+              Debe marcar su ubicación y/o agregar una referencia.
             </ThemedText>
           )}
+          <View
+            style={{
+              padding: 5,
+              width: "100%",
+              marginHorizontal: "auto",
+            }}
+          >
+            <GeneralButton
+              styleBtn={
+                !enableBtn
+                  ? ButtonGeneralStyle.btnUpdateSthetic
+                  : ButtonGeneralStyle.btnDisabledSthetic
+              }
+              textBtn="Guardar mi ubicación"
+              styleText={{
+                color: !enableBtn
+                  ? ThemeColorsSthetic.textLight
+                  : ThemeColorsSthetic.muted,
+              }}
+              handleOnPress={handleSubmitUpdateLocation}
+              disabledBtn={enableBtn}
+            />
+          </View>
         </View>
-      </View>
-      <View style={{ padding: 5, width: "90%", marginHorizontal: "auto" }}>
-        <GeneralButton
-          styleBtn={
-            !enableBtn
-              ? ButtonGeneralStyle.btnUpdateSthetic
-              : ButtonGeneralStyle.btnDisabledSthetic
-          }
-          textBtn="Guardar mi ubicación"
-          styleText={{
-            color: !enableBtn
-              ? ThemeColorsSthetic.textLight
-              : ThemeColorsSthetic.muted,
-          }}
-          handleOnPress={handleSubmitUpdateLocation}
-          disabledBtn={enableBtn}
-        />
-      </View>
+      </ScrollView>
+      {/* </View> */}
+
       <SelectStateModal
         open={openSelectStateModal}
         handleSelect={handleSelectGeoState}
@@ -360,8 +396,6 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
         handleSelect={handleSelectGeoMunicipality}
         handleCloseModal={() => setOpenSelectMunicipalityModal(false)}
         listMunicipality={listMunicipality}
-        // idState={stateSelected?.id}
-        // entityId={dataLocation?.idMunicipality}
       />
     </View>
   );
@@ -374,15 +408,24 @@ const localStyle = StyleSheet.create({
   },
   map: {
     marginTop: 10,
-    flex: 1,
+    height: "100%",
   },
-  contentBody: { width: "auto", height: "80%", padding: 10 },
+  contentBody: { flex: 1, padding: 10 },
   textDescription: {
     textAlign: "center",
     marginBottom: 10,
     color: ThemeColorsSthetic.textLabels,
   },
-  contentBtnLocation: { flexDirection: "row", justifyContent: "flex-end" },
+  referenceInput: {
+    ...InputStyle.withBorder,
+    marginTop: 5,
+    backgroundColor: "white",
+  },
+  contentBtnLocation: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginBottom: -10,
+  },
   btnLocation: {
     zIndex: 9,
     padding: 5,
@@ -393,10 +436,12 @@ const localStyle = StyleSheet.create({
   textLoading: {
     ...TextStyle.center,
     color: ThemeColorsSthetic.muted,
+    marginBottom: 10,
   },
   textError: {
     ...TextStyle.center,
     color: ThemeColorsSthetic.textError,
+    // marginTop: 10,
   },
   rowInput: {
     ...GridStyle.rowSpaceBetween,
