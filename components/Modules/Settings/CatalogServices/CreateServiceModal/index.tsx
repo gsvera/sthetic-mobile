@@ -17,6 +17,7 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { convertStringToNumber } from "@/utils/GeneralUtils";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 type formServiceCatalogType = {
   nameService: string;
@@ -46,7 +47,7 @@ export const CreateServiceModal = ({
     queryKey: [REACT_QUERY_KEYS.menuServices.getServiceById(idMenuService)],
     queryFn: () => apiMenuService.getMenuServiceById(idMenuService),
     ...{
-      select: (data: ResponseAPi) => data.data.items as CatalogService,
+      select: (data: ResponseApi) => data.data.items as CatalogService,
       enabled: !!idMenuService,
     },
   });
@@ -63,13 +64,13 @@ export const CreateServiceModal = ({
 
   const { mutate: saveMenuService } = useMutation({
     mutationFn: (data: any) => apiMenuService.saveMenuService(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessSaveMenuService(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessSaveMenuService(data.data),
     onError: ErrorAlertMessage,
   });
 
   const { mutate: updateMenuService } = useMutation({
     mutationFn: (data: any) => apiMenuService.updateMenuService(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessSaveMenuService(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessSaveMenuService(data.data),
     onError: ErrorAlertMessage,
   });
 
@@ -225,7 +226,7 @@ const localStyle = StyleSheet.create({
     marginBottom: 15,
   },
   contentModal: {
-    backgroundColor: ThemeColorsSthetic.backgroundLigth,
+    backgroundColor: ThemeColorsSthetic.backgroundLight,
     width: "80%",
   },
   contentForm: {

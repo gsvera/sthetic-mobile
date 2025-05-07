@@ -35,6 +35,7 @@ import ModalConfirm from "@/components/Shared/ModalConfirm";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { ThemeColorsSthetic } from "@/constants/Colors";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 dayjs.locale("es"); // Esta config se debera establecer a futuro para ingles tambien
 
@@ -56,7 +57,7 @@ export const AdminCalendarProvider = () => {
     queryFn: () => apiCalendar.getCalendarByUser(idUser),
     ...{
       enabled: !!idUser,
-      select: (data: ResponseAPi) => data.data.items,
+      select: (data: ResponseApi) => data.data.items,
     },
   });
 
@@ -73,13 +74,13 @@ export const AdminCalendarProvider = () => {
         ),
       ...{
         enabled: !!idUser && !!selectedDate?.dateString,
-        select: (data: ResponseAPi) => data.data.items as exceptionDayType,
+        select: (data: ResponseApi) => data.data.items as exceptionDayType,
       },
     });
 
   const { mutate: deleteCalendarException } = useMutation({
     mutationFn: (id: number) => apiCalendar.deleteCalendarException(id),
-    onSuccess: (data: ResponseAPi) =>
+    onSuccess: (data: ResponseApi) =>
       handleSuccessDeleteCalendarException(data.data),
     onError: ErrorAlertMessage,
   });

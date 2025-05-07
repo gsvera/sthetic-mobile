@@ -38,13 +38,13 @@ export enum FORMAT_DATE {
 }
 
 export const WEEK_DAYS:weekDays[] = [
-    'Lunes',
-    'Martes', 
-    'Miércoles', 
-    'Jueves', 
-    'Viernes', 
-    'Sábado', 
-    'Domingo'
+    'lunes',
+    'martes', 
+    'miércoles', 
+    'jueves', 
+    'viernes', 
+    'sábado', 
+    'domingo'
 ];
 
 export const DEFAULT_VALUES_WEEK = WEEK_DAYS.map((day: string) => ({

@@ -1,7 +1,11 @@
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
 import { ThemedText } from "@/components/ThemedText";
-import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
-import { useEffect, useState } from "react";
+import {
+  ButtonGeneralStyle,
+  GridStyle,
+  TextStyle,
+} from "@/constants/StyleComponents";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MapView, { Marker } from "react-native-maps";
@@ -14,6 +18,15 @@ import { TYPE_STATUS } from "@/constants/Constants";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
+import { apiCatalogs } from "@/api/Catalogs";
+import SelectStateModal from "./SelectStateModal";
+import {
+  CatalogGeoStateType,
+  CatalogGeoMunicipalityType,
+} from "@/constants/GeneralTypes";
+import SelectMunicipalityModal from "./SelectMunicipalityModal";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import { apiOtherServices } from "@/api/OtherServices";
 
 type myLocationProps = {
   idUser: string;
@@ -25,8 +38,17 @@ type currentLocationType = {
   longitude: number;
 };
 
+type LocationAuxType = {
+  auxState: string | undefined;
+  auxMunicipality: string | undefined;
+};
+
 type dataLocationType = currentLocationType & {
   idUser: string;
+  idState?: number;
+  idMunicipality?: number;
+  auxState?: string;
+  auxMunicipality?: string;
 };
 
 // SE DEBE PONER UNA LOCACION DEFAULT POR MUNICIPIO
@@ -37,25 +59,59 @@ const defaultCoordinate = {
 
 export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   const { handleNotification } = useNotificationProvider();
+  const mapRef = useRef<MapView>(null);
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [enableBtn, setEnableBtn] = useState(false);
   const [requiredLocation, setRequiredLocation] = useState(false);
+  const [openSelectStateModal, setOpenSelectStateModal] = useState(false);
+  const [openSelectMunicipalityModal, setOpenSelectMunicipalityModal] =
+    useState(false);
+  const [stateSelected, setStateSelected] = useState<CatalogGeoStateType>();
+  const [municiaplitySelected, setMunicipalitySelected] =
+    useState<CatalogGeoMunicipalityType>();
+  const [dataLocationAux, setDataLocationAux] =
+    useState<LocationAuxType | null>({
+      auxState: "",
+      auxMunicipality: "",
+    });
   const [currentLocation, setCurrentLocation] =
     useState<currentLocationType>(defaultCoordinate);
 
   const queryClient = useQueryClient();
 
-  const { data: dataLocation, isFetching } = useQuery({
+  const { data: listState = [], isLoading: isPendingStates } = useQuery({
+    queryKey: [REACT_QUERY_KEYS.catalogs.geo.getAllState("select-state-modal")],
+    queryFn: () => apiCatalogs.getAllGeoState(),
+    ...{
+      select: (data: ResponseApi) =>
+        data.data.items as Array<CatalogGeoStateType>,
+    },
+  });
+
+  const { data: listMunicipality = [], isLoading: isPendingMunicipalities } =
+    useQuery({
+      queryKey: [
+        REACT_QUERY_KEYS.catalogs.geo.getMunicipalityByState(stateSelected?.id),
+      ],
+      queryFn: () => apiCatalogs.getMunicipalityByState(stateSelected?.id),
+      ...{
+        select: (data: ResponseApi) =>
+          data.data.items as Array<CatalogGeoMunicipalityType>,
+        enabled: !!stateSelected?.id,
+      },
+    });
+
+  const { data: dataLocation, isLoading: isPendingLocation } = useQuery({
     queryKey: [REACT_QUERY_KEYS.userConfig.getLocationByUser(idUser)],
     queryFn: () => apiUserConfig.getLocationByUser(idUser),
     ...{
-      select: (data: ResponseAPi) => data?.data,
+      select: (data: ResponseApi) => data?.data.items as dataLocationType,
     },
   });
 
   const { mutate: saveLocation } = useMutation({
     mutationFn: (data: dataLocationType) => apiUserConfig.saveLocation(data),
-    onSuccess: (data: ResponseAPi) => handleSaveResponse(data.data),
+    onSuccess: (data: ResponseApi) => handleSaveResponse(data.data),
     onError: (err) => ErrorAlertMessage,
   });
 
@@ -79,13 +135,36 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   };
 
   useEffect(() => {
-    if (dataLocation?.items) {
-      setCurrentLocation({
-        latitude: dataLocation?.items?.latitude,
-        longitude: dataLocation?.items?.longitude,
+    if (dataLocation) {
+      setDataLocationAux({
+        auxState: dataLocation.auxState,
+        auxMunicipality: dataLocation.auxMunicipality,
+      });
+      handleUpdateLocation({
+        latitude: dataLocation?.latitude,
+        longitude: dataLocation?.longitude,
       });
     }
   }, [dataLocation]);
+
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
+          latitudeDelta: 0.02, // Ajusta para zoom
+          longitudeDelta: 0.02,
+        },
+        1000
+      );
+    }
+  }, [currentLocation]);
+
+  const loadingData = useMemo(
+    () => isPendingLocation || isPendingStates || isPendingMunicipalities,
+    [isPendingLocation, isPendingStates, isPendingMunicipalities]
+  );
 
   const handleDeviceLocation = async () => {
     setRequiredLocation(false);
@@ -98,13 +177,41 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
 
     const location = await Location.getCurrentPositionAsync({});
     const { latitude, longitude } = location.coords;
-    setCurrentLocation({ latitude, longitude });
+    setStateSelected(undefined);
+    setMunicipalitySelected(undefined);
+    geolocationInvert({ latitude, longitude });
+    handleUpdateLocation({ latitude, longitude });
     setLoadingLocation(false);
   };
 
   const handlePickLotacion = (event: any) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
-    setCurrentLocation({ latitude, longitude });
+    setStateSelected(undefined);
+    setMunicipalitySelected(undefined);
+    geolocationInvert({ latitude, longitude });
+    handleUpdateLocation({ latitude, longitude });
+  };
+
+  const geolocationInvert = async ({
+    latitude,
+    longitude,
+  }: currentLocationType) => {
+    const result = await apiOtherServices.getInverserGeo({
+      latitude,
+      longitude,
+    });
+
+    if (result.data) {
+      setDataLocationAux({
+        auxState: result.data.address.state,
+        auxMunicipality:
+          result.data.address.municipality ?? result.data.address.county,
+      });
+    }
+  };
+
+  const handleUpdateLocation = (location: currentLocationType) => {
+    setCurrentLocation(location);
   };
 
   const handleSubmitUpdateLocation = () => {
@@ -112,6 +219,10 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
       setEnableBtn(true);
       saveLocation({
         ...currentLocation,
+        idState: stateSelected?.id,
+        idMunicipality: municiaplitySelected?.id,
+        auxState: dataLocationAux?.auxState,
+        auxMunicipality: dataLocationAux?.auxMunicipality,
         idUser,
       });
     } else {
@@ -119,21 +230,70 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
     }
   };
 
+  const handleSelectGeoState = (data: CatalogGeoStateType) => {
+    setStateSelected(data);
+    setMunicipalitySelected(undefined);
+    setOpenSelectStateModal(false);
+    setDataLocationAux(null);
+  };
+
+  const handleSelectGeoMunicipality = (data: CatalogGeoMunicipalityType) => {
+    setMunicipalitySelected(data);
+    setCurrentLocation({
+      latitude: data.latitude,
+      longitude: data.longitude,
+    });
+    setOpenSelectMunicipalityModal(false);
+  };
+
   return (
     <View>
       <SubHeaderReturn subtitle="Mi Ubicación" handleReturn={returnBack} />
       <View style={localStyle.contentBody}>
         <ThemedText style={localStyle.textDescription}>
-          Toque en el mapa la ubicacion de su local o negocio
+          Seleccione el estado y municipio y/o toque en el mapa la ubicacion de
+          su local o negocio para ser mas preciso
         </ThemedText>
+        <View style={localStyle.rowInput}>
+          <ThemedText style={TextStyle.label}>Estado: </ThemedText>
+          <Pressable
+            style={localStyle.boxData}
+            onPress={() => setOpenSelectStateModal(true)}
+          >
+            <ThemedText style={TextStyle.value}>
+              {stateSelected
+                ? stateSelected.stateName
+                : !dataLocationAux?.auxState
+                ? "Seleccione una opción"
+                : dataLocationAux?.auxState}
+            </ThemedText>
+          </Pressable>
+        </View>
+        <View style={localStyle.rowInput}>
+          <ThemedText style={TextStyle.label}>Municipio: </ThemedText>
+          <Pressable
+            style={localStyle.boxData}
+            onPress={() => setOpenSelectMunicipalityModal(true)}
+          >
+            <ThemedText style={TextStyle.value}>
+              {municiaplitySelected
+                ? municiaplitySelected?.municipalityName
+                : !dataLocationAux?.auxMunicipality
+                ? "Seleccione una opción"
+                : dataLocationAux?.auxMunicipality}
+            </ThemedText>
+          </Pressable>
+        </View>
+        {/* <AndroidMaps /> */}
         <MapView
           style={localStyle.map}
+          ref={mapRef}
           // UBICACIONES POR DEFAULT DE CANCUN
           initialRegion={{
             latitude: 21.1739744,
             longitude: -86.8745216,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02,
           }}
           onPress={handlePickLotacion}
         >
@@ -141,8 +301,8 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
           {currentLocation && (
             <Marker
               coordinate={currentLocation}
-              title="Ubicación"
-              description="Esta es una descripción de la ubicación"
+              title="Ubicación marcada"
+              // description="Esta es una descripción de la ubicación"
             />
           )}
         </MapView>
@@ -160,7 +320,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
               Obteniendo la ubicación del dispositivo...
             </ThemedText>
           )}
-          {isFetching && (
+          {loadingData && (
             <ThemedText style={localStyle.textLoading}>
               Cargando ubicación...
             </ThemedText>
@@ -189,6 +349,20 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
           disabledBtn={enableBtn}
         />
       </View>
+      <SelectStateModal
+        open={openSelectStateModal}
+        handleSelect={handleSelectGeoState}
+        handleCloseModal={() => setOpenSelectStateModal(false)}
+        listState={listState}
+      />
+      <SelectMunicipalityModal
+        open={openSelectMunicipalityModal}
+        handleSelect={handleSelectGeoMunicipality}
+        handleCloseModal={() => setOpenSelectMunicipalityModal(false)}
+        listMunicipality={listMunicipality}
+        // idState={stateSelected?.id}
+        // entityId={dataLocation?.idMunicipality}
+      />
     </View>
   );
 };
@@ -199,6 +373,7 @@ const localStyle = StyleSheet.create({
     margin: 10,
   },
   map: {
+    marginTop: 10,
     flex: 1,
   },
   contentBody: { width: "auto", height: "80%", padding: 10 },
@@ -222,6 +397,20 @@ const localStyle = StyleSheet.create({
   textError: {
     ...TextStyle.center,
     color: ThemeColorsSthetic.textError,
+  },
+  rowInput: {
+    ...GridStyle.rowSpaceBetween,
+    ...GridStyle.rowItemsVerticalCenter,
+    marginVertical: 5,
+  },
+  boxData: {
+    ...GridStyle.rowItemsVerticalCenter,
+    paddingLeft: 5,
+    borderWidth: 0.5,
+    borderRadius: 5,
+    width: "49%",
+    height: 30,
+    backgroundColor: "white",
   },
 });
 

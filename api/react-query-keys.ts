@@ -25,7 +25,11 @@ export const REACT_QUERY_KEYS = {
         },
         coupon: {
             getByCode: (key:string) => `get-coupon-by-code-${key}`
-        },        
+        },  
+        geo: {
+            getAllState: (key: string) => `get-all-geo-state-${key}`,
+            getMunicipalityByState: (key: number | undefined) => `get-all-geo-municipality-${key}`
+        }      
     },
     menuServices: {
         getServiceById: (key: number | undefined) => `get-menu-service-by-id-${key}`,

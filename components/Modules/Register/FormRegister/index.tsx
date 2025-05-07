@@ -22,6 +22,7 @@ import { apiUser } from "@/api/User";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ThemedText } from "@/components/ThemedText";
+import { ResponseApi } from "@/api/responseApi";
 
 const schema = yup.object().shape({
   firstName: yup
@@ -106,7 +107,7 @@ export const FormRegister = ({
     queryKey: [REACT_QUERY_KEYS.lada.getFilterData("registry")],
     queryFn: () => apiLada.getFilterData(),
     ...{
-      select: (data: ResponseAPi) => data.data.items,
+      select: (data: ResponseApi) => data.data.items,
     },
   });
 
@@ -124,7 +125,7 @@ export const FormRegister = ({
 
   const handleSavePersonalData = async (data: FormInputs) => {
     try {
-      const searchUser: ResponseAPi = await apiUser.findDuplicateUser(
+      const searchUser: ResponseApi = await apiUser.findDuplicateUser(
         data.email,
         data.phone
       );

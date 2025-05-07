@@ -33,7 +33,7 @@ export enum GlobalColors {
  * @param secondary - Fondo principal o secciones
  * @param accent - Íconos, detalles premium
  * @param accentReverse - Aporta contraste sin ser negro, ideal para íconos o textos destacados
- * @param background - Backgrounds, tarjetas
+ * @param backgroundLight - Backgrounds, tarjetas
  * @param backgroundStrong - Background oscuro
  * @param text - Texto principal
  * @param textLight - Texto invertido
@@ -75,7 +75,7 @@ export enum ThemeColorsSthetic  {
     /**
      * Backgrounds, tarjetas
      */
-    backgroundLigth = '#F5F5F5',
+    backgroundLight = '#F5F5F5',
     /**
      * Background oscuro
      */

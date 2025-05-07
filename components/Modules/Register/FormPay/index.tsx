@@ -15,6 +15,7 @@ import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { apiCoupon } from "@/api/Coupon";
 import LoadingView from "@/components/Shared/LoadingView";
 import GeneralButton from "@/components/Shared/GeneralButton";
+import { ResponseApi } from "@/api/responseApi";
 
 type formPayProps = {
   plan: PlanCardProps | null;
@@ -40,7 +41,7 @@ export const FormPay = ({
     queryFn: () => apiCoupon.getCoupon(coupon as string),
     ...{
       enabled: shouldFetch,
-      select: (data: ResponseAPi) => data.data,
+      select: (data: ResponseApi) => data.data,
     },
   });
 

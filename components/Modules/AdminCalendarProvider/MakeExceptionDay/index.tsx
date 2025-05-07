@@ -27,6 +27,7 @@ import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoSc
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 type exceptionDayProps = modalCustomProps & {
   day: weekDaysProps;
@@ -47,13 +48,13 @@ export const MakeExceptionDay = ({
 
   const { mutate: saveExceptionDay } = useMutation({
     mutationFn: (data: any) => apiCalendar.saveExceptionDay(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessSaveExceptionDay(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessSaveExceptionDay(data.data),
     onError: ErrorAlertMessage,
   });
 
   const { mutate: updateExceptionDay } = useMutation({
     mutationFn: (data: any) => apiCalendar.updateExceptionDay(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessSaveExceptionDay(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessSaveExceptionDay(data.data),
     onError: ErrorAlertMessage,
   });
 

@@ -33,14 +33,14 @@ export default function TabLayout() {
         backgroundColor:
           colorScheme === "dark"
             ? ThemeColorsSthetic.backgroundStrong
-            : ThemeColorsSthetic.backgroundLigth,
+            : ThemeColorsSthetic.backgroundLight,
       }}
     >
-      <SafeAreaView style={localStyle.container}>
+      <View style={localStyle.container}>
         <Tabs
           screenOptions={{
             tabBarActiveTintColor: ThemeColorsSthetic.accent,
-            tabBarActiveBackgroundColor: ThemeColorsSthetic.backgroundLigth,
+            tabBarActiveBackgroundColor: ThemeColorsSthetic.backgroundLight,
             headerShown: false,
             tabBarButton: HapticTab,
             tabBarBackground: TabBarBackground,
@@ -108,7 +108,7 @@ export default function TabLayout() {
             }}
           />
         </Tabs>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }
@@ -116,5 +116,6 @@ export default function TabLayout() {
 const localStyle = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 15,
   },
 });

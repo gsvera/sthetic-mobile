@@ -19,6 +19,23 @@ export type modalCustomProps = {
     idUser?: string;
   };
 
+export type CatalogGeoStateType = {
+    id: number;
+    stateName: string;
+}
+
+export type CatalogGeoMunicipalityType = {
+    id: number;
+    municipalityName: string;
+    latitude: number;
+    longitude: number;
+}
+export type OptionSelectType = {
+    value: string | number;
+    label: string;
+    onSelect: (value:string | number) => void   
+}
+
 /**
  *  OBJECTS
  */
@@ -61,4 +78,4 @@ export type CatalogService = {
     people: number
 }
 
-export type weekDays = 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes' | 'Sábado' | 'Domingo';
+export type weekDays = 'lunes' | 'martes' | 'miércoles' | 'jueves' | 'viernes' | 'sábado' | 'domingo';

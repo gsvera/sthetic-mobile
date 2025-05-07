@@ -31,6 +31,7 @@ import { TYPE_STATUS } from "@/constants/Constants";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { InfoCompanyType } from "@/constants/GeneralTypes";
 import LoadingView from "@/components/Shared/LoadingView";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 type myCompanyProps = {
   idUser: string;
@@ -71,14 +72,14 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
       queryKey: [REACT_QUERY_KEYS.userConfig.getInfoCompanyByUer(idUser)],
       queryFn: () => apiUserConfig.getInfoCompany(idUser),
       ...{
-        select: (data: ResponseAPi) => data.data.items as InfoCompanyType,
+        select: (data: ResponseApi) => data.data.items as InfoCompanyType,
       },
     }
   );
 
   const { mutate: updateInfoCompany } = useMutation({
     mutationFn: (data: any) => apiUserConfig.updateInfoCompany(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessUpdateInfoCompany(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessUpdateInfoCompany(data.data),
     onError: ErrorAlertMessage,
   });
 
@@ -165,7 +166,7 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
                 borderWidth: 1,
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: ThemeColorsSthetic.backgroundLigth,
+                backgroundColor: ThemeColorsSthetic.backgroundLight,
               }}
               onPress={showFileManager}
             >

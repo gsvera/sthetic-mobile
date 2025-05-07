@@ -1,3 +1,4 @@
+import { ResponseApi } from "@/api/responseApi";
 import { apiUser } from "@/api/User";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
@@ -11,13 +12,7 @@ import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 
 type changePasswordProps = {
   returnBack: () => void;
@@ -31,11 +26,11 @@ export const ChangePassword = ({ returnBack }: changePasswordProps) => {
 
   const { mutate: updatePassword } = useMutation({
     mutationFn: (value: string) => apiUser.updatePassword(value),
-    onSuccess: (data: ResponseAPi) => handleResponseUpdate(data),
+    onSuccess: (data: ResponseApi) => handleResponseUpdate(data),
     onError: (err) => handleErrorUpdate(err),
   });
 
-  const handleResponseUpdate = (data: ResponseAPi) => {
+  const handleResponseUpdate = (data: ResponseApi) => {
     if (data?.data?.error) {
       handleNotification({
         type: TYPE_STATUS.ERROR,

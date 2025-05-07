@@ -18,6 +18,7 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { TYPE_STATUS } from "@/constants/Constants";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 type cameraCustomProps = {
   idUser: string;
@@ -34,7 +35,7 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
 
   const { mutate: savePicture } = useMutation({
     mutationFn: (data: any) => apiUserConfig.saveProfilePicture(data),
-    onSuccess: (data: ResponseAPi) => handleSuccessSavePicture(data.data),
+    onSuccess: (data: ResponseApi) => handleSuccessSavePicture(data.data),
     onError: ErrorAlertMessage,
   });
 
