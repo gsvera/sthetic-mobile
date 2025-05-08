@@ -30,6 +30,7 @@ const ApiRequestProvider = ({ children }) => {
   const interceptResponseErrorHandler = useCallback((error) => {
     const { status: statusCode, data, headers } = error?.response ?? {};
     console.log("🚀 ~ interceptResponseErrorHandler ~ data:", data);
+    console.log("🚀 ~ interceptResponseErrorHandler ~ error:", error);
     console.log("🚀 ~ interceptResponseErrorHandler ~ statusCode:", statusCode);
     if (statusCode === 403 && token) {
       console.log("🚀 ~ interceptResponseErrorHandler ~ error:", error);

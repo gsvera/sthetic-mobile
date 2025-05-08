@@ -1,7 +1,14 @@
 import { DEFAULT_VALUES_WEEK, TYPE_STATUS } from "@/constants/Constants";
 import { modalCustomProps } from "@/constants/GeneralTypes";
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, Modal, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  ScrollView,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Platform,
+} from "react-native";
 import { weekDaysProps } from "../types";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";

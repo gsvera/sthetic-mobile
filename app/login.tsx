@@ -126,12 +126,12 @@ export default function Login() {
             <View>
               <View style={styles.imgContainer}>
                 <Image
-                  source={require("@/assets/images/react-logo.png")}
+                  source={require("@/assets/images/meredith-logo-worker.png")}
                   style={styles.logo}
                 />
               </View>
-              <ThemedText style={styles.title}>Meredith Worker</ThemedText>
               <View style={styles.centerInput}>
+                <ThemedText style={styles.label}>Usuario</ThemedText>
                 <Controller
                   control={control}
                   name="username"
@@ -153,6 +153,7 @@ export default function Login() {
                 )}
               </View>
               <View style={styles.centerInput}>
+                <ThemedText style={styles.label}>Contraseña</ThemedText>
                 <Controller
                   control={control}
                   name="password"
@@ -225,9 +226,9 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   logo: {
-    height: 100,
-    width: 100,
-    marginTop: 100,
+    height: 200,
+    width: 230,
+    marginTop: 70,
   },
   title: {
     paddingTop: 20,
@@ -237,9 +238,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: ThemeColorsSthetic.primary,
   },
+  label: {
+    color: ThemeColorsSthetic.textTitle,
+    textAlign: "center",
+    marginBottom: 5,
+  },
   centerInput: {
     justifyContent: "center",
-    flexDirection: "row",
     marginTop: 15,
   },
   icon: {

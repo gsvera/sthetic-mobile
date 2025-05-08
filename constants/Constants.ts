@@ -55,3 +55,8 @@ export const DEFAULT_VALUES_WEEK = WEEK_DAYS.map((day: string) => ({
   duration: 0,
   maxReservations: 0,
 }));
+
+export enum PLATFORM_TYPE {
+    IOS = 'ios',
+    ANDROID = 'android'
+}
