@@ -186,10 +186,14 @@ export default function More() {
               <Image
                 source={
                   !dataUser?.profilePictureB64
-                    ? require("@/assets/images/react-logo.png")
+                    ? require("@/assets/images/me-logo-worker.png")
                     : { uri: dataUser?.profilePictureB64 }
                 }
-                style={localStyle.avatar}
+                style={
+                  !dataUser?.profilePictureB64
+                    ? localStyle.avatarMeredith
+                    : localStyle.avatar
+                }
               />
             </TouchableOpacity>
             <View style={{ marginLeft: 10 }}>
@@ -426,6 +430,11 @@ const localStyle = StyleSheet.create({
   avatar: {
     width: 50,
     height: 50,
+    borderRadius: 50, // Hace que la imagen sea circular
+  },
+  avatarMeredith: {
+    width: 80,
+    height: 80,
     borderRadius: 50, // Hace que la imagen sea circular
   },
   name: {
