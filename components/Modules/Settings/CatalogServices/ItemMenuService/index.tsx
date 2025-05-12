@@ -1,6 +1,7 @@
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemeColorsSthetic } from "@/constants/Colors";
+import { PLATFORM_TYPE } from "@/constants/Constants";
 import { CatalogService } from "@/constants/GeneralTypes";
 import {
   ButtonGeneralStyle,
@@ -9,7 +10,7 @@ import {
 } from "@/constants/StyleComponents";
 import { convertCurrency } from "@/utils/GeneralUtils";
 import { Feather } from "@expo/vector-icons";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 type itemMenuServiceProps = {
   register: CatalogService;
@@ -79,16 +80,16 @@ const localStyle = StyleSheet.create({
   titleCard: {
     color: ThemeColorsSthetic.textTitle,
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: Platform.OS === PLATFORM_TYPE.ANDROID ? 20 : 18,
   },
   label: {
     color: ThemeColorsSthetic.accentReverse,
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: Platform.OS === PLATFORM_TYPE.ANDROID ? 16 : 14,
   },
   value: {
     color: ThemeColorsSthetic.text,
-    fontSize: 17,
+    fontSize: Platform.OS === PLATFORM_TYPE.ANDROID ? 17 : 15,
     textAlign: "center",
   },
   contentBtn: {

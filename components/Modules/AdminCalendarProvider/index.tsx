@@ -1,13 +1,7 @@
-import { useContext, useEffect, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Calendar } from "react-native-calendars";
-import { AvailableByDay, exceptionDayType, weekDaysProps } from "./types";
+import { exceptionDayType, weekDaysProps } from "./types";
 import { ThemedText } from "@/components/ThemedText";
 import {
   ButtonGeneralStyle,
@@ -233,7 +227,6 @@ export const AdminCalendarProvider = () => {
 
 export const localStyle = StyleSheet.create({
   contentCalendar: {
-    flex: 1,
     paddingHorizontal: 20,
   },
   contentBtn: {

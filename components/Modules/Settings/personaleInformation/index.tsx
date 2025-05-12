@@ -7,7 +7,7 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { SubHeaderReturn } from "@/components/Shared/SubHeaderReturn";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemeColorsSthetic } from "@/constants/Colors";
-import { REGEX, TYPE_STATUS } from "@/constants/Constants";
+import { PLATFORM_TYPE, REGEX, TYPE_STATUS } from "@/constants/Constants";
 import {
   ButtonGeneralStyle,
   GeneralStyle,
@@ -18,7 +18,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, View, TextInput, Text, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Text,
+  ScrollView,
+  Platform,
+} from "react-native";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -278,10 +285,8 @@ export const PersonalInformation = ({
 
 const localStyle = StyleSheet.create({
   label: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: ThemeColorsSthetic.textLabels,
-    marginBottom: 10,
+    ...TextStyle.label,
+    marginBottom: Platform.OS === PLATFORM_TYPE.ANDROID ? 5 : 15,
   },
   contentButton: {
     marginTop: 15,

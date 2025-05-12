@@ -1,15 +1,18 @@
 {
   "expo": {
-    "name": "sthetic-mobile",
+    "name": "Meredith Worker",
     "slug": "sthetic-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/meredith-logo-worker.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Esta aplicación necesita acceder a tu ubicación para mostrar tu posición en el mapa."
+      }
     },
     "android": {
       "adaptiveIcon": {

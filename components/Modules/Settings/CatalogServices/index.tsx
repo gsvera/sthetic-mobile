@@ -1,5 +1,5 @@
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { functionServicesType } from "../types";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ThemedText } from "@/components/ThemedText";
@@ -16,7 +16,7 @@ import ItemMenuService from "./ItemMenuService";
 import ModalConfirm from "@/components/Shared/ModalConfirm";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { TYPE_STATUS } from "@/constants/Constants";
+import { PLATFORM_TYPE, TYPE_STATUS } from "@/constants/Constants";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 export const CatalogServices = ({
@@ -157,7 +157,7 @@ const localStyle = StyleSheet.create({
     height: 35,
   },
   contentMenuList: {
-    height: "78%",
+    height: Platform.OS === PLATFORM_TYPE.IOS ? "77%" : "78%",
     paddingHorizontal: 15,
     marginTop: 10,
     paddingBottom: 10,

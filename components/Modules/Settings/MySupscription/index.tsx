@@ -129,8 +129,7 @@ const localStyle = StyleSheet.create({
     ...TextStyle.label,
   },
   textValue: {
-    ...TextStyle.size20,
-    color: ThemeColorsSthetic.text,
+    ...TextStyle.value,
   },
   contentBtn: {
     width: "80%",
