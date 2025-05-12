@@ -7,7 +7,7 @@ import { Switch } from "react-native";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { REGEX } from "@/constants/Constants";
 import dayjs from "dayjs";
 
@@ -53,18 +53,17 @@ export const AvailableTimeCard = ({
   };
 
   const handleChageTime = (e: any) => {
-    if (e.type === "set") {
-      if (selectedDay.position === "start")
-        day.startTime = dayjs(e.nativeEvent.timestamp).format("HH:mm");
-      else day.endTime = dayjs(e.nativeEvent.timestamp).format("HH:mm");
-      updateDataDay(day);
-    }
+    if (selectedDay.position === "start")
+      day.startTime = dayjs(e).format("HH:mm");
+    else day.endTime = dayjs(e).format("HH:mm");
+
+    updateDataDay(day);
     setShowTimePicker(false);
   };
 
   return (
     <View style={localStyle.cardItem}>
-      <View style={GridStyle.rowSpaceBetween}>
+      <View style={localStyle.cardHeader}>
         <ThemedText style={localStyle.titleDay}>{day.day}</ThemedText>
         <Switch value={day.isActive} onValueChange={handleEnabledDayToWork} />
       </View>
@@ -126,28 +125,31 @@ export const AvailableTimeCard = ({
           </View>
         </>
       )}
-      {showTimePicker && (
-        <DateTimePicker
-          mode="time"
-          display="clock"
-          value={new Date()}
-          onChange={(e) => handleChageTime(e)}
-        />
-      )}
+      <DateTimePickerModal
+        isVisible={showTimePicker}
+        mode="time"
+        onConfirm={handleChageTime}
+        onCancel={() => setShowTimePicker(false)}
+      />
     </View>
   );
 };
 
 const localStyle = StyleSheet.create({
+  cardHeader: {
+    ...GridStyle.rowSpaceBetween,
+    ...GridStyle.rowItemsVerticalCenter,
+  },
   cardItem: {
     marginBottom: 20,
     padding: 30,
     borderColor: ThemeColorsSthetic.text,
-    elevation: 2,
+    borderWidth: 0.2,
+    borderRadius: 5,
   },
   titleDay: {
     ...TextStyle.size20,
-    color: ThemeColorsSthetic.textLabels,
+    color: ThemeColorsSthetic.textTitle,
     fontWeight: "bold",
   },
   cardRowItem: {

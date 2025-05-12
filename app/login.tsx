@@ -99,7 +99,10 @@ export default function Login() {
   useEffect(() => {
     if (token) {
       setLoadingSession(false);
-      navigation.navigate("(tabs)" as never);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "(tabs)" as never }],
+      });
     }
   }, [token]);
 

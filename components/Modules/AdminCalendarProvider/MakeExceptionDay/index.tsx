@@ -1,14 +1,6 @@
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Modal, Platform, StyleSheet, TextInput, View } from "react-native";
 import { exceptionDayType, weekDaysProps } from "../types";
 import AvailableTimeCard from "../AvailableTimeCard";
-import { SimpleLineIcons } from "@expo/vector-icons";
 import { modalCustomProps } from "@/constants/GeneralTypes";
 import { ThemedText } from "@/components/ThemedText";
 import {
@@ -21,13 +13,15 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiCalendar } from "@/api/Calendar";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { FORMAT_DATE, TYPE_STATUS } from "@/constants/Constants";
+import { FORMAT_DATE, PLATFORM_TYPE, TYPE_STATUS } from "@/constants/Constants";
 import { convertDateToGeneralFormat } from "@/utils/GeneralUtils";
 import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type exceptionDayProps = modalCustomProps & {
   day: weekDaysProps;
@@ -41,6 +35,7 @@ export const MakeExceptionDay = ({
   day,
   entityToEdit,
 }: exceptionDayProps) => {
+  const insets = useSafeAreaInsets();
   const { handleNotification } = useNotificationProvider();
   const queryClient = useQueryClient();
   const [commentsException, setCommentsException] = useState("");
@@ -129,23 +124,16 @@ export const MakeExceptionDay = ({
   if (!localDay) return <></>;
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={open}
-      style={{ padding: 16 }}
-    >
-      <ContentKeyboardAutoScroll>
-        <View style={localStyle.contentBody}>
-          <View style={localStyle.contentBtnClose}>
-            <Pressable onPress={handleCloseModalException}>
-              <SimpleLineIcons
-                name="close"
-                size={24}
-                color={ThemeColorsSthetic.accentReverse}
-              />
-            </Pressable>
-          </View>
+    <Modal animationType="slide" transparent={true} visible={open}>
+      <View
+        style={{
+          ...localStyle.contentBody,
+          top: Platform.OS === PLATFORM_TYPE.IOS ? insets.top : 0,
+          flex: 1,
+        }}
+      >
+        <ContentKeyboardAutoScroll>
+          <ButtonCloseModal handleOnPress={handleCloseModalException} />
           <View style={{ marginBottom: 10 }}>
             <ThemedText style={TextStyle.titleModal}>
               Cambio de horario para el día {day.dateString}
@@ -175,8 +163,8 @@ export const MakeExceptionDay = ({
               />
             </View>
           </View>
-        </View>
-      </ContentKeyboardAutoScroll>
+        </ContentKeyboardAutoScroll>
+      </View>
     </Modal>
   );
 };
@@ -184,6 +172,7 @@ export const MakeExceptionDay = ({
 const localStyle = StyleSheet.create({
   contentBody: {
     paddingHorizontal: 15,
+    backgroundColor: ThemeColorsSthetic.backgroundLight,
   },
   contentBtnClose: {
     flexDirection: "row",

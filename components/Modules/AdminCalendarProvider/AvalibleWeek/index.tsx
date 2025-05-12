@@ -1,16 +1,12 @@
-import { DEFAULT_VALUES_WEEK, TYPE_STATUS } from "@/constants/Constants";
+import {
+  DEFAULT_VALUES_WEEK,
+  PLATFORM_TYPE,
+  TYPE_STATUS,
+} from "@/constants/Constants";
 import { modalCustomProps } from "@/constants/GeneralTypes";
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  ScrollView,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Platform,
-} from "react-native";
+import { View, ScrollView, Modal, StyleSheet, Platform } from "react-native";
 import { weekDaysProps } from "../types";
-import { SimpleLineIcons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -22,6 +18,8 @@ import AvailableTimeCard from "../AvailableTimeCard";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
 
 type availableWeekProps = modalCustomProps & {
   daysByweek: weekDaysProps[];
@@ -33,6 +31,7 @@ export const AvailibleWeek = ({
   idUser,
   daysByweek,
 }: availableWeekProps) => {
+  const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
   const { handleNotification } = useNotificationProvider();
   const [availableTimeWeek, setAvailableTimeWeek] = useState<weekDaysProps[]>(
@@ -126,44 +125,42 @@ export const AvailibleWeek = ({
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={open}
-      style={{ padding: 16 }}
-    >
-      <View style={localStyle.contentBody}>
-        <View style={localStyle.contentBtnClose}>
-          <Pressable onPress={handleCloseModal}>
-            <SimpleLineIcons
-              name="close"
-              size={24}
-              color={ThemeColorsSthetic.accentReverse}
-            />
-          </Pressable>
-        </View>
+    <Modal animationType="slide" transparent={true} visible={open}>
+      <View
+        style={{
+          ...localStyle.contentBody,
+          backgroundColor: ThemeColorsSthetic.backgroundLight,
+          flex: 1,
+          top: Platform.OS === PLATFORM_TYPE.IOS ? insets.top : 0,
+        }}
+      >
+        <ButtonCloseModal handleOnPress={handleCloseModal} />
         <View style={{ marginBottom: 10 }}>
           <ThemedText type="subtitle" style={TextStyle.titleModal}>
             Disponibilidad semanal
           </ThemedText>
         </View>
-      </View>
-      <ScrollView contentContainerStyle={{ padding: 16 }}>
-        {availableTimeWeek.map((day, i) => (
-          <AvailableTimeCard
-            key={i}
-            day={day}
-            updateDataDay={handleUpdateArrDay}
+        <View
+          style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "75%" : "80%" }}
+        >
+          <ScrollView>
+            {availableTimeWeek.map((day, i) => (
+              <AvailableTimeCard
+                key={i}
+                day={day}
+                updateDataDay={handleUpdateArrDay}
+              />
+            ))}
+          </ScrollView>
+        </View>
+        <View style={localStyle.contentBtnSave}>
+          <GeneralButton
+            styleBtn={localStyle.btnSave}
+            textBtn="Actualizar datos"
+            styleText={TextStyle.fontBoldWhite}
+            handleOnPress={handleSaveCalendar}
           />
-        ))}
-      </ScrollView>
-      <View style={localStyle.contentBtnSave}>
-        <GeneralButton
-          styleBtn={localStyle.btnSave}
-          textBtn="Actualizar datos"
-          styleText={TextStyle.fontBoldWhite}
-          handleOnPress={handleSaveCalendar}
-        />
+        </View>
       </View>
     </Modal>
   );
@@ -176,7 +173,7 @@ const localStyle = StyleSheet.create({
     margin: 15,
   },
   contentBody: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
   },
   contentBtnSave: {
     marginTop: 10,

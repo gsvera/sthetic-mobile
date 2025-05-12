@@ -1,5 +1,5 @@
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "@/components/ThemedText";
 import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
@@ -13,7 +13,7 @@ import apiCatalogUserService from "@/api/CatalogUserService";
 import PreviewCard, { previewCardProps } from "@/components/Shared/PreviewCard";
 import LoadingView from "@/components/Shared/LoadingView";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
-import { TYPE_STATUS } from "@/constants/Constants";
+import { PLATFORM_TYPE, TYPE_STATUS } from "@/constants/Constants";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import ModalConfirm from "@/components/Shared/ModalConfirm";
 import { fileTypes } from "@/constants/GeneralTypes";
@@ -244,7 +244,7 @@ const localStyle = StyleSheet.create({
     alignItems: "center",
   },
   scrollViewGallery: {
-    height: "79%",
+    height: Platform.OS === PLATFORM_TYPE.ANDROID ? "79%" : "76%",
     paddingHorizontal: 10,
     marginTop: 10,
   },

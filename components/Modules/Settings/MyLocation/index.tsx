@@ -260,7 +260,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   return (
     <View>
       <SubHeaderReturn subtitle="Mi Ubicación" handleReturn={returnBack} />
-      <ScrollView style={{ height: "100%" }}>
+      <View style={{ height: "100%" }}>
         <View style={localStyle.contentBody}>
           <ThemedText style={localStyle.textDescription}>
             Seleccione el estado y municipio y/o toque en el mapa la ubicacion
@@ -382,8 +382,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
             />
           </View>
         </View>
-      </ScrollView>
-      {/* </View> */}
+      </View>
 
       <SelectStateModal
         open={openSelectStateModal}
@@ -408,7 +407,7 @@ const localStyle = StyleSheet.create({
   },
   map: {
     marginTop: 10,
-    height: "100%",
+    height: "33%",
   },
   contentBody: { flex: 1, padding: 10 },
   textDescription: {

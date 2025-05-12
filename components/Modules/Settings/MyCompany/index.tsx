@@ -16,6 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import * as ImagePicker from "expo-image-picker";
 import {
   Image,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -27,7 +28,7 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useMutation, useQuery } from "@tanstack/react-query";
 import apiUserConfig from "@/api/UserConfig";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { TYPE_STATUS } from "@/constants/Constants";
+import { PLATFORM_TYPE, TYPE_STATUS } from "@/constants/Constants";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { InfoCompanyType } from "@/constants/GeneralTypes";
 import LoadingView from "@/components/Shared/LoadingView";
@@ -218,20 +219,22 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
                   control={control}
                   name="generalDescription"
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <View style={localStyle.descriptionBox}>
-                      <TextInput
-                        placeholder="Ingrese una breve descripción de sus servicios"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        multiline
-                        numberOfLines={5}
-                        maxLength={5000}
-                      />
+                    <>
+                      <View style={localStyle.descriptionBox}>
+                        <TextInput
+                          placeholder="Ingrese una breve descripción de sus servicios"
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          value={value}
+                          multiline
+                          numberOfLines={5}
+                          maxLength={5000}
+                        />
+                      </View>
                       <ThemedText style={localStyle.suffix}>
                         {value?.length}/5000
                       </ThemedText>
-                    </View>
+                    </>
                   )}
                 />
                 {errors.generalDescription && (
@@ -314,12 +317,15 @@ const localStyle = StyleSheet.create({
     flexDirection: "row",
   },
   label: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: ThemeColorsSthetic.textLabels,
-    marginBottom: 10,
+    ...TextStyle.label,
+    marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? 10 : 0,
   },
-  descriptionBox: { ...InputStyle.withBorder, height: 115 },
+  descriptionBox: {
+    ...InputStyle.withBorder,
+    height: 115,
+    marginTop: Platform.OS === PLATFORM_TYPE.ANDROID ? 10 : 0,
+    paddingBottom: Platform.OS === PLATFORM_TYPE.ANDROID ? 15 : 25,
+  },
   contentBtn: {
     width: "80%",
     marginHorizontal: "auto",
@@ -329,7 +335,8 @@ const localStyle = StyleSheet.create({
     color: ThemeColorsSthetic.muted,
     fontSize: 15,
     textAlign: "right",
-    marginTop: -10,
+    marginTop: -25,
+    marginRight: 10,
   },
 });
 export default MyCompany;

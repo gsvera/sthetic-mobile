@@ -5,14 +5,13 @@ import {
 } from "@/constants/StyleComponents";
 import {
   Modal,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { formProjectToImgtype, modalCustomFormProps } from "../types";
-import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { useEffect, useMemo, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import * as ImagePicker from "expo-image-picker";
@@ -26,11 +25,12 @@ import ImageWithOptions from "@/components/Shared/ImageWithOptions";
 import { useQuery } from "@tanstack/react-query";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import apiCatalogUserService from "@/api/CatalogUserService";
-import { MAX_LENGTH } from "@/constants/Constants";
+import { MAX_LENGTH, PLATFORM_TYPE } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
 import { ResponseApi } from "@/api/responseApi";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const schema = yup.object().shape({
   nameService: yup.string().required("Campo obligatorio"),
@@ -51,6 +51,7 @@ export const UploadImageModal = ({
   idUser,
   idEntity,
 }: modalCustomFormProps) => {
+  const insets = useSafeAreaInsets();
   const {
     control,
     handleSubmit,
@@ -178,137 +179,143 @@ export const UploadImageModal = ({
 
   return (
     <Modal animationType="slide" transparent={false} visible={open}>
-      <ButtonCloseModal handleOnPress={handleClose} />
-      {loadingData ? (
-        <LoadingView />
-      ) : (
-        <View>
-          <ThemedText style={localStyle.titleModal}>
-            {!idEntity
-              ? "Agregar portafolio de servicio"
-              : "Editar portafolio de servicio"}
-          </ThemedText>
-          <View style={{ paddingHorizontal: 15, marginBottom: 10 }}>
-            <ThemedText style={localStyle.labelInput}>
-              * Descripción de la galeria
+      <View
+        style={{ top: Platform.OS === PLATFORM_TYPE.ANDROID ? 0 : insets.top }}
+      >
+        <ButtonCloseModal handleOnPress={handleClose} />
+        {loadingData ? (
+          <LoadingView />
+        ) : (
+          <View>
+            <ThemedText style={localStyle.titleModal}>
+              {!idEntity
+                ? "Agregar portafolio de servicio"
+                : "Editar portafolio de servicio"}
             </ThemedText>
-            <Controller
-              control={control}
-              name="nameService"
-              render={({ field: { onChange, onBlur, value } }) => (
-                // <View style={InputStyle.withBorder}>
-                <TextInput
-                  style={GeneralStyle.simpleInput}
-                  placeholder="Agregue una descripción o nombre"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  maxLength={100}
-                />
+            <View style={{ paddingHorizontal: 15, marginBottom: 10 }}>
+              <ThemedText style={localStyle.labelInput}>
+                * Descripción de la galeria
+              </ThemedText>
+              <Controller
+                control={control}
+                name="nameService"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  // <View style={InputStyle.withBorder}>
+                  <TextInput
+                    style={GeneralStyle.simpleInput}
+                    placeholder="Agregue una descripción o nombre"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    maxLength={100}
+                  />
+                )}
+              />
+              {errors.nameService && (
+                <Text style={TextStyle.textError}>
+                  {errors.nameService.message}
+                </Text>
               )}
-            />
-            {errors.nameService && (
-              <Text style={TextStyle.textError}>
-                {errors.nameService.message}
-              </Text>
-            )}
-          </View>
-          <View style={{ paddingHorizontal: 15 }}>
-            <View style={{ paddingBottom: 10 }}>
-              <ThemedText
-                style={{ ...localStyle.labelInput, textAlign: "center" }}
+            </View>
+            <View style={{ paddingHorizontal: 15 }}>
+              <View style={{ paddingBottom: 10 }}>
+                <ThemedText
+                  style={{ ...localStyle.labelInput, textAlign: "center" }}
+                >
+                  Rango de precios
+                </ThemedText>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
               >
-                Rango de precios
+                <View style={{ width: "48%" }}>
+                  <View>
+                    <ThemedText style={localStyle.subLabel}>De:</ThemedText>
+                    <Controller
+                      control={control}
+                      name="minPrice"
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                          style={GeneralStyle.simpleInput}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          value={value?.toString()}
+                          keyboardType="numeric"
+                        />
+                      )}
+                    />
+                  </View>
+                </View>
+                <View style={{ width: "48%" }}>
+                  <View>
+                    <ThemedText style={localStyle.subLabel}>A:</ThemedText>
+                    <Controller
+                      control={control}
+                      name="maxPrice"
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                          style={GeneralStyle.simpleInput}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          value={value?.toString()}
+                          keyboardType="numeric"
+                        />
+                      )}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={localStyle.headClose}>
+              <GeneralButton
+                styleText={TextStyle.fontBoldWhite}
+                textBtn="Abrir galeria"
+                styleBtn={ButtonGeneralStyle.btnActionSthetic}
+                handleOnPress={showFileManager}
+              />
+            </View>
+            <View style={localStyle.contentListImg}>
+              {listImage.map((item) => (
+                <View key={item.key}>
+                  <ImageWithOptions
+                    id={item.key}
+                    deleteAction={handleRemovePicture}
+                    uri={item.uri}
+                  />
+                </View>
+              ))}
+            </View>
+            <View style={localStyle.textNote}>
+              <ThemedText
+                style={{ ...TextStyle.darkColor, ...TextStyle.center }}
+              >
+                *Puedes cargar un maximo de {MAX_LENGTH.MAX_FILE_TO_UPLOAD}{" "}
+                archivos*
               </ThemedText>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <View style={{ width: "48%" }}>
-                <View>
-                  <ThemedText style={localStyle.subLabel}>De:</ThemedText>
-                  <Controller
-                    control={control}
-                    name="minPrice"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <TextInput
-                        style={GeneralStyle.simpleInput}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value?.toString()}
-                        keyboardType="numeric"
-                      />
-                    )}
-                  />
-                </View>
-              </View>
-              <View style={{ width: "48%" }}>
-                <View>
-                  <ThemedText style={localStyle.subLabel}>A:</ThemedText>
-                  <Controller
-                    control={control}
-                    name="maxPrice"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <TextInput
-                        style={GeneralStyle.simpleInput}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value?.toString()}
-                        keyboardType="numeric"
-                      />
-                    )}
-                  />
-                </View>
-              </View>
+            <View style={ButtonGeneralStyle.contentBtnSthetic}>
+              <GeneralButton
+                styleBtn={
+                  !disableBtn
+                    ? ButtonGeneralStyle.btnUpdateSthetic
+                    : ButtonGeneralStyle.btnDisabledSthetic
+                }
+                textBtn="Actualizar datos"
+                styleText={{
+                  color: !disableBtn
+                    ? ThemeColorsSthetic.textLight
+                    : ThemeColorsSthetic.muted,
+                }}
+                handleOnPress={handleSubmit(handleSaveCatalogUserService)}
+                disabledBtn={disableBtn}
+              />
             </View>
           </View>
-          <View style={localStyle.headClose}>
-            <GeneralButton
-              styleText={TextStyle.fontBoldWhite}
-              textBtn="Abrir galeria"
-              styleBtn={ButtonGeneralStyle.btnActionSthetic}
-              handleOnPress={showFileManager}
-            />
-          </View>
-          <View style={localStyle.contentListImg}>
-            {listImage.map((item) => (
-              <View key={item.key}>
-                <ImageWithOptions
-                  id={item.key}
-                  deleteAction={handleRemovePicture}
-                  uri={item.uri}
-                />
-              </View>
-            ))}
-          </View>
-          <View style={localStyle.textNote}>
-            <ThemedText style={{ ...TextStyle.darkColor, ...TextStyle.center }}>
-              *Puedes cargar un maximo de {MAX_LENGTH.MAX_FILE_TO_UPLOAD}{" "}
-              archivos*
-            </ThemedText>
-          </View>
-          <View style={ButtonGeneralStyle.contentBtnSthetic}>
-            <GeneralButton
-              styleBtn={
-                !disableBtn
-                  ? ButtonGeneralStyle.btnUpdateSthetic
-                  : ButtonGeneralStyle.btnDisabledSthetic
-              }
-              textBtn="Actualizar datos"
-              styleText={{
-                color: !disableBtn
-                  ? ThemeColorsSthetic.textLight
-                  : ThemeColorsSthetic.muted,
-              }}
-              handleOnPress={handleSubmit(handleSaveCatalogUserService)}
-              disabledBtn={disableBtn}
-            />
-          </View>
-        </View>
-      )}
+        )}
+      </View>
     </Modal>
   );
 };
