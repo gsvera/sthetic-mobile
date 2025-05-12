@@ -33,18 +33,25 @@ import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 dayjs.locale("es"); // Esta config se debera establecer a futuro para ingles tambien
 
-export const AdminCalendarProvider = () => {
+type adminCalendarProvider = {
+  idUser: string;
+};
+
+export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
   const { handleNotification } = useNotificationProvider();
   const [openForm, setOpenForm] = useState(false);
   const [openExceptionForm, setOpenExceptionForm] = useState(false);
   const [openModalDeleteException, setOpenModalDeleteException] =
     useState(false);
-  const [selectedDate, setSelectedDate] = useState<weekDaysProps | undefined>();
-  const [idUser, setIdUser] = useState("");
-
-  getStoreSession({ key: KEY_STORE.idUser }).then(
-    (value) => value && setIdUser(value)
-  );
+  const [selectedDate, setSelectedDate] = useState<weekDaysProps>({
+    day: "",
+    isActive: false,
+    startTime: "",
+    endTime: "",
+    duration: 0, // minutos
+    maxReservations: 0,
+    dateString: dayjs().format(FORMAT_DATE.GENERAL_EN),
+  });
 
   const { data: dataCalendar = [], isFetching: isFetchingCalendar } = useQuery({
     queryKey: [REACT_QUERY_KEYS.calendar.calendarByUser.getByIdUser(idUser)],
@@ -67,7 +74,7 @@ export const AdminCalendarProvider = () => {
           )
         ),
       ...{
-        enabled: !!idUser && !!selectedDate?.dateString,
+        enabled: Boolean(idUser && !!selectedDate?.dateString),
         select: (data: ResponseApi) => data.data.items as exceptionDayType,
       },
     });
