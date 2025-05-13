@@ -32,6 +32,7 @@ const ApiRequestProvider = ({ children }) => {
     console.log("🚀 ~ interceptResponseErrorHandler ~ data:", data);
     console.log("🚀 ~ interceptResponseErrorHandler ~ error:", error);
     console.log("🚀 ~ interceptResponseErrorHandler ~ statusCode:", statusCode);
+
     if (statusCode === 403 && token) {
       console.log("🚀 ~ interceptResponseErrorHandler ~ error:", error);
       // PARA MANEJO DE ERRORES
@@ -39,6 +40,7 @@ const ApiRequestProvider = ({ children }) => {
     }
     // Reject promise if usual error
     if (statusCode !== 401) {
+      setToken(null);
       return Promise.reject(error);
     }
   }, []);

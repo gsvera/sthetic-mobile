@@ -1,6 +1,8 @@
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import { Pressable, StyleSheet, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useEffect } from "react";
+import { BackHandler, Pressable, StyleSheet, View } from "react-native";
 
 type buttonCloseModalProps = {
   handleOnPress: () => void;

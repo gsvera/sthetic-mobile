@@ -125,7 +125,12 @@ export const AvailibleWeek = ({
   };
 
   return (
-    <Modal animationType="slide" transparent={true} visible={open}>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={open}
+      onRequestClose={handleCloseModal}
+    >
       <View
         style={{
           ...localStyle.contentBody,

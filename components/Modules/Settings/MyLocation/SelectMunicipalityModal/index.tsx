@@ -22,7 +22,12 @@ export const SelectMunicipalityModal = ({
   handleSelect,
 }: selectMunicipalityModalProps) => {
   return (
-    <Modal visible={open} animationType="fade" transparent={true}>
+    <Modal
+      visible={open}
+      animationType="fade"
+      transparent={true}
+      onRequestClose={handleCloseModal}
+    >
       <View
         style={ModalStyle.modalView}
         onStartShouldSetResponder={() => {
