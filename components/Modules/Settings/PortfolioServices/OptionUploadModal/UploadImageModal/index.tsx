@@ -178,7 +178,12 @@ export const UploadImageModal = ({
   };
 
   return (
-    <Modal animationType="slide" transparent={false} visible={open}>
+    <Modal
+      animationType="slide"
+      transparent={false}
+      visible={open}
+      onRequestClose={handleClose}
+    >
       <View
         style={{ top: Platform.OS === PLATFORM_TYPE.ANDROID ? 0 : insets.top }}
       >

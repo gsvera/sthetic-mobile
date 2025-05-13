@@ -9,6 +9,7 @@ export default function Calendar() {
   getStoreSession({ key: KEY_STORE.idUser }).then(
     (value) => value && setIdUser(value)
   );
+
   if (!idUser) return <></>;
 
   return (

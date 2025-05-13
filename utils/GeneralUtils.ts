@@ -2,9 +2,11 @@ import * as FileSystem from 'expo-file-system';
 import CryptoJS from "crypto-js";
 import dayjs from "dayjs";
 import { REGEX } from '@/constants/Constants';
+import customParseFormat from "dayjs/plugin/customParseFormat"; 
+import { Linking } from 'react-native';
 
 const secretKeyPass = process.env.EXPO_PUBLIC_SECRET_KEY;
-
+dayjs.extend(customParseFormat);
 /**
  * Funcion para encryptar el password para antes de enviarlo a cual quier peticion de servicios, el @param secretKeyPass debe ser el mismo que el de back
  * @param text 
@@ -63,6 +65,14 @@ export const getBase64FromVideo = async (uri:any) => {
     return await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
   };
 
+/**
+ * Convierte un string de hora y minuto a formato AM o PM 
+ * @param hour en formato HH:MM A
+ * @returns 
+ */
+export const convertHourToAMorPM = (hour: string) => {
+  return dayjs(hour, "HH:mm").format("hh:mm A");
+}
   /**
    * Convierte un string de fecha a formato fecha dependiendo el "formatString" por default es "DD/MM/YYYY"
    * @param date 
@@ -72,3 +82,10 @@ export const getBase64FromVideo = async (uri:any) => {
 export const convertDateToGeneralFormat = (date:string | undefined, formatString: string = "DD/MM/YYYY") => {
   if(date) return dayjs(date).format(formatString)
 }
+
+export async function openLink (url: string){
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    }
+  };

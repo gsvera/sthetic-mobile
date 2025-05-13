@@ -124,7 +124,12 @@ export const MakeExceptionDay = ({
   if (!localDay) return <></>;
 
   return (
-    <Modal animationType="slide" transparent={true} visible={open}>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={open}
+      onRequestClose={handleCloseModalException}
+    >
       <View
         style={{
           ...localStyle.contentBody,

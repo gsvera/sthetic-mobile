@@ -136,7 +136,12 @@ export const CreateServiceModal = ({
   };
 
   return (
-    <Modal visible={open} transparent={true} animationType="fade">
+    <Modal
+      visible={open}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={onCloseModal}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={localStyle.modalView}>
           <View style={localStyle.contentModal}>

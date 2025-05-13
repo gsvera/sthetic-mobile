@@ -3,6 +3,9 @@ export const REACT_QUERY_KEYS = {
         findDuplicatedUser: (key:string) => `get-plan-filter-data-${key}`,
         getDataUser: (key: string) => `get-data-user-${key}`,
     },
+    schedule: {
+        getAllByDay: (key: string) => `schedule-get-all-${key}`
+    },
     userConfig: {
         getLocationByUser: (key:string) => `get-location-by-user${key}`,
         getInfoCompanyByUer: (key:string) => `get-info-company-by-user-${key}`

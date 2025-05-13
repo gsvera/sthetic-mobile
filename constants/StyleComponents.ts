@@ -151,15 +151,23 @@ export const ButtonGeneralStyle = StyleSheet.create({
 
 export const TextStyle = StyleSheet.create({
     fontBoldDark: {
-        color: GlobalColors.blackColor,
+        color: ThemeColorsSthetic.text,
         fontWeight: 'bold'
     },
     fontBoldWhite: {
-        color: GlobalColors.whiteColor,
+        color: 'white',
+        fontWeight: 'bold'
+    },
+    fontBoldError: {
+        color: ThemeColorsSthetic.textError,
         fontWeight: 'bold'
     },
     fontBoldBlue: {
         color: GlobalColors.blueColor,
+        fontWeight: 'bold'
+    },
+    fontBoldAccept: {
+        color: ThemeColorsSthetic.textOre,
         fontWeight: 'bold'
     },
     darkColor: {
@@ -197,6 +205,11 @@ export const TextStyle = StyleSheet.create({
         fontSize: 24,
         color: ThemeColorsSthetic.textTitle,
         textAlign: 'center'
+    },
+    title: {
+        fontSize: Platform.OS === PLATFORM_TYPE.ANDROID ? 19 : 17,
+        fontWeight: 'bold',
+        color: ThemeColorsSthetic.textTitle 
     },
     label: {
         fontSize: Platform.OS === PLATFORM_TYPE.ANDROID ? 18 : 16,

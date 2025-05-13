@@ -13,15 +13,15 @@ import { useApiProvider } from "@/provider/InterceptorProvider";
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
-  const { setToken } = useApiProvider();
-  const [tokenSession, setTokenSession] = useState<string | null>("");
+  const { setToken, token } = useApiProvider();
+  // const [tokenSession, setTokenSession] = useState<string | null>("");
 
   getStoreSession({ key: KEY_STORE.userToken }).then((value) => {
-    setTokenSession(value);
-    setToken(value);
+    // setTokenSession(value);
+    if (value) setToken(value);
   });
 
-  if (tokenSession === null) return <Redirect href="/login" />;
+  if (token === null) return <Redirect href="/login" />;
 
   return (
     <View

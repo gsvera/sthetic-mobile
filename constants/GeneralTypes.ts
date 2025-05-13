@@ -18,6 +18,11 @@ export type modalCustomProps = {
     handleCloseModal: () => void;    
     idUser?: string;
   };
+  export type modalActionCustomProps = {
+    open: boolean;
+    handleCloseModal: () => void;    
+    handleConfirmModal: (text?: string) => void;
+  };
 
 export type CatalogGeoStateType = {
     id: number;
@@ -77,5 +82,28 @@ export type CatalogService = {
     price: number;
     people: number
 }
+
+export type ScheduleTypeUser = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    lada: string;
+    phone: string;
+}
+
+export type ScheduleType = {
+    id: number;
+    idClient: ScheduleTypeUser;
+    idProvider: string;
+    scheduleDate: string;
+    startTime: string;
+    endTime: string;
+    nameService: string;
+    people: number;
+    amount: number;
+    statusService: number;
+}
+
 
 export type weekDays = 'lunes' | 'martes' | 'miércoles' | 'jueves' | 'viernes' | 'sábado' | 'domingo';

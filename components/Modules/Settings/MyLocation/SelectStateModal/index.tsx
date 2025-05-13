@@ -21,7 +21,12 @@ export const SelectStateModal = ({
   handleSelect,
 }: selectStateModalProps) => {
   return (
-    <Modal visible={open} animationType="fade" transparent={true}>
+    <Modal
+      visible={open}
+      animationType="fade"
+      transparent={true}
+      onRequestClose={handleCloseModal}
+    >
       <View
         style={ModalStyle.modalView}
         onStartShouldSetResponder={() => {
