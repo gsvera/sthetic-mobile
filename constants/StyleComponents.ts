@@ -265,6 +265,10 @@ export const GridStyle = StyleSheet.create({
     rowItemsVerticalCenter: {
         alignItems: "center",
         flexDirection: "row",
+    },
+    rowContentCenter: {
+        flexDirection: 'row',
+        justifyContent: 'center'
     }
 });
 

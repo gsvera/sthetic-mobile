@@ -14,10 +14,7 @@ export default function TabLayout() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
   const { setToken, token } = useApiProvider();
-  // const [tokenSession, setTokenSession] = useState<string | null>("");
-
   getStoreSession({ key: KEY_STORE.userToken }).then((value) => {
-    // setTokenSession(value);
     if (value) setToken(value);
   });
 

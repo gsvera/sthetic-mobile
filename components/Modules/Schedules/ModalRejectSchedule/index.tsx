@@ -1,19 +1,24 @@
 import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
 import GeneralButton from "@/components/Shared/GeneralButton";
-import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { modalActionCustomProps } from "@/constants/GeneralTypes";
 import {
   ButtonGeneralStyle,
-  GridStyle,
   InputStyle,
   ModalStyle,
   TextStyle,
 } from "@/constants/StyleComponents";
 import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
-import { Modal, StyleSheet, TextInput, View } from "react-native";
+import {
+  Keyboard,
+  Modal,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
 export const ModalRejectSchedule = ({
   open,
@@ -40,36 +45,38 @@ export const ModalRejectSchedule = ({
       animationType="fade"
       onRequestClose={onHandlerClose}
     >
-      <View style={ModalStyle.modalView}>
-        <View style={localStyle.modalRejectSchedule}>
-          <ButtonCloseModal handleOnPress={onHandlerClose} />
-          <View style={localStyle.contentIcon}>
-            <AntDesign name="warning" style={localStyle.icon} />
-          </View>
-          <ThemedText style={localStyle.text}>
-            Agregue un motivo de rechazo
-          </ThemedText>
-          <TextInput
-            style={localStyle.input}
-            multiline
-            numberOfLines={3}
-            maxLength={250}
-            value={localTextReject}
-            onChangeText={setLocalTextReject}
-          />
-          {showError && (
-            <ThemedText style={localStyle.textError}>
-              Debe agregar un motivo
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={ModalStyle.modalView}>
+          <View style={localStyle.modalRejectSchedule}>
+            <ButtonCloseModal handleOnPress={onHandlerClose} />
+            <View style={localStyle.contentIcon}>
+              <AntDesign name="warning" style={localStyle.icon} />
+            </View>
+            <ThemedText style={localStyle.text}>
+              Agregue un motivo de rechazo
             </ThemedText>
-          )}
-          <GeneralButton
-            textBtn="Rechazar"
-            styleText={TextStyle.fontBoldWhite}
-            styleBtn={ButtonGeneralStyle.btnActionSthetic}
-            handleOnPress={onHandlerConfirm}
-          />
+            <TextInput
+              style={localStyle.input}
+              multiline
+              numberOfLines={3}
+              maxLength={250}
+              value={localTextReject}
+              onChangeText={setLocalTextReject}
+            />
+            {showError && (
+              <ThemedText style={localStyle.textError}>
+                Debe agregar un motivo
+              </ThemedText>
+            )}
+            <GeneralButton
+              textBtn="Rechazar"
+              styleText={TextStyle.fontBoldWhite}
+              styleBtn={ButtonGeneralStyle.btnActionSthetic}
+              handleOnPress={onHandlerConfirm}
+            />
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };

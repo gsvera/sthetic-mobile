@@ -3,33 +3,41 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiSchedule } from "@/api/Schedule";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import { ScrollView, View } from "react-native";
-import { ScheduleType } from "@/constants/GeneralTypes";
+import { ScheduleType, StatusScheduleType } from "@/constants/GeneralTypes";
 import ScheduleItem from "./ScheduleItem";
 import ModalRejectSchedule from "./ModalRejectSchedule";
 import { useState } from "react";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { TYPE_STATUS } from "@/constants/Constants";
+import LoadingView from "@/components/Shared/LoadingView";
 
 type schedulesProps = {
   idUser: string;
   day: string;
+  statusSchedule: StatusScheduleType;
 };
 
-export const Schedules = ({ idUser, day }: schedulesProps) => {
+export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
   const queryClient = useQueryClient();
   const { handleNotification } = useNotificationProvider();
   const [openRejectSchedule, setOpenRejectSchedule] = useState(false);
   const [idSchedule, setIdSchedule] = useState(0);
 
-  const { data: listSchedule = [] } = useQuery({
-    queryKey: [REACT_QUERY_KEYS.schedule.getAllByDay(idUser), day],
-    queryFn: () => apiSchedule.findAllByDay(idUser, day),
-    ...{
-      select: (data: ResponseApi) => data.data.items as Array<ScheduleType>,
-      enabled: Boolean(idUser && day),
-    },
-  });
+  const { data: listSchedule = [], isFetching: isFetchingSchedules } = useQuery(
+    {
+      queryKey: [
+        REACT_QUERY_KEYS.schedule.getAllByDay(idUser),
+        day,
+        statusSchedule,
+      ],
+      queryFn: () => apiSchedule.findAllByDay(idUser, day, statusSchedule),
+      ...{
+        select: (data: ResponseApi) => data.data.items as Array<ScheduleType>,
+        enabled: Boolean(idUser && day),
+      },
+    }
+  );
 
   const { mutate: acceptSchedule } = useMutation({
     mutationFn: (idSchedule: number) => apiSchedule.acceptSchedule(idSchedule),
@@ -79,16 +87,20 @@ export const Schedules = ({ idUser, day }: schedulesProps) => {
 
   return (
     <View>
-      <ScrollView>
-        {listSchedule?.map((item) => (
-          <ScheduleItem
-            key={item.id}
-            item={item}
-            handleAcceptService={handleAcceptSchedule}
-            handleRejectSchedule={handleOpenRejectModal}
-          />
-        ))}
-      </ScrollView>
+      {isFetchingSchedules ? (
+        <LoadingView />
+      ) : (
+        <ScrollView>
+          {listSchedule?.map((item) => (
+            <ScheduleItem
+              key={item.id}
+              item={item}
+              handleAcceptService={handleAcceptSchedule}
+              handleRejectSchedule={handleOpenRejectModal}
+            />
+          ))}
+        </ScrollView>
+      )}
       <ModalRejectSchedule
         open={openRejectSchedule}
         handleCloseModal={handleCloseRejectModal}

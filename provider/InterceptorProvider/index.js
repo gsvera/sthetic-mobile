@@ -36,11 +36,15 @@ const ApiRequestProvider = ({ children }) => {
     if (statusCode === 403 && token) {
       console.log("🚀 ~ interceptResponseErrorHandler ~ error:", error);
       // PARA MANEJO DE ERRORES
-      setStoreSession({ key: KEY_STORE.userToken, value: "" });
+      // setStoreSession({ key: KEY_STORE.userToken, value: "" });
     }
     // Reject promise if usual error
     if (statusCode !== 401) {
+      return Promise.reject(error);
+    }
+    if (statusCode === 401) {
       setToken(null);
+      setStoreSession({ key: KEY_STORE.userToken, value: null });
       return Promise.reject(error);
     }
   }, []);
