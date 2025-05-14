@@ -2,22 +2,44 @@ import Schedules from "@/components/Modules/Schedules";
 import { ThemedText } from "@/components/ThemedText";
 
 import { Container, ThemeColorsSthetic } from "@/constants/Colors";
-import { FORMAT_DATE } from "@/constants/Constants";
-import { TextStyle } from "@/constants/StyleComponents";
+import { FORMAT_DATE, PLATFORM_TYPE } from "@/constants/Constants";
+import { GridStyle, TextStyle } from "@/constants/StyleComponents";
 import { getStoreSession, KEY_STORE } from "@/hooks/StoreDataSecure";
-import { Feather } from "@expo/vector-icons";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { StatusScheduleType } from "@/constants/GeneralTypes";
+import TabsStatusSchedule from "@/components/Modules/Schedules/TabsStatusSchedule";
 
 export default function Home() {
+  const [openDatePicker, setOpenDatePicker] = useState(false);
   const [idUser, setIdUser] = useState("");
+  const [dateSearch, setDateSearch] = useState(
+    dayjs().format(FORMAT_DATE.GENERAL_EN)
+  );
+  const [statusSelected, setStatusSelected] = useState<StatusScheduleType>();
 
   getStoreSession({ key: KEY_STORE.idUser }).then(
     (value) => value && setIdUser(value)
   );
 
   if (!idUser) return <></>;
+
+  const handleChageDate = (date: Date) => {
+    setDateSearch(dayjs(date).format(FORMAT_DATE.GENERAL_EN));
+    setOpenDatePicker(false);
+  };
+
+  const onChangeStatus = (valueStatus: StatusScheduleType) => {
+    setStatusSelected(valueStatus);
+  };
 
   return (
     <View style={Container.container}>
@@ -26,26 +48,34 @@ export default function Home() {
           source={require("@/assets/images/me-text-worker-logo.png")}
           style={localStyle.logo}
         />
-        <Pressable
-          style={localStyle.inputSearch}
-          // onPress={() => setOpenSearchModal((v) => !v)}
+      </View>
+      <View style={GridStyle.rowContentCenter}>
+        <TouchableOpacity
+          style={localStyle.contentDate}
+          onPress={() => setOpenDatePicker(true)}
         >
-          <ThemedText style={{ color: ThemeColorsSthetic.text }}>
-            Buscar
-          </ThemedText>
-          <Feather
-            name="search"
-            size={20}
-            color={ThemeColorsSthetic.accentReverse}
-          />
-        </Pressable>
+          <ThemedText style={localStyle.labelDate}>{dateSearch}</ThemedText>
+        </TouchableOpacity>
       </View>
-      <View>
-        <ThemedText style={localStyle.dateString}>
-          {dayjs().format(FORMAT_DATE.GENERAL_EN)}
-        </ThemedText>
+      <TabsStatusSchedule
+        statusSelected={statusSelected}
+        handleChangeStatus={onChangeStatus}
+      />
+      <View
+        style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "65%" : "71%" }}
+      >
+        <Schedules
+          idUser={idUser}
+          day={dateSearch}
+          statusSchedule={statusSelected}
+        />
       </View>
-      <Schedules idUser={idUser} day={dayjs().format(FORMAT_DATE.GENERAL_EN)} />
+      <DateTimePickerModal
+        isVisible={openDatePicker}
+        mode="date"
+        onConfirm={handleChageDate}
+        onCancel={() => setOpenDatePicker(false)}
+      />
     </View>
   );
 }
@@ -77,12 +107,19 @@ const localStyle = StyleSheet.create({
     width: 150,
     height: 50,
   },
-  dateString: {
+  labelDate: {
     ...TextStyle.label,
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
+    lineHeight: 28,
+  },
+  contentDate: {
+    paddingVertical: 7,
+    paddingHorizontal: 10,
     marginTop: 5,
     marginBottom: 15,
+    borderWidth: 0.5,
+    borderRadius: 5,
   },
 });

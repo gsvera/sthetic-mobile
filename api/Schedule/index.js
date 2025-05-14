@@ -3,9 +3,11 @@ import axiosInstance from "..";
 const BASE_URL = "/schedule-service";
 
 export const apiSchedule = {
-  findAllByDay: function (idUser, date) {
+  findAllByDay: function (idUser, date, statusSchedule) {
     return axiosInstance.get(
-      `${BASE_URL}/find-all-by-provider/${idUser}?date=${date}`
+      `${BASE_URL}/find-all-by-provider/${idUser}?date=${date}${
+        statusSchedule === undefined ? "" : "&status-schedule=" + statusSchedule
+      }`
     );
   },
   acceptSchedule: function (idSchedule) {
