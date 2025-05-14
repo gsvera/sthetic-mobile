@@ -23,7 +23,10 @@ import {
 import { apiMenuService } from "@/api/MenuService";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { convertStringToNumber } from "@/utils/GeneralUtils";
+import {
+  convertStringToNumber,
+  convertStringToNumberPrice,
+} from "@/utils/GeneralUtils";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
@@ -45,11 +48,16 @@ export const CreateServiceModal = ({
 }: createServiceModalProps) => {
   const queryClient = useQueryClient();
   const { handleNotification } = useNotificationProvider();
+  const [priceTextAux, setPriceTextAux] = useState("");
   const [serviceMenu, setServiceMenu] = useState<formServiceCatalogType>({
     nameService: "",
     price: 0,
     people: 1,
   });
+
+  useEffect(() => {
+    setPriceTextAux(serviceMenu.price.toString());
+  }, [serviceMenu.price]);
 
   const { data: entityToEdit } = useQuery({
     queryKey: [REACT_QUERY_KEYS.menuServices.getServiceById(idMenuService)],
@@ -170,13 +178,14 @@ export const CreateServiceModal = ({
                 <TextInput
                   style={localStyle.input}
                   keyboardType="numeric"
-                  onChangeText={(value) =>
+                  onChangeText={(value) => {
+                    setPriceTextAux(value);
                     setServiceMenu((prev) => ({
                       ...prev,
-                      price: convertStringToNumber(value),
-                    }))
-                  }
-                  value={serviceMenu.price.toString()}
+                      price: convertStringToNumberPrice(value),
+                    }));
+                  }}
+                  value={priceTextAux}
                 />
               </View>
               <View style={localStyle.formInput}>
@@ -246,6 +255,7 @@ const localStyle = StyleSheet.create({
   },
   input: {
     ...GeneralStyle.simpleInput,
+    paddingBottom: 0,
     height: 30,
   },
   label: {

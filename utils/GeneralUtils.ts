@@ -47,6 +47,30 @@ export const convertCurrency = (n:number | undefined, digits: number = 2) => {
 };
 
 /**
+ * Limpia el string de numero para precios aceptanto un solo punto decimal
+ * @param value 
+ * @returns number
+ */
+export const sanitizeDecimalString = (value: string): string => {
+  if (!value) return '';
+
+  // Reemplaza todas las comas por puntos (normalización)
+  let cleaned = value.replace(/,/g, '.');
+
+  // Solo deja la primera aparición del punto decimal, quita las demás
+  const parts = cleaned.split('.');
+
+  if (parts.length > 2) {
+    cleaned = parts[0] + '.' + parts.slice(1).join('').replace(/\./g, '');
+  }
+
+  // Solo acepta números y un punto decimal
+  cleaned = cleaned.replace(/[^0-9.]/g, '');
+
+  return cleaned;
+};
+
+/**
  * Convierte el numero tipo string a tipo number, validando que el dato que se pase sea un numero y en todo caso retorna 0
  * @param n @type string
  * @returns number
@@ -54,6 +78,17 @@ export const convertCurrency = (n:number | undefined, digits: number = 2) => {
 export const convertStringToNumber = (n:string) => {
   if(REGEX.ONLY_NUMBER.test(n)) return parseInt(n);
   return 0
+}
+
+/**
+ * Convierte el numero tipo string a tipo number con decimales, validando que el dato que se pase sea un numero y en todo caso retorna 0
+ * @param n @type string
+ * @returns number
+ */
+export const convertStringToNumberPrice = (n:string) => {
+  const sanitized = sanitizeDecimalString(n);
+  const floatVal = parseFloat(sanitized);
+  return isNaN(floatVal) ? 0 : floatVal;
 }
 
 /**

@@ -6,7 +6,8 @@ export enum ROUTES {
 
 export const REGEX = {
     ONLY_TEXT: /^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+$/ ,
-    ONLY_NUMBER: /^\d+$/ ,
+    ONLY_NUMBER: /^\d+$/ ,  
+    ONLY_NUMBER_PRICE: /^[+-]?(\d+([.,]\d*)?|[.,]\d+)$/ ,
     PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 }
 
