@@ -31,6 +31,7 @@ import GeneralButton from "@/components/Shared/GeneralButton";
 import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
 import { ResponseApi } from "@/api/responseApi";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { convertStringToNumberPrice } from "@/utils/GeneralUtils";
 
 const schema = yup.object().shape({
   nameService: yup.string().required("Campo obligatorio"),
@@ -58,11 +59,14 @@ export const UploadImageModal = ({
     watch,
     reset,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<formProjectToImgtype>({
     resolver: yupResolver(schema),
   });
   const [listImage, setListImage] = useState<customImagePickerAsset[] | []>([]);
+  const [minPriceTextAux, setMinPriceTextAux] = useState("");
+  const [maxPriceTextAux, setMaxPriceTextAux] = useState("");
 
   const { data: entityToEdit = null, isPending: isPendingData } = useQuery({
     queryKey: [
@@ -80,6 +84,8 @@ export const UploadImageModal = ({
       setValue("nameService", entityToEdit.nameService);
       setValue("minPrice", entityToEdit.minPrice);
       setValue("maxPrice", entityToEdit.maxPrice);
+      setMinPriceTextAux(entityToEdit.minPrice.toString());
+      setMaxPriceTextAux(entityToEdit.maxPrice.toString());
       setListImage(
         entityToEdit.detail?.map((item: any, index: number) => ({
           ...item,
@@ -89,6 +95,16 @@ export const UploadImageModal = ({
       );
     }
   }, [entityToEdit]);
+
+  useEffect(() => {
+    const minPrice = getValues("minPrice");
+    minPrice !== undefined && setMinPriceTextAux(minPrice.toString());
+  }, [watch("minPrice")]);
+
+  useEffect(() => {
+    const maxPrice = getValues("maxPrice");
+    maxPrice !== undefined && setMaxPriceTextAux(maxPrice.toString());
+  }, [watch("maxPrice")]);
 
   const loadingData = useMemo(
     () => idEntity && isPendingData,
@@ -246,8 +262,11 @@ export const UploadImageModal = ({
                         <TextInput
                           style={GeneralStyle.simpleInput}
                           onBlur={onBlur}
-                          onChangeText={onChange}
-                          value={value?.toString()}
+                          onChangeText={(value) => {
+                            setMinPriceTextAux(value);
+                            onChange(convertStringToNumberPrice(value));
+                          }}
+                          value={minPriceTextAux}
                           keyboardType="numeric"
                         />
                       )}
@@ -264,8 +283,11 @@ export const UploadImageModal = ({
                         <TextInput
                           style={GeneralStyle.simpleInput}
                           onBlur={onBlur}
-                          onChangeText={onChange}
-                          value={value?.toString()}
+                          onChangeText={(value) => {
+                            setMaxPriceTextAux(value);
+                            onChange(convertStringToNumberPrice(value));
+                          }}
+                          value={maxPriceTextAux}
                           keyboardType="numeric"
                         />
                       )}
