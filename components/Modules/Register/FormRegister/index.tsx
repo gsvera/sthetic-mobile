@@ -1,6 +1,6 @@
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
-import { REGEX } from "@/constants/Constants";
+import { PLATFORM_TYPE, REGEX } from "@/constants/Constants";
 import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { Ionicons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,20 +9,23 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { apiLada } from "@/api/Lada";
 import {
-  Button,
+  Platform,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import * as yup from "yup";
 import { apiUser } from "@/api/User";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ResponseApi } from "@/api/responseApi";
+import { ThemeColorsSthetic } from "@/constants/Colors";
+import { LadaType } from "@/constants/GeneralTypes";
+import LadaOptionModal from "./LadaOptionModal";
 
 const schema = yup.object().shape({
   firstName: yup
@@ -33,10 +36,6 @@ const schema = yup.object().shape({
     .string()
     .required("Campo obligatorio")
     .matches(REGEX.ONLY_TEXT, "Solo puede agregar letras"),
-  lada: yup
-    .string()
-    .required("La lada es obligatoria")
-    .notOneOf(["0"], "La lada es obligatoria"),
   phone: yup
     .string()
     .required("El numero telefonico es obligatorio")
@@ -65,13 +64,15 @@ const schema = yup.object().shape({
 
 type PropsFormRegister = {
   personalInformation: FormInputs | null;
+  ladaSelected?: LadaType;
+  handleSelectLada: (lada: LadaType) => void;
   handlePersonalInformation: (data: FormInputs) => void;
 };
 
 export type FormInputs = {
   firstName: string;
   lastName: string;
-  lada: string;
+  lada?: string;
   phone: string;
   email: string;
   password: string;
@@ -81,9 +82,14 @@ export type FormInputs = {
 export const FormRegister = ({
   personalInformation,
   handlePersonalInformation,
+  ladaSelected,
+  handleSelectLada,
 }: PropsFormRegister) => {
+  console.log("🚀 ~ personalInformation:", personalInformation);
   const [hiddenPass, setHiddenPass] = useState(true);
   const [hiddenConfirmPass, setHiddenConfirmPass] = useState(true);
+  const [openLadaModal, setOpenLadaModal] = useState(false);
+  const [showErrorLada, setShowErrorLada] = useState(false);
 
   const {
     control,
@@ -95,7 +101,6 @@ export const FormRegister = ({
     defaultValues: {
       firstName: "",
       lastName: "",
-      lada: "",
       phone: "",
       email: "",
       password: "",
@@ -115,7 +120,6 @@ export const FormRegister = ({
     if (personalInformation !== null) {
       setValue("firstName", personalInformation.firstName);
       setValue("lastName", personalInformation.lastName);
-      setValue("lada", personalInformation.lada);
       setValue("phone", personalInformation.phone);
       setValue("email", personalInformation.email);
       setValue("password", personalInformation.password);
@@ -130,15 +134,23 @@ export const FormRegister = ({
         data.phone
       );
 
+      if (!ladaSelected?.lada) return setShowErrorLada(true);
+
       if (searchUser.data.error) {
         ErrorAlertMessage({ message: searchUser.data.message });
       } else {
-        handlePersonalInformation(data);
+        handlePersonalInformation({ ...data, lada: ladaSelected?.lada });
       }
     } catch (err) {
       ErrorAlertMessage({});
       // console.log(err);
     }
+  };
+
+  const handleOnSelectLada = (data: LadaType) => {
+    handleSelectLada(data);
+    setShowErrorLada(false);
+    setOpenLadaModal(false);
   };
 
   return (
@@ -193,41 +205,24 @@ export const FormRegister = ({
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              height: "65%",
             }}
           >
-            <Controller
-              control={control}
-              name="lada"
-              render={({ field: { onChange, value } }) => (
-                <View
-                  style={{
-                    ...localStyles.inputSelect,
-                    width: "35%",
-                  }}
-                >
-                  <Picker
-                    style={{
-                      marginTop: 0,
-                      marginBottom: 0,
-                      marginHorizontal: -10,
-                    }}
-                    selectedValue={value}
-                    onValueChange={(itemValue) => onChange(itemValue)}
-                    itemStyle={{ padding: 0, width: 50 }}
-                  >
-                    <Picker.Item label="Seleccione una opcion" value="0" />
-                    {catalogLada?.map((item: any) => (
-                      <Picker.Item
-                        key={item?.id}
-                        label={item?.lada}
-                        value={item?.lada}
-                      />
-                    ))}
-                  </Picker>
-                </View>
-              )}
-            />
+            <Pressable
+              style={localStyles.contentLada}
+              onPress={() => setOpenLadaModal((v) => !v)}
+            >
+              <ThemedText
+                style={
+                  !ladaSelected
+                    ? localStyles.textLadaPlaceholder
+                    : localStyles.textLada
+                }
+              >
+                {!ladaSelected
+                  ? "Seleccione Lada"
+                  : `${ladaSelected.lada} ${ladaSelected.code}`}
+              </ThemedText>
+            </Pressable>
             <Controller
               control={control}
               name="phone"
@@ -243,8 +238,8 @@ export const FormRegister = ({
               )}
             />
           </View>
-          {errors.lada && (
-            <Text style={TextStyle.textError}>{errors.lada.message}</Text>
+          {showErrorLada && (
+            <Text style={TextStyle.textError}>La lada es requerida</Text>
           )}
           {errors.phone && (
             <Text style={TextStyle.textError}>{errors.phone.message}</Text>
@@ -345,6 +340,12 @@ export const FormRegister = ({
           />
         </View>
       </View>
+      <LadaOptionModal
+        open={openLadaModal}
+        handleCloseModal={() => setOpenLadaModal((v) => !v)}
+        listLada={catalogLada}
+        handleSelect={handleOnSelectLada}
+      />
     </ContentKeyboardAutoScroll>
   );
 };
@@ -352,8 +353,6 @@ export const FormRegister = ({
 const localStyles = StyleSheet.create({
   ContentForm: {
     alignItems: "center",
-    // marginTop: 30,
-    // height: "100%",
   },
   contentInput: {
     justifyContent: "center",
@@ -367,21 +366,45 @@ const localStyles = StyleSheet.create({
   },
   input: {
     ...TextStyle.value,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: ThemeColorsSthetic.muted,
     borderRadius: 5,
     paddingHorizontal: 10,
+    height: 40,
+    textAlignVertical: "center", // Android
+    paddingVertical: Platform.OS === PLATFORM_TYPE.IOS ? 10 : 0,
+  },
+  contentLada: {
+    ...TextStyle.textNote,
+    width: "35%",
+    height: 40,
+    borderWidth: 1,
+    borderColor: ThemeColorsSthetic.muted,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textLadaPlaceholder: {
+    ...TextStyle.textNote,
+    height: 40,
+    lineHeight: Platform.OS === PLATFORM_TYPE.ANDROID ? 50 : 40,
+  },
+  textLada: {
+    ...TextStyle.value,
+    height: 40,
+    lineHeight: Platform.OS === PLATFORM_TYPE.ANDROID ? 50 : 40,
   },
   inputSelect: {
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 5,
+    marginLeft: 10,
+    position: "absolute",
+    right: 10,
+    marginTop: 6,
   },
   icon: {
     marginLeft: 10,
+    position: "absolute",
+    right: 10,
+    marginTop: 6,
   },
   contentButton: {
     marginVertical: 15,

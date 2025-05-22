@@ -1,10 +1,11 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { ThemedText } from "../../../ThemedText";
 import PlanCard, { PlanCardProps } from "./PlanCard";
 import { useQuery } from "@tanstack/react-query";
 import { apiPlan } from "@/api/Plan";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ThemeColorsSthetic } from "@/constants/Colors";
+import { PLATFORM_TYPE } from "@/constants/Constants";
 
 type PlanProps = {
   selectedPlan: (idPlan: PlanCardProps) => void;
@@ -58,7 +59,7 @@ export const localStyles = StyleSheet.create({
     fontWeight: "bold",
   },
   constentScroll: {
-    height: 570,
+    height: Platform.OS === PLATFORM_TYPE.ANDROID ? 560 : 600,
   },
   content: {
     flexGrow: 1,

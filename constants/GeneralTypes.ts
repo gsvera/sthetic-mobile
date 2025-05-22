@@ -47,6 +47,12 @@ export type OptionSelectType = {
  *  OBJECTS
  */
 
+export type LadaType = {
+    id: number;
+    code: string;
+    lada: string;
+}
+
 export type CatalogPlanDTO = {
     id: number;
     active: boolean;

@@ -161,16 +161,6 @@ export default function More() {
     handleView(COMPONENTS_SETINGS.PROFILE_PICTURE);
   };
 
-  const handleLogout = () => {
-    PromtConfirm({
-      title: "Cerrar sesión",
-      message: "¿Quieres salir de tu cuenta?",
-      textBtnCancel: "Cancelar",
-      textBtnConfirm: "Ok",
-      handleConfirmAction: logoutSession,
-    });
-  };
-
   const handleDeleteAccount = () => {
     deleteAccount();
   };

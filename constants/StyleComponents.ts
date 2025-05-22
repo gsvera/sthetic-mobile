@@ -223,6 +223,9 @@ export const TextStyle = StyleSheet.create({
     textError: {
         color: ThemeColorsSthetic.dangerColor
     },
+    textNote: {
+        color: ThemeColorsSthetic.muted
+    },
     valueSelect: {
         fontSize: 19,
         color: ThemeColorsSthetic.text

@@ -7,7 +7,6 @@ import {
   modalCustomProps,
 } from "@/constants/GeneralTypes";
 import { GridStyle, ModalStyle, TextStyle } from "@/constants/StyleComponents";
-
 import { Modal, ScrollView, StyleSheet, View } from "react-native";
 
 type selectMunicipalityModalProps = modalCustomProps & {
