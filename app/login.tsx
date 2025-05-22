@@ -1,10 +1,5 @@
 import { ThemedText } from "@/components/ThemedText";
-import {
-  Container,
-  GlobalColors,
-  loginStyle,
-  ThemeColorsSthetic,
-} from "@/constants/Colors";
+import { loginStyle, ThemeColorsSthetic } from "@/constants/Colors";
 import { Link, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,6 +10,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -46,6 +42,7 @@ const schema = yup.object({
 export default function Login() {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const colorScheme = useColorScheme();
   const { setToken, token } = useApiProvider();
   const {
     control,
@@ -116,7 +113,17 @@ export default function Login() {
   };
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        backgroundColor:
+          colorScheme === "dark"
+            ? ThemeColorsSthetic.backgroundStrong
+            : ThemeColorsSthetic.backgroundLight,
+      }}
+    >
       <ImageBackground source={imageBg} style={styles.imgBg}>
         <ContentKeyboardAutoScroll>
           <View

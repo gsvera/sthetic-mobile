@@ -4,8 +4,8 @@ import { ThemedText } from "@/components/ThemedText";
 import { Container, ThemeColorsSthetic } from "@/constants/Colors";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Alert, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import FormRegister, {
   FormInputs,
@@ -23,6 +23,7 @@ import ArrowBack from "@/components/Modules/Register/ArrowBack";
 import FormPay from "@/components/Modules/Register/FormPay";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import { LadaType } from "@/constants/GeneralTypes";
 
 enum STEP_CREATION_PROFILE {
   FIELD_PROFILE = 1,
@@ -34,6 +35,7 @@ enum STEP_CREATION_PROFILE {
 export default function newAccount() {
   const queryClient = useQueryClient();
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const { setToken } = useApiProvider();
   const [agreeConditions, setAgreeConditions] = useState(false);
   const [showMessageSucces, setShowMessageSuccess] = useState(false);
@@ -43,6 +45,7 @@ export default function newAccount() {
   const [stepView, setStepView] = useState(STEP_CREATION_PROFILE.FIELD_PROFILE);
   const [personalInformation, setPersonalInformation] =
     useState<FormInputs | null>(null);
+  const [ladaSelected, setLadaSelected] = useState<LadaType>();
 
   useEffect(() => navigation.setOptions({ headerShown: false }), [navigation]);
 
@@ -66,10 +69,12 @@ export default function newAccount() {
       ErrorAlertMessage({ message: data.message });
       return;
     }
-    setStoreSession({ key: KEY_STORE.userToken, value: data.items.token });
-    setStoreSession({ key: KEY_STORE.idUser, value: data.items.idUser });
-    setToken(data.items.token);
     setShowMessageSuccess(true);
+    setTimeout(() => {
+      setStoreSession({ key: KEY_STORE.userToken, value: data.items.token });
+      setStoreSession({ key: KEY_STORE.idUser, value: data.items.idUser });
+      setToken(data.items.token);
+    }, 3000);
     setStepView(STEP_CREATION_PROFILE.FIELD_PROFILE);
   };
 
@@ -117,20 +122,34 @@ export default function newAccount() {
     setPersonalInformation(null);
     setPlanSelected(null);
     setAgreeConditions(false);
+    setLadaSelected(undefined);
     navigation.navigate("login" as never);
   };
 
   return (
-    <SafeAreaView style={{ ...Container.container, paddingTop: 10 }}>
+    <View
+      style={{
+        ...Container.container,
+        backgroundColor: ThemeColorsSthetic.backgroundStrong,
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+      }}
+    >
       {showMessageSucces ? (
         <SuccessNotification />
       ) : (
-        <>
+        <View
+          style={{
+            backgroundColor: ThemeColorsSthetic.backgroundLight,
+            height: "100%",
+          }}
+        >
           <View
             style={{
               flexDirection: "row",
               justifyContent: "flex-end",
               paddingRight: 20,
+              marginTop: 20,
             }}
           >
             <AntDesign
@@ -145,6 +164,8 @@ export default function newAccount() {
             <FormRegister
               handlePersonalInformation={handlePersonalInformationStore}
               personalInformation={personalInformation}
+              ladaSelected={ladaSelected}
+              handleSelectLada={setLadaSelected}
             />
           )}
           {stepView === STEP_CREATION_PROFILE.AGREE_CONDITIONS && (
@@ -184,9 +205,9 @@ export default function newAccount() {
               />
             </>
           )}
-        </>
+        </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 

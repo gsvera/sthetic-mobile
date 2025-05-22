@@ -18,6 +18,7 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { PLATFORM_TYPE, TYPE_STATUS } from "@/constants/Constants";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import LoadingView from "@/components/Shared/LoadingView";
 
 export const CatalogServices = ({
   returnBack,
@@ -28,15 +29,18 @@ export const CatalogServices = ({
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [idMenuService, setIdMenuService] = useState(0);
 
-  const { data: listMenuService = [], refetch: refetchListMenuService } =
-    useQuery({
-      queryKey: [REACT_QUERY_KEYS.menuServices.getByUserId(idUser)],
-      queryFn: () => apiMenuService.getListMenuServicesByUser(idUser),
-      ...{
-        select: (data: ResponseApi) => data.data.items as Array<CatalogService>,
-        enabled: !!idUser,
-      },
-    });
+  const {
+    data: listMenuService = [],
+    refetch: refetchListMenuService,
+    isFetching: isFetchingMenuServices,
+  } = useQuery({
+    queryKey: [REACT_QUERY_KEYS.menuServices.getByUserId(idUser)],
+    queryFn: () => apiMenuService.getListMenuServicesByUser(idUser),
+    ...{
+      select: (data: ResponseApi) => data.data.items as Array<CatalogService>,
+      enabled: !!idUser,
+    },
+  });
 
   const { mutate: deleteMenuService } = useMutation({
     mutationFn: () => apiMenuService.deleteMenuService(idUser, idMenuService),
@@ -108,16 +112,26 @@ export const CatalogServices = ({
             handleOnPress={() => setOpenCreateServiceModal(true)}
           />
         </View>
-        <ScrollView style={localStyle.contentMenuList}>
-          {listMenuService.map((item) => (
-            <ItemMenuService
-              key={item.id}
-              register={item}
-              handleSelect={handleSelectItem}
-              handleSelectDelete={handleOnOpenModalDelete}
-            />
-          ))}
-        </ScrollView>
+        <View style={{ paddingHorizontal: 15, marginTop: 5 }}>
+          <ThemedText style={{ ...TextStyle.textNote, textAlign: "justify" }}>
+            Nota: Actualmente no se realizan cobros por medio de la app,
+            esperalo pronto en nuestras proximas actualizaciones
+          </ThemedText>
+        </View>
+        {isFetchingMenuServices ? (
+          <LoadingView />
+        ) : (
+          <ScrollView style={localStyle.contentMenuList}>
+            {listMenuService.map((item) => (
+              <ItemMenuService
+                key={item.id}
+                register={item}
+                handleSelect={handleSelectItem}
+                handleSelectDelete={handleOnOpenModalDelete}
+              />
+            ))}
+          </ScrollView>
+        )}
       </View>
       <CreateServiceModal
         open={openCreateServiceModal}
@@ -157,7 +171,7 @@ const localStyle = StyleSheet.create({
     height: 35,
   },
   contentMenuList: {
-    height: Platform.OS === PLATFORM_TYPE.IOS ? "77%" : "78%",
+    height: Platform.OS === PLATFORM_TYPE.IOS ? "67%" : "68%",
     paddingHorizontal: 15,
     marginTop: 10,
     paddingBottom: 10,

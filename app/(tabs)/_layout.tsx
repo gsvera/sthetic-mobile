@@ -1,5 +1,5 @@
-import { Redirect, Tabs } from "expo-router";
-import React, { useState } from "react";
+import { Tabs, useNavigation } from "expo-router";
+import React, { useEffect } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
@@ -11,24 +11,30 @@ import { AntDesign, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { useApiProvider } from "@/provider/InterceptorProvider";
 
 export default function TabLayout() {
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
   const { setToken, token } = useApiProvider();
-  getStoreSession({ key: KEY_STORE.userToken }).then((value) => {
-    if (value) setToken(value);
-  });
 
-  if (token === null) return <Redirect href="/login" />;
+  useEffect(() => {
+    getStoreSession({ key: KEY_STORE.userToken }).then((value) => {
+      if (!value) return navigation.navigate("login" as never);
+      else setToken(value);
+    });
+  }, [token]);
+
+  if (!token) return <></>;
 
   return (
     <View
       style={{
         ...localStyle.container,
         paddingTop: insets.top,
+        paddingBottom: insets.bottom,
         backgroundColor:
           colorScheme === "dark"
             ? ThemeColorsSthetic.backgroundStrong
-            : ThemeColorsSthetic.backgroundLight,
+            : ThemeColorsSthetic.backgroundStrong,
       }}
     >
       <View style={localStyle.container}>
@@ -40,13 +46,20 @@ export default function TabLayout() {
             headerShown: false,
             tabBarButton: HapticTab,
             tabBarBackground: TabBarBackground,
-            tabBarStyle: Platform.select({
-              ios: {
-                // Use a transparent background on iOS to show the blur effect
-                position: "absolute",
-              },
-              default: {},
-            }),
+            tabBarHideOnKeyboard: true,
+            tabBarStyle: {
+              ...Platform.select({
+                ios: {
+                  // Use a transparent background on iOS to show the blur effect
+                  position: "absolute",
+                },
+                default: {},
+              }),
+              height: 50,
+              paddingBottom: 0,
+              borderTopWidth: 0,
+              backgroundColor: ThemeColorsSthetic.backgroundLight,
+            },
           }}
         >
           <Tabs.Screen

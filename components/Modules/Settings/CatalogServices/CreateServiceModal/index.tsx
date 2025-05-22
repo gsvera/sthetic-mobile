@@ -29,6 +29,7 @@ import {
 } from "@/utils/GeneralUtils";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import ButtonShowMore from "@/components/Shared/ButtonShowMore";
 
 type formServiceCatalogType = {
   nameService: string;
@@ -48,6 +49,7 @@ export const CreateServiceModal = ({
 }: createServiceModalProps) => {
   const queryClient = useQueryClient();
   const { handleNotification } = useNotificationProvider();
+  const [show, setShow] = useState(false);
   const [priceTextAux, setPriceTextAux] = useState("");
   const [serviceMenu, setServiceMenu] = useState<formServiceCatalogType>({
     nameService: "",
@@ -203,6 +205,20 @@ export const CreateServiceModal = ({
                   value={serviceMenu.people.toString()}
                 />
               </View>
+              <ThemedText
+                style={{ ...TextStyle.textNote, textAlign: "justify" }}
+                numberOfLines={show ? undefined : 2}
+              >
+                Nota: Te recomendamos mantener actualizado tus precios, para no
+                tener inconvenientes con las reservas de tus clientes, si los
+                dejas en cero le informaremos al cliente que tendra que
+                comunicarse con tigo para obtener mas información.
+              </ThemedText>
+              <ButtonShowMore
+                show={show}
+                handlePress={() => setShow((v) => !v)}
+                styleTextProp={TextStyle.textNote}
+              />
               <View style={localStyle.contentBtn}>
                 <GeneralButton
                   textBtn="Guardar"
