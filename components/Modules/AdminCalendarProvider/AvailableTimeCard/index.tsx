@@ -10,6 +10,7 @@ import { TextInput } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { REGEX } from "@/constants/Constants";
 import dayjs from "dayjs";
+import { convertHourToAMorPM } from "@/utils/GeneralUtils";
 
 type availebleTimeCardProps = {
   day: weekDaysProps;
@@ -78,7 +79,9 @@ export const AvailableTimeCard = ({
                     <Feather name="alert-circle" size={24} color="red" />
                   )}
                 </ThemedText>
-                <ThemedText style={TextStyle.value}>{day.startTime}</ThemedText>
+                <ThemedText style={TextStyle.value}>
+                  {convertHourToAMorPM(day.startTime)}
+                </ThemedText>
               </Pressable>
             </View>
             <View style={localStyle.cardRowItem}>
@@ -89,7 +92,9 @@ export const AvailableTimeCard = ({
                     <Feather name="alert-circle" size={24} color="red" />
                   )}
                 </ThemedText>
-                <ThemedText style={TextStyle.value}>{day.endTime}</ThemedText>
+                <ThemedText style={TextStyle.value}>
+                  {convertHourToAMorPM(day.endTime)}
+                </ThemedText>
               </Pressable>
             </View>
           </View>

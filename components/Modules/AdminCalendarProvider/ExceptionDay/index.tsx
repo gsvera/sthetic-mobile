@@ -3,6 +3,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { GridStyle, MarginStyle, TextStyle } from "@/constants/StyleComponents";
 import { StyleSheet, View } from "react-native";
+import { convertHourToAMorPM } from "../../../../utils/GeneralUtils";
 
 export const ExceptionDay = (exceptionDay: exceptionDayType) => {
   return (
@@ -21,13 +22,13 @@ export const ExceptionDay = (exceptionDay: exceptionDayType) => {
           <View style={localStyle.rowElement}>
             <ThemedText style={TextStyle.label}>Inicio:</ThemedText>
             <ThemedText style={TextStyle.value}>
-              {exceptionDay.startTime}
+              {convertHourToAMorPM(exceptionDay.startTime)}
             </ThemedText>
           </View>
           <View style={localStyle.rowElement}>
             <ThemedText style={TextStyle.label}>Fin:</ThemedText>
             <ThemedText style={TextStyle.value}>
-              {exceptionDay.endTime}
+              {convertHourToAMorPM(exceptionDay.endTime)}
             </ThemedText>
           </View>
           <View style={localStyle.rowElement}>
