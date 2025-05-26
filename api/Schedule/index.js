@@ -10,14 +10,15 @@ export const apiSchedule = {
       }`
     );
   },
-  acceptSchedule: function (idSchedule) {
+  changeStatusSchedule: function ({
+    idSchedule,
+    statusSchedule,
+    textComments,
+  }) {
     return axiosInstance.patch(
-      `${BASE_URL}/accept-schedule-by-provider?id-schedule=${idSchedule}`
-    );
-  },
-  rejectSchedule: function ({ idSchedule, textReject }) {
-    return axiosInstance.patch(
-      `${BASE_URL}/reject-schedule-by-provider?id-schedule=${idSchedule}&text-reject=${textReject}`
+      `${BASE_URL}/change-status-schedule?id-schedule=${idSchedule}&status-schedule=${statusSchedule}${
+        textComments ? "&text-comments=" + textComments : ""
+      }`
     );
   },
 };

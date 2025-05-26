@@ -2,8 +2,8 @@ import GeneralButton from "@/components/Shared/GeneralButton";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { STATUS_SERVICE } from "@/constants/Constants";
 import { StatusScheduleType } from "@/constants/GeneralTypes";
-import { GridStyle, TextStyle } from "@/constants/StyleComponents";
-import { StyleSheet, View } from "react-native";
+import { TextStyle } from "@/constants/StyleComponents";
+import { ScrollView, StyleSheet } from "react-native";
 
 type tabsSatusScheduleProps = {
   statusSelected: StatusScheduleType;
@@ -15,7 +15,11 @@ export const TabsStatusSchedule = ({
   handleChangeStatus,
 }: tabsSatusScheduleProps) => {
   return (
-    <View style={localStyle.contentTabsBtn}>
+    <ScrollView
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+      style={localStyle.contentTabsBtn}
+    >
       <GeneralButton
         textBtn="Todos"
         styleText={
@@ -45,6 +49,20 @@ export const TabsStatusSchedule = ({
         handleOnPress={() => handleChangeStatus(STATUS_SERVICE.PENDIENT)}
       />
       <GeneralButton
+        textBtn="Cancelado"
+        styleText={
+          statusSelected === STATUS_SERVICE.CANCEL
+            ? TextStyle.fontBoldWhite
+            : TextStyle.fontBoldBlue
+        }
+        styleBtn={
+          statusSelected === STATUS_SERVICE.CANCEL
+            ? localStyle.btnStatusSelected
+            : localStyle.btnStatus
+        }
+        handleOnPress={() => handleChangeStatus(STATUS_SERVICE.CANCEL)}
+      />
+      <GeneralButton
         textBtn="Confirmado"
         styleText={
           statusSelected === STATUS_SERVICE.ACCEPT
@@ -72,30 +90,37 @@ export const TabsStatusSchedule = ({
         }
         handleOnPress={() => handleChangeStatus(STATUS_SERVICE.REJECT)}
       />
-    </View>
+    </ScrollView>
   );
 };
 
 const localStyle = StyleSheet.create({
   contentTabsBtn: {
-    ...GridStyle.rowSpaceBetween,
-    paddingHorizontal: 10,
-    marginBottom: 15,
+    marginHorizontal: 10,
+    paddingVertical: 10,
   },
   btnStatus: {
+    marginRight: 8,
+    height: 40,
     borderRadius: 5,
     borderWidth: 0.5,
     borderColor: ThemeColorsSthetic.textTitle,
     paddingVertical: 5,
     paddingHorizontal: 8,
+    flexDirection: "row",
+    alignItems: "center",
   },
   btnStatusSelected: {
+    marginRight: 8,
+    height: 40,
     borderRadius: 5,
     borderWidth: 0.5,
     borderColor: ThemeColorsSthetic.textTitle,
     backgroundColor: ThemeColorsSthetic.textTitle,
     paddingVertical: 5,
     paddingHorizontal: 8,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 export default TabsStatusSchedule;

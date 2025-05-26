@@ -9,8 +9,10 @@ import ModalRejectSchedule from "./ModalRejectSchedule";
 import { useState } from "react";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { TYPE_STATUS } from "@/constants/Constants";
+import { STATUS_SERVICE, TYPE_STATUS } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
+import { GridStyle } from "@/constants/StyleComponents";
+import EmptyView from "@/components/Shared/EmptyView";
 
 type schedulesProps = {
   idUser: string;
@@ -39,19 +41,14 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
     }
   );
 
-  const { mutate: acceptSchedule } = useMutation({
-    mutationFn: (idSchedule: number) => apiSchedule.acceptSchedule(idSchedule),
-    onSuccess: (data: ResponseApi) => handleSuccessMutations(data.data),
+  const { mutate: changeStatusSchedule } = useMutation({
+    mutationFn: (data: any) => apiSchedule.changeStatusSchedule(data),
+    onSuccess: (data: ResponseApi) =>
+      handleSuccessChangeStatusSchedule(data.data),
     onError: ErrorAlertMessage,
   });
 
-  const { mutate: rejectSchedule } = useMutation({
-    mutationFn: (data: any) => apiSchedule.rejectSchedule(data),
-    onSuccess: (data: ResponseApi) => handleSuccessMutations(data.data),
-    onError: ErrorAlertMessage,
-  });
-
-  const handleSuccessMutations = (data: ObjectResponse) => {
+  const handleSuccessChangeStatusSchedule = (data: ObjectResponse) => {
     if (data.error)
       return handleNotification({
         type: TYPE_STATUS.ERROR,
@@ -75,30 +72,44 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
   };
 
   const handleAcceptSchedule = (idSchedule: number) => {
-    acceptSchedule(idSchedule);
+    changeStatusSchedule({
+      idSchedule,
+      statusSchedule: STATUS_SERVICE.ACCEPT,
+    });
   };
 
   const handleRejectSchedule = (textReject: string | undefined) => {
-    rejectSchedule({
+    changeStatusSchedule({
       idSchedule,
-      textReject,
+      statusSchedule: STATUS_SERVICE.REJECT,
+      textComments: textReject,
     });
   };
 
   return (
     <View>
       {isFetchingSchedules ? (
-        <LoadingView />
+        <View style={{ marginTop: 100 }}>
+          <LoadingView />
+        </View>
       ) : (
         <ScrollView>
-          {listSchedule?.map((item) => (
-            <ScheduleItem
-              key={item.id}
-              item={item}
-              handleAcceptService={handleAcceptSchedule}
-              handleRejectSchedule={handleOpenRejectModal}
-            />
-          ))}
+          {listSchedule.length > 0 ? (
+            listSchedule?.map((item) => (
+              <ScheduleItem
+                key={item.id}
+                item={item}
+                handleAcceptService={handleAcceptSchedule}
+                handleRejectSchedule={handleOpenRejectModal}
+              />
+            ))
+          ) : (
+            <View
+              style={{ ...GridStyle.rowItemsVerticalCenter, marginTop: 100 }}
+            >
+              <EmptyView />
+            </View>
+          )}
         </ScrollView>
       )}
       <ModalRejectSchedule

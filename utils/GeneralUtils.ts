@@ -118,6 +118,11 @@ export const convertDateToGeneralFormat = (date:string | undefined, formatString
   if(date) return dayjs(date).format(formatString)
 }
 
+/**
+ * @description Abre un link proporcionado en otra ventana
+ * @param url 
+ *  
+ */
 export async function openLink (url: string){
     const supported = await Linking.canOpenURL(url);
     if (supported) {

@@ -111,6 +111,7 @@ export type ScheduleType = {
     people: number;
     amount: number;
     statusService: number;
+    comments?: string;
 }
 
 export type StatusScheduleType = STATUS_SERVICE | undefined;
