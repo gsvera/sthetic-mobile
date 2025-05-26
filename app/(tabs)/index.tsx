@@ -57,12 +57,14 @@ export default function Home() {
           <ThemedText style={localStyle.labelDate}>{dateSearch}</ThemedText>
         </TouchableOpacity>
       </View>
-      <TabsStatusSchedule
-        statusSelected={statusSelected}
-        handleChangeStatus={onChangeStatus}
-      />
+      <View style={localStyle.contentTabs}>
+        <TabsStatusSchedule
+          statusSelected={statusSelected}
+          handleChangeStatus={onChangeStatus}
+        />
+      </View>
       <View
-        style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "65%" : "71%" }}
+        style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "65%" : "69%" }}
       >
         <Schedules
           idUser={idUser}
@@ -118,8 +120,11 @@ const localStyle = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 10,
     marginTop: 5,
-    marginBottom: 15,
+    marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? 10 : 5,
     borderWidth: 0.5,
     borderRadius: 5,
+  },
+  contentTabs: {
+    marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? 10 : 5,
   },
 });

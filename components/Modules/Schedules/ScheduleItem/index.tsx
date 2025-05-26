@@ -33,7 +33,15 @@ export const ScheduleItem = ({
           <ThemedText
             style={{ ...TextStyle.fontBoldDark, ...localStyle.textStatus }}
           >
-            Pendiente
+            Pendiente por confirmar
+          </ThemedText>
+        );
+      case STATUS_SERVICE.CANCEL:
+        return (
+          <ThemedText
+            style={{ ...TextStyle.fontBoldCancel, ...localStyle.textStatus }}
+          >
+            Cancelado
           </ThemedText>
         );
       case STATUS_SERVICE.REJECT:
@@ -56,8 +64,15 @@ export const ScheduleItem = ({
   };
   return (
     <View style={localStyle.scheduleItem}>
-      <View style={GridStyle.rowFlexEnd}>{textStatus(item.statusService)}</View>
-      <View style={localStyle.rowInfo}>
+      <View style={GridStyle.rowContentCenter}>
+        {textStatus(item.statusService)}
+      </View>
+      {item?.comments && (
+        <ThemedText style={{ ...TextStyle.textNote, ...TextStyle.center }}>
+          {item.comments}
+        </ThemedText>
+      )}
+      <View style={{ ...localStyle.rowInfo, marginTop: 15 }}>
         <View>
           <ThemedText style={TextStyle.label}>Horario de servicio:</ThemedText>
         </View>
@@ -153,8 +168,7 @@ const localStyle = StyleSheet.create({
   },
   textStatus: {
     fontSize: 20,
-    marginTop: 5,
-    marginBottom: 10,
+    marginTop: 10,
   },
 });
 export default ScheduleItem;
