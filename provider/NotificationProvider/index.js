@@ -31,6 +31,7 @@ const NotificationProvider = ({ children }) => {
     <NotificationContext.Provider value={{ handleNotification }}>
       {showNotification && (
         <MiniNotification
+          open={showNotification}
           type={dataNotification?.type}
           message={dataNotification?.message}
         />

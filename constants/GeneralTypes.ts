@@ -114,6 +114,11 @@ export type ScheduleType = {
     comments?: string;
 }
 
+export type DataChangeStatusSchedule = {
+    idSchedule: number;
+    statusSchedule: number;
+    textComments?: string;
+}
 export type StatusScheduleType = STATUS_SERVICE | undefined;
 
 

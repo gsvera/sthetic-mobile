@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { exceptionDayType, weekDaysProps } from "./types";
 import { ThemedText } from "@/components/ThemedText";
@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import {
   DEFAULT_VALUES_WEEK,
   FORMAT_DATE,
+  PLATFORM_TYPE,
   TYPE_STATUS,
 } from "@/constants/Constants";
 import { MakeExceptionDay } from "./MakeExceptionDay";
@@ -30,6 +31,7 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import LoadingView from "@/components/Shared/LoadingView";
 
 dayjs.locale("es"); // Esta config se debera establecer a futuro para ingles tambien
 
@@ -62,22 +64,25 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
     },
   });
 
-  const { data: dataCalendarException, refetch: refetchCalendarException } =
-    useQuery({
-      queryKey: [REACT_QUERY_KEYS.calendar.calendarException.getByUser(idUser)],
-      queryFn: () =>
-        apiCalendar.getCalencarExceptionByUser(
-          idUser,
-          convertDateToGeneralFormat(
-            selectedDate?.dateString,
-            FORMAT_DATE.TIME_STAMP
-          )
-        ),
-      ...{
-        enabled: Boolean(idUser && !!selectedDate?.dateString),
-        select: (data: ResponseApi) => data.data.items as exceptionDayType,
-      },
-    });
+  const {
+    data: dataCalendarException,
+    refetch: refetchCalendarException,
+    isFetching: isLoadingExceptionDay,
+  } = useQuery({
+    queryKey: [REACT_QUERY_KEYS.calendar.calendarException.getByUser(idUser)],
+    queryFn: () =>
+      apiCalendar.getCalencarExceptionByUser(
+        idUser,
+        convertDateToGeneralFormat(
+          selectedDate?.dateString,
+          FORMAT_DATE.TIME_STAMP
+        )
+      ),
+    ...{
+      enabled: Boolean(idUser && !!selectedDate?.dateString),
+      select: (data: ResponseApi) => data.data.items as exceptionDayType,
+    },
+  });
 
   const { mutate: deleteCalendarException } = useMutation({
     mutationFn: (id: number) => apiCalendar.deleteCalendarException(id),
@@ -162,7 +167,7 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
       />
       <ScrollView
         style={{
-          flexGrow: 1,
+          height: Platform.OS === PLATFORM_TYPE.IOS ? "36%" : "31%",
         }}
       >
         <View style={{ ...GridStyle.rowSpaceBetween, marginTop: 10 }}>
@@ -202,7 +207,11 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
             )}
           </View>
         </View>
-        {dataCalendarException && <ExceptionDay {...dataCalendarException} />}
+        {isLoadingExceptionDay ? (
+          <LoadingView />
+        ) : (
+          dataCalendarException && <ExceptionDay {...dataCalendarException} />
+        )}
 
         <AvailibleWeek
           open={openForm}

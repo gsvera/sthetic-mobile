@@ -13,7 +13,7 @@ export const apiSchedule = {
   changeStatusSchedule: function ({
     idSchedule,
     statusSchedule,
-    textComments,
+    textComments = null,
   }) {
     return axiosInstance.patch(
       `${BASE_URL}/change-status-schedule?id-schedule=${idSchedule}&status-schedule=${statusSchedule}${

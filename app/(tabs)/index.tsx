@@ -49,7 +49,8 @@ export default function Home() {
           style={localStyle.logo}
         />
       </View>
-      <View style={GridStyle.rowContentCenter}>
+      <View style={localStyle.headerTitle}>
+        <ThemedText style={TextStyle.titleModal}>Mis citas del día:</ThemedText>
         <TouchableOpacity
           style={localStyle.contentDate}
           onPress={() => setOpenDatePicker(true)}
@@ -64,7 +65,7 @@ export default function Home() {
         />
       </View>
       <View
-        style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "65%" : "69%" }}
+        style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "66%" : "71%" }}
       >
         <Schedules
           idUser={idUser}
@@ -84,6 +85,7 @@ export default function Home() {
 
 const localStyle = StyleSheet.create({
   header: {
+    height: 70,
     paddingVertical: 10,
     marginBottom: 10,
     flexDirection: "row",
@@ -111,16 +113,21 @@ const localStyle = StyleSheet.create({
   },
   labelDate: {
     ...TextStyle.label,
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: "bold",
     textAlign: "center",
     lineHeight: 28,
   },
-  contentDate: {
-    paddingVertical: 7,
-    paddingHorizontal: 10,
-    marginTop: 5,
+  headerTitle: {
+    ...GridStyle.rowSpaceBetween,
+    ...GridStyle.rowItemsVerticalCenter,
+    width: "90%",
+    marginHorizontal: "auto",
     marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? 10 : 5,
+  },
+  contentDate: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     borderWidth: 0.5,
     borderRadius: 5,
   },
