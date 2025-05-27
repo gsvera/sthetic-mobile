@@ -3,7 +3,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiSchedule } from "@/api/Schedule";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import { ScrollView, View } from "react-native";
-import { ScheduleType, StatusScheduleType } from "@/constants/GeneralTypes";
+import {
+  DataChangeStatusSchedule,
+  ScheduleType,
+  StatusScheduleType,
+} from "@/constants/GeneralTypes";
 import ScheduleItem from "./ScheduleItem";
 import ModalRejectSchedule from "./ModalRejectSchedule";
 import { useState } from "react";
@@ -43,12 +47,15 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
 
   const { mutate: changeStatusSchedule } = useMutation({
     mutationFn: (data: any) => apiSchedule.changeStatusSchedule(data),
-    onSuccess: (data: ResponseApi) =>
-      handleSuccessChangeStatusSchedule(data.data),
+    onSuccess: (data: ResponseApi, variables) =>
+      handleSuccessChangeStatusSchedule(data.data, variables),
     onError: ErrorAlertMessage,
   });
 
-  const handleSuccessChangeStatusSchedule = (data: ObjectResponse) => {
+  const handleSuccessChangeStatusSchedule = (
+    data: ObjectResponse,
+    variables: DataChangeStatusSchedule
+  ) => {
     if (data.error)
       return handleNotification({
         type: TYPE_STATUS.ERROR,
@@ -58,7 +65,13 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
     queryClient.invalidateQueries({
       queryKey: [REACT_QUERY_KEYS.schedule.getAllByDay(idUser), day],
     });
-    handleNotification({ type: TYPE_STATUS.SUCCESS, message: data.message });
+
+    var menssage =
+      variables.statusSchedule === STATUS_SERVICE.ACCEPT
+        ? "Se acepto con éxito la reservación"
+        : "Se rechazo con éxito la reservación";
+
+    handleNotification({ type: TYPE_STATUS.SUCCESS, message: menssage });
   };
 
   const handleOpenRejectModal = (id: number) => {

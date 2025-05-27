@@ -1,21 +1,49 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemeColorsSthetic } from "@/constants/Colors";
-import { TYPE_STATUS } from "@/constants/Constants";
+import { PLATFORM_TYPE, TYPE_STATUS } from "@/constants/Constants";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
-import { ReactNode, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Dimensions,
+  Modal,
+  Platform,
+  StyleSheet,
+  View,
+} from "react-native";
 
 export type miniNotificationProps = {
+  open: boolean;
   type: TYPE_STATUS.SUCCESS | TYPE_STATUS.UPDATE | TYPE_STATUS.ERROR;
   message?: string;
 };
 
+const SCREEN_HEIGHT = Dimensions.get("window").height;
+
 export default function MiniNotification({
+  open,
   type,
   message,
 }: miniNotificationProps) {
   const [bgColor, setBgColor] = useState("");
   const [icon, setIcon] = useState<ReactNode>();
+  const translateY = useRef(new Animated.Value(-SCREEN_HEIGHT)).current;
+
+  useEffect(() => {
+    if (open) {
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(translateY, {
+        toValue: -SCREEN_HEIGHT,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [open]);
 
   useEffect(() => {
     switch (type) {
@@ -44,12 +72,23 @@ export default function MiniNotification({
   }, [type]);
 
   return (
-    <View style={{ ...localStyle.backgroundContent, backgroundColor: bgColor }}>
-      <View>{icon}</View>
-      <View style={{ marginLeft: 10 }}>
-        <ThemedText style={localStyle.textNotification}>{message}</ThemedText>
-      </View>
-    </View>
+    <Modal visible={open} transparent={true} animationType="slide">
+      <Animated.View style={[{ transform: [{ translateY }] }]}>
+        <View
+          style={{
+            ...localStyle.backgroundContent,
+            backgroundColor: bgColor,
+          }}
+        >
+          <View>{icon}</View>
+          <View style={{ marginLeft: 10 }}>
+            <ThemedText style={localStyle.textNotification}>
+              {message}
+            </ThemedText>
+          </View>
+        </View>
+      </Animated.View>
+    </Modal>
   );
 }
 
@@ -57,13 +96,12 @@ const localStyle = StyleSheet.create({
   backgroundContent: {
     borderRadius: 5,
     maxWidth: "100%",
-    top: 40,
+    top: Platform.OS === PLATFORM_TYPE.IOS ? 50 : 20,
     paddingVertical: 15,
     paddingHorizontal: 15,
     right: 10,
     left: 10,
     position: "absolute",
-    zIndex: 1000,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
