@@ -7,7 +7,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -21,6 +21,7 @@ import { ApiRequestProvider } from "@/provider/InterceptorProvider";
 import { NotificationProvider } from "@/provider/NotificationProvider";
 import { useOnlineManager } from "@/hooks/query/UseOnlineManager";
 import { useAppState } from "@/hooks/query/useAppState";
+import { SessionProvider } from "@/provider/SessionProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -62,14 +63,16 @@ export default function RootLayout() {
         <ThemeProvider
           value={colorScheme === "dark" ? DefaultTheme : DefaultTheme}
         >
-          <NotificationProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-              <Stack.Screen name="login" options={{ headerShown: false }} />
-            </Stack>
-            <StatusBar style="auto" />
-          </NotificationProvider>
+          <SessionProvider>
+            <NotificationProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+                <Stack.Screen name="login" options={{ headerShown: false }} />
+              </Stack>
+              <StatusBar style="auto" />
+            </NotificationProvider>
+          </SessionProvider>
         </ThemeProvider>
       </ApiRequestProvider>
     </QueryClientProvider>

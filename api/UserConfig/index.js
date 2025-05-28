@@ -23,6 +23,9 @@ export const apiUserConfig = {
   updateInfoCompany: function (data) {
     return axiosInstance.put(`${BASE_URL}/update-info-company`, data);
   },
+  saveTokenNotification: function (data) {
+    return axiosInstance.put(`${BASE_URL}/save-notifications-token`, data);
+  },
 };
 
 export default apiUserConfig;

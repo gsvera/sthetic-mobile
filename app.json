@@ -43,7 +43,11 @@
       "typedRoutes": true
     },
     "extra": {
-      "expoDebug": true
+      "expoDebug": true,
+      "router": {},
+      "eas": {
+        "projectId": "e3d35683-dbbb-4ebe-b105-7648e05b2546"
+      }
     }
   }
 }
