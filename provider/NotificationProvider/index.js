@@ -22,7 +22,7 @@ const NotificationProvider = ({ children }) => {
     if (showNotification) {
       setTimeout(() => {
         setShowNotification(false);
-      }, 3000);
+      }, 2500);
     } else {
     }
   }, [showNotification, dataNotification]);

@@ -12,6 +12,10 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Esta aplicación necesita acceder a tu ubicación para mostrar tu posición en el mapa."
+      },
+      "bundleIdentifier": "com.abasotech.meredithcarework",
+      "config": {
+        "usesNonExemptEncryption": false
       }
     },
     "android": {
@@ -20,7 +24,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.stheticmobile"
+      "package": "com.abasotech.meredithcarework"
     },
     "web": {
       "bundler": "metro",
@@ -28,11 +32,17 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/meredith-logo-worker.png"
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/meredith-logo-worker.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"

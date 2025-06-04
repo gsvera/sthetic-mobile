@@ -72,7 +72,7 @@ export default function MiniNotification({
   }, [type]);
 
   return (
-    <Modal visible={open} transparent={true} animationType="slide">
+    <View style={localStyle.toast}>
       <Animated.View style={[{ transform: [{ translateY }] }]}>
         <View
           style={{
@@ -88,11 +88,17 @@ export default function MiniNotification({
           </View>
         </View>
       </Animated.View>
-    </Modal>
+    </View>
   );
 }
 
 const localStyle = StyleSheet.create({
+  toast: {
+    position: "absolute",
+    left: 20,
+    right: 20,
+    zIndex: 9999, // asegúrate de que esté por encima
+  },
   backgroundContent: {
     borderRadius: 5,
     maxWidth: "100%",

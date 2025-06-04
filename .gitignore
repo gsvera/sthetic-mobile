@@ -36,3 +36,6 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
+
+meredith-care-firebase-adminsdk-fbsvc-05cfb22bd6.json
+google-services.json

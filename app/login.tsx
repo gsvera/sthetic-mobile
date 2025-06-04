@@ -147,7 +147,7 @@ export default function Login() {
                   name="username"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                      style={loginStyle.input}
+                      style={{ ...loginStyle.input, ...TextStyle.value }}
                       placeholder="Ingrese su usuario"
                       keyboardType="email-address"
                       onBlur={onBlur}
@@ -170,7 +170,7 @@ export default function Login() {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <View style={{ flexDirection: "row" }}>
                       <TextInput
-                        style={loginStyle.input}
+                        style={{ ...loginStyle.input, ...TextStyle.value }}
                         placeholder="Ingrese su password"
                         onBlur={onBlur}
                         onChangeText={onChange}

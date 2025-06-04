@@ -7,11 +7,11 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { AppStateStatus, Platform, View } from "react-native";
+import { AppStateStatus, Platform } from "react-native";
 import {
   focusManager,
   QueryClient,
@@ -22,6 +22,7 @@ import { NotificationProvider } from "@/provider/NotificationProvider";
 import { useOnlineManager } from "@/hooks/query/UseOnlineManager";
 import { useAppState } from "@/hooks/query/useAppState";
 import { SessionProvider } from "@/provider/SessionProvider";
+import { WebSocketProvider } from "@/provider/WebSocketProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -64,14 +65,19 @@ export default function RootLayout() {
           value={colorScheme === "dark" ? DefaultTheme : DefaultTheme}
         >
           <SessionProvider>
-            <NotificationProvider>
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
-                <Stack.Screen name="login" options={{ headerShown: false }} />
-              </Stack>
-              <StatusBar style="auto" />
-            </NotificationProvider>
+            <WebSocketProvider>
+              <NotificationProvider>
+                <Stack>
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen name="+not-found" />
+                  <Stack.Screen name="login" options={{ headerShown: false }} />
+                </Stack>
+                <StatusBar style="auto" />
+              </NotificationProvider>
+            </WebSocketProvider>
           </SessionProvider>
         </ThemeProvider>
       </ApiRequestProvider>

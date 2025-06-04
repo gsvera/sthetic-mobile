@@ -9,10 +9,6 @@ import { getStoreSession, KEY_STORE } from "@/hooks/StoreDataSecure";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AntDesign, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { useApiProvider } from "@/provider/InterceptorProvider";
-import {
-  connectWebSocket,
-  disconnectWebSocket,
-} from "@/provider/ws/socketService";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { useMutation } from "@tanstack/react-query";
@@ -22,6 +18,8 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { TYPE_STATUS } from "@/constants/Constants";
 import { useSessionProvider } from "@/provider/SessionProvider";
+import { useWebSocketProvider } from "@/provider/WebSocketProvider";
+import { SOCKET_CHANNELS_TOPICS } from "@/constants/socket-channels";
 
 export default function TabLayout() {
   const navigation = useNavigation();
@@ -30,7 +28,8 @@ export default function TabLayout() {
   const { handleNotification } = useNotificationProvider();
   const { setToken, token } = useApiProvider();
   const { storeSessionProvider } = useSessionProvider();
-  console.log("🚀 ~ TabLayout ~ storeSessionProvider:", storeSessionProvider);
+  const { subscribeToChannel, unSubscribeToChannelByTopic } =
+    useWebSocketProvider();
   const notificationListener = useRef<Notifications.EventSubscription | null>(
     null
   );
@@ -49,7 +48,6 @@ export default function TabLayout() {
         type: TYPE_STATUS.ERROR,
         message: data.message,
       });
-    handleNotification({ type: TYPE_STATUS.SUCCESS, message: data.message });
   };
 
   useEffect(() => {
@@ -59,24 +57,23 @@ export default function TabLayout() {
     });
   }, [token]);
 
-  // useEffect(() => {
-  //   if (token) {
-  //     connectWebSocket(token, handleNotificationWs);
-  //     return () => {
-  //       disconnectWebSocket();
-  //     };
-  //   }
-  // }, [token]);
+  useEffect(() => {
+    if (token) {
+      subscribeToChannel({
+        topic: SOCKET_CHANNELS_TOPICS.schedules(),
+        handleEvent: (data: any) => handleNotificationWs(data),
+      });
+      return () => {
+        unSubscribeToChannelByTopic(SOCKET_CHANNELS_TOPICS.schedules());
+      };
+    }
+  }, [token]);
 
+  // Para noitificaciones push
   useEffect(() => {
     if (token && storeSessionProvider?.idUser) {
       registerForPushNotificationsAsync().then((tokenNotification) => {
-        console.log(
-          "🚀 ~ registerForPushNotificationsAsync ~ tokenNotification:",
-          tokenNotification
-        );
         if (tokenNotification) {
-          console.log("Push tokenNotifications:", tokenNotification);
           saveTokenNotification({
             id: storeSessionProvider?.idUser,
             tokenNotification,
@@ -104,8 +101,10 @@ export default function TabLayout() {
   }, [token, storeSessionProvider]);
 
   const handleNotificationWs = (data: any) => {
-    console.log("🔔 Notificación:", data);
-    // Aquí puedes lanzar un modal, toast, actualizar UI, etc.
+    handleNotification({
+      type: TYPE_STATUS.UPDATE,
+      message: data.message,
+    });
   };
 
   if (!token) return <></>;
@@ -231,7 +230,8 @@ async function registerForPushNotificationsAsync() {
     alert("No se otorgaron permisos para notificaciones push");
     return;
   }
+
   const tokenData = await Notifications.getExpoPushTokenAsync();
-  console.log("🚀 ~ registerForPushNotificationsAsync ~ tokenData:", tokenData);
+
   return tokenData.data;
 }

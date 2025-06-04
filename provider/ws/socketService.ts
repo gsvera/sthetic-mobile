@@ -3,10 +3,9 @@ import { Client } from '@stomp/stompjs';
 
 let stompClient: Client;
 
-export const connectWebSocket = (token: string, onNotification: (message: any) => void) => {
-  console.log("🚀 ~ token:", token)
+export const connectWebSocket = (token: string, channel:string, onNotification: (message: any) => void) => {
   stompClient = new Client({
-    webSocketFactory: () => new SockJS(`http://192.168.0.10:8002/ws`), // Ajusta al endpoint real
+    webSocketFactory: () => new SockJS(`${process.env.EXPO_PUBLIC_API_URL}/ws`), // Ajusta al endpoint real
     connectHeaders: {
       Authorization: `Bearer ${token}`, // el interceptor en el backend tomará esto
     },
@@ -16,11 +15,9 @@ export const connectWebSocket = (token: string, onNotification: (message: any) =
     onConnect: () => {
       console.log('🔌 Conectado al WebSocket');
 
-      stompClient.subscribe('/user/queue/notifications', (message) => {
-        console.log("🚀 ~ stompClient.subscribe ~ message:", message)
+      stompClient.subscribe(channel, (message) => {
         if (message.body) {
           const data = JSON.parse(message.body);
-          console.log('📩 Notificación recibida:', data);
           onNotification(data);
         }
       }),() => { console.log("📡 Suscripción activa")};
