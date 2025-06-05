@@ -95,6 +95,7 @@ export default function MiniNotification({
 const localStyle = StyleSheet.create({
   toast: {
     position: "absolute",
+    top: 20,
     left: 20,
     right: 20,
     zIndex: 9999, // asegúrate de que esté por encima

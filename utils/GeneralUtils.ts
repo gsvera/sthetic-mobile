@@ -3,7 +3,7 @@ import CryptoJS from "crypto-js";
 import dayjs from "dayjs";
 import { REGEX } from '@/constants/Constants';
 import customParseFormat from "dayjs/plugin/customParseFormat"; 
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 const secretKeyPass = process.env.EXPO_PUBLIC_SECRET_KEY;
 dayjs.extend(customParseFormat);
@@ -129,3 +129,28 @@ export async function openLink (url: string){
       await Linking.openURL(url);
     }
   };
+
+  /**
+ * @description abre el mapa del dispositivo y puntea en el mapa en base a la latitu y longitud proporcionada
+ * @param latitude 
+ * @param longitude 
+ * @param label 
+ * @returns 
+ */
+export const openMap = (
+    latitude: number | undefined,
+    longitude: number | undefined,
+    label = "Ubicación" 
+  ) => {
+  if(!latitude || !longitude) return
+  const latLng = `${latitude},${longitude}`;
+
+  const url = Platform.select({
+    ios: `http://maps.apple.com/?ll=${latLng}&q=${label}`,
+    android: `geo:${latLng}?q=${latLng}(${label})`,
+  });
+
+  Linking.openURL(url!).catch((err) =>
+    console.error(err)
+  );
+};

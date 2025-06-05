@@ -15,7 +15,8 @@
       },
       "bundleIdentifier": "com.abasotech.meredithcarework",
       "config": {
-        "usesNonExemptEncryption": false
+        "usesNonExemptEncryption": false,
+        "googleMapsApiKey": "AIzaSyBEPqhm55f6JnlZv_lIxiikGiUiuU7YJ4w"
       }
     },
     "android": {
@@ -24,7 +25,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.abasotech.meredithcarework"
+      "package": "com.abasotech.meredithcarework",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBEPqhm55f6JnlZv_lIxiikGiUiuU7YJ4w"
+        }
+      }
     },
     "web": {
       "bundler": "metro",

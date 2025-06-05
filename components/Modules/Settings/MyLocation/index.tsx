@@ -12,10 +12,16 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import MapView, { Marker } from "react-native-maps";
+{
+  /* 
+  SE COMENTA EL MAPA YA QUE REQUIERE AGREGAR API KEY DE GOOGLE PERO TIENE COSTO, PARA FUTURAS VERSIONES VALORAR SI SE REQUIERE HABILITAR
+**/
+}
+// import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiUserConfig } from "@/api/UserConfig";
@@ -34,6 +40,8 @@ import {
 import SelectMunicipalityModal from "./SelectMunicipalityModal";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import { apiOtherServices } from "@/api/OtherServices";
+import { Entypo, Feather } from "@expo/vector-icons";
+import { openMap } from "@/utils/GeneralUtils";
 
 type myLocationProps = {
   idUser: string;
@@ -67,7 +75,12 @@ const defaultCoordinate = {
 
 export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   const { handleNotification } = useNotificationProvider();
-  const mapRef = useRef<MapView>(null);
+  {
+    /* 
+    SE COMENTA EL MAPA YA QUE REQUIERE AGREGAR API KEY DE GOOGLE PERO TIENE COSTO, PARA FUTURAS VERSIONES VALORAR SI SE REQUIERE HABILITAR
+  **/
+  }
+  // const mapRef = useRef<MapView>(null);
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [enableBtn, setEnableBtn] = useState(false);
   const [requiredLocation, setRequiredLocation] = useState(false);
@@ -82,8 +95,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
       auxState: "",
       auxMunicipality: "",
     });
-  const [currentLocation, setCurrentLocation] =
-    useState<currentLocationType>(defaultCoordinate);
+  const [currentLocation, setCurrentLocation] = useState<currentLocationType>();
   const [reference, setReference] = useState("");
 
   const queryClient = useQueryClient();
@@ -135,6 +147,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
         type: TYPE_STATUS.SUCCESS,
         message: data.message,
       });
+      returnBack();
     } else {
       handleNotification({
         type: TYPE_STATUS.ERROR,
@@ -157,19 +170,24 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
     }
   }, [dataLocation]);
 
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.animateToRegion(
-        {
-          latitude: currentLocation.latitude,
-          longitude: currentLocation.longitude,
-          latitudeDelta: 0.02, // Ajusta para zoom
-          longitudeDelta: 0.02,
-        },
-        1000
-      );
-    }
-  }, [currentLocation]);
+  {
+    /* 
+    SE COMENTA EL MAPA YA QUE REQUIERE AGREGAR API KEY DE GOOGLE PERO TIENE COSTO, PARA FUTURAS VERSIONES VALORAR SI SE REQUIERE HABILITAR
+  **/
+  }
+  // useEffect(() => {
+  //   if (mapRef.current) {
+  //     mapRef.current.animateToRegion(
+  //       {
+  //         latitude: currentLocation.latitude,
+  //         longitude: currentLocation.longitude,
+  //         latitudeDelta: 0.02, // Ajusta para zoom
+  //         longitudeDelta: 0.02,
+  //       },
+  //       1000
+  //     );
+  //   }
+  // }, [currentLocation]);
 
   const loadingData = useMemo(
     () => isPendingLocation || isPendingStates || isPendingMunicipalities,
@@ -194,13 +212,18 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
     setLoadingLocation(false);
   };
 
-  const handlePickLotacion = (event: any) => {
-    const { latitude, longitude } = event.nativeEvent.coordinate;
-    setStateSelected(undefined);
-    setMunicipalitySelected(undefined);
-    geolocationInvert({ latitude, longitude });
-    handleUpdateLocation({ latitude, longitude });
-  };
+  {
+    /* 
+    SE COMENTA EL MAPA YA QUE REQUIERE AGREGAR API KEY DE GOOGLE PERO TIENE COSTO, PARA FUTURAS VERSIONES VALORAR SI SE REQUIERE HABILITAR
+  **/
+  }
+  // const handlePickLotacion = (event: any) => {
+  //   const { latitude, longitude } = event.nativeEvent.coordinate;
+  //   setStateSelected(undefined);
+  //   setMunicipalitySelected(undefined);
+  //   geolocationInvert({ latitude, longitude });
+  //   handleUpdateLocation({ latitude, longitude });
+  // };
 
   const geolocationInvert = async ({
     latitude,
@@ -257,14 +280,18 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
     setOpenSelectMunicipalityModal(false);
   };
 
+  const handleClearLocation = () => {
+    setCurrentLocation(undefined);
+  };
+
   return (
     <View>
       <SubHeaderReturn subtitle="Mi Ubicación" handleReturn={returnBack} />
       <View style={{ height: "100%" }}>
         <View style={localStyle.contentBody}>
           <ThemedText style={localStyle.textDescription}>
-            Seleccione el estado y municipio y/o toque en el mapa la ubicacion
-            de su local o negocio para ser mas preciso
+            Seleccione el estado y municipio y/o utilice el boton para obtener
+            la ubicación de su dispositivo
           </ThemedText>
           <View style={localStyle.rowInput}>
             <ThemedText style={TextStyle.label}>Estado: </ThemedText>
@@ -307,7 +334,10 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
               numberOfLines={2}
             />
           </View>
-          <MapView
+          {/* 
+            SE COMENTA EL MAPA YA QUE REQUIERE AGREGAR API KEY DE GOOGLE PERO TIENE COSTO, PARA FUTURAS VERSIONES VALORAR SI SE REQUIERE HABILITAR
+          **/}
+          {/* <MapView
             style={localStyle.map}
             ref={mapRef}
             // UBICACIONES POR DEFAULT DE CANCUN
@@ -318,27 +348,55 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
               longitudeDelta: 0.02,
             }}
             onPress={handlePickLotacion}
-          >
-            {/* Agregar un marcador */}
-            {currentLocation && (
+          > */}
+          {/* Agregar un marcador */}
+          {/* {currentLocation && (
               <Marker
                 coordinate={currentLocation}
                 title="Ubicación marcada"
                 // description="Esta es una descripción de la ubicación"
               />
-            )}
-          </MapView>
+            )} */}
+          {/* </MapView> */}
           <View style={localStyle.contentBtnLocation}>
-            <Pressable
-              onPress={handleDeviceLocation}
-              style={localStyle.btnLocation}
-            >
-              <FontAwesome6
-                name="location-crosshairs"
-                size={24}
-                color="black"
-              />
-            </Pressable>
+            <GeneralButton
+              textBtn={
+                <>
+                  <ThemedText>Ubicación actual {"  "}</ThemedText>
+
+                  <FontAwesome6
+                    name="location-crosshairs"
+                    style={localStyle.iconMap}
+                  />
+                </>
+              }
+              styleText={TextStyle.lightColor}
+              styleBtn={localStyle.btnLocation}
+              handleOnPress={handleDeviceLocation}
+            />
+            {currentLocation?.latitude && currentLocation.longitude && (
+              <>
+                <GeneralButton
+                  textBtn={
+                    <>
+                      <ThemedText>Ver en mapa {"  "}</ThemedText>
+                      <Entypo name="location" style={localStyle.iconMap} />
+                    </>
+                  }
+                  styleText={TextStyle.lightColor}
+                  styleBtn={localStyle.btnLocation}
+                  handleOnPress={() =>
+                    openMap(currentLocation.latitude, currentLocation.longitude)
+                  }
+                />
+                <GeneralButton
+                  textBtn={<Feather name="trash" style={localStyle.iconMap} />}
+                  styleText={TextStyle.lightColor}
+                  styleBtn={localStyle.btnDeleteLocation}
+                  handleOnPress={handleClearLocation}
+                />
+              </>
+            )}
           </View>
           <View>
             {loadingLocation && (
@@ -422,15 +480,26 @@ const localStyle = StyleSheet.create({
   },
   contentBtnLocation: {
     flexDirection: "row",
-    justifyContent: "flex-end",
-    marginBottom: -10,
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   btnLocation: {
+    ...ButtonGeneralStyle.btnActionSthetic,
+    flexDirection: "row",
     zIndex: 9,
     padding: 5,
-    backgroundColor: "white",
-    top: -40,
-    right: 10,
+    marginTop: 10,
+  },
+  btnDeleteLocation: {
+    ...ButtonGeneralStyle.btnDeleteSthetic,
+    flexDirection: "row",
+    zIndex: 9,
+    padding: 5,
+    marginTop: 10,
+  },
+  iconMap: {
+    color: ThemeColorsSthetic.textLight,
+    fontSize: 22,
   },
   textLoading: {
     ...TextStyle.center,
