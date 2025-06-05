@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { AppStateStatus, Platform } from "react-native";
+import { AppStateStatus, Platform, View } from "react-native";
 import {
   focusManager,
   QueryClient,
