@@ -255,7 +255,7 @@ export const FormRegister = ({
                 style={localStyles.input}
                 placeholder="Ingrese su email"
                 keyboardType="email-address"
-                onChangeText={onChange}
+                onChangeText={(e) => onChange(e.toLowerCase())}
                 onBlur={onBlur}
                 value={value}
               />

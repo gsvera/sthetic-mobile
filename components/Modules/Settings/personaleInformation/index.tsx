@@ -1,6 +1,6 @@
 import { apiLada } from "@/api/Lada";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
-import { ResponseApi } from "@/api/responseApi";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import { apiUser } from "@/api/User";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
@@ -96,15 +96,15 @@ export const PersonalInformation = ({
   const { mutate: updatePersonalInformation } = useMutation({
     mutationFn: (data: formPersonalInformation) =>
       apiUser.updatePersonalInformation(data),
-    onSuccess: (data: ResponseApi) => handleSuccessUpdate(data),
-    onError: (err) => ErrorAlertMessage,
+    onSuccess: (data: ResponseApi) => handleSuccessUpdate(data.data),
+    onError: ErrorAlertMessage,
   });
 
-  const handleSuccessUpdate = (data: ResponseApi) => {
-    if (data.data.error) {
+  const handleSuccessUpdate = (data: ObjectResponse) => {
+    if (data.error) {
       handleNotification({
         type: TYPE_STATUS.ERROR,
-        message: data.data.message,
+        message: data.message,
       });
       return;
     }
@@ -255,7 +255,7 @@ export const PersonalInformation = ({
                     style={GeneralStyle.simpleInput}
                     placeholder="Ingrese su email"
                     keyboardType="email-address"
-                    onChangeText={onChange}
+                    onChangeText={(e) => onChange(e.toLowerCase())}
                     onBlur={onBlur}
                     value={value}
                   />

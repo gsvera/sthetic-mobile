@@ -6,6 +6,7 @@ import { apiPlan } from "@/api/Plan";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { PLATFORM_TYPE } from "@/constants/Constants";
+import LoadingView from "@/components/Shared/LoadingView";
 
 type PlanProps = {
   selectedPlan: (idPlan: PlanCardProps) => void;
@@ -16,7 +17,7 @@ export const Plan = ({ selectedPlan }: PlanProps) => {
     selectedPlan(plan);
   };
 
-  const { data: dataPlans = [] } = useQuery({
+  const { data: dataPlans = [], isLoading: isLoadingPlans } = useQuery({
     queryKey: [REACT_QUERY_KEYS.plan.getFilterData("register")],
     queryFn: () => apiPlan.getAllPlans(),
     ...{
@@ -39,13 +40,19 @@ export const Plan = ({ selectedPlan }: PlanProps) => {
       </View>
       <View style={localStyles.constentScroll}>
         <ScrollView>
-          <View style={localStyles.content}>
-            {dataPlans.map((item: PlanCardProps) => (
-              <View key={item.id}>
-                <PlanCard {...item} onSelectPlan={handleSelectedPlan} />
-              </View>
-            ))}
-          </View>
+          {isLoadingPlans ? (
+            <View style={{ marginTop: 100 }}>
+              <LoadingView />
+            </View>
+          ) : (
+            <View style={localStyles.content}>
+              {dataPlans.map((item: PlanCardProps) => (
+                <View key={item.id}>
+                  <PlanCard {...item} onSelectPlan={handleSelectedPlan} />
+                </View>
+              ))}
+            </View>
+          )}
         </ScrollView>
       </View>
     </View>
