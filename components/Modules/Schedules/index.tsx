@@ -3,11 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiSchedule } from "@/api/Schedule";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import { ScrollView, View } from "react-native";
-import {
-  DataChangeStatusSchedule,
-  ScheduleType,
-  StatusScheduleType,
-} from "@/constants/GeneralTypes";
+import { ScheduleType, StatusScheduleType } from "@/constants/GeneralTypes";
 import ScheduleItem from "./ScheduleItem";
 import ModalRejectSchedule from "./ModalRejectSchedule";
 import { useState } from "react";
@@ -17,6 +13,12 @@ import { STATUS_SERVICE, TYPE_STATUS } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
 import { GridStyle } from "@/constants/StyleComponents";
 import EmptyView from "@/components/Shared/EmptyView";
+
+export type scheduleSelectType = {
+  id: number;
+  statusSchedule: number;
+  comments?: string;
+};
 
 type schedulesProps = {
   idUser: string;
@@ -28,7 +30,7 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
   const queryClient = useQueryClient();
   const { handleNotification } = useNotificationProvider();
   const [openRejectSchedule, setOpenRejectSchedule] = useState(false);
-  const [idSchedule, setIdSchedule] = useState(0);
+  const [schedule, setSchedule] = useState<scheduleSelectType>();
 
   const { data: listSchedule = [], isFetching: isFetchingSchedules } = useQuery(
     {
@@ -48,14 +50,11 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
   const { mutate: changeStatusSchedule } = useMutation({
     mutationFn: (data: any) => apiSchedule.changeStatusSchedule(data),
     onSuccess: (data: ResponseApi, variables) =>
-      handleSuccessChangeStatusSchedule(data.data, variables),
+      handleSuccessChangeStatusSchedule(data.data),
     onError: ErrorAlertMessage,
   });
 
-  const handleSuccessChangeStatusSchedule = (
-    data: ObjectResponse,
-    variables: DataChangeStatusSchedule
-  ) => {
+  const handleSuccessChangeStatusSchedule = (data: ObjectResponse) => {
     if (data.error)
       return handleNotification({
         type: TYPE_STATUS.ERROR,
@@ -66,37 +65,36 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
       queryKey: [REACT_QUERY_KEYS.schedule.getAllByDay(idUser), day],
     });
 
-    var menssage =
-      variables.statusSchedule === STATUS_SERVICE.ACCEPT
-        ? "Se acepto con éxito la reservación"
-        : "Se rechazo con éxito la reservación";
-
-    handleNotification({ type: TYPE_STATUS.SUCCESS, message: menssage });
+    handleNotification({
+      type: TYPE_STATUS.SUCCESS,
+      message: `Se ha cambiado el estatus de la reservación con éxito`,
+    });
   };
 
-  const handleOpenRejectModal = (id: number) => {
-    setIdSchedule(id);
+  const handleOpenRejectModal = (data: scheduleSelectType) => {
+    setSchedule(data);
     setOpenRejectSchedule(true);
   };
 
   const handleCloseRejectModal = () => {
     setOpenRejectSchedule(false);
-    setIdSchedule(0);
+    setSchedule(undefined);
   };
 
-  const handleAcceptSchedule = (idSchedule: number) => {
+  const handleAcceptSchedule = (data: scheduleSelectType) => {
     changeStatusSchedule({
-      idSchedule,
-      statusSchedule: STATUS_SERVICE.ACCEPT,
+      idSchedule: data.id,
+      statusSchedule: data.statusSchedule,
     });
   };
 
   const handleRejectSchedule = (textReject: string | undefined) => {
-    changeStatusSchedule({
-      idSchedule,
-      statusSchedule: STATUS_SERVICE.REJECT,
-      textComments: textReject,
-    });
+    if (schedule)
+      changeStatusSchedule({
+        idSchedule: schedule.id,
+        statusSchedule: schedule.statusSchedule,
+        textComments: textReject,
+      });
   };
 
   return (
@@ -125,11 +123,13 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
           )}
         </ScrollView>
       )}
-      <ModalRejectSchedule
-        open={openRejectSchedule}
-        handleCloseModal={handleCloseRejectModal}
-        handleConfirmModal={handleRejectSchedule}
-      />
+      {openRejectSchedule && (
+        <ModalRejectSchedule
+          open={openRejectSchedule}
+          handleCloseModal={handleCloseRejectModal}
+          handleConfirmModal={handleRejectSchedule}
+        />
+      )}
     </View>
   );
 };

@@ -11,11 +11,12 @@ import {
 import { convertHourToAMorPM, openLink } from "@/utils/GeneralUtils";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { scheduleSelectType } from "..";
 
 type scheduleItemProps = {
   item: ScheduleType;
-  handleAcceptService: (id: number) => void;
-  handleRejectSchedule: (id: number) => void;
+  handleAcceptService: (data: scheduleSelectType) => void;
+  handleRejectSchedule: (data: scheduleSelectType) => void;
 };
 
 export const ScheduleItem = ({
@@ -23,8 +24,10 @@ export const ScheduleItem = ({
   handleAcceptService,
   handleRejectSchedule,
 }: scheduleItemProps) => {
-  const acceptService = () => handleAcceptService(item.id);
-  const rejectService = () => handleRejectSchedule(item.id);
+  const acceptService = (status: STATUS_SERVICE) =>
+    handleAcceptService({ id: item.id, statusSchedule: status });
+  const rejectService = (status: STATUS_SERVICE) =>
+    handleRejectSchedule({ id: item.id, statusSchedule: status });
 
   const textStatus = (statusSchedule: number) => {
     switch (statusSchedule) {
@@ -60,8 +63,17 @@ export const ScheduleItem = ({
             Confirmado
           </ThemedText>
         );
+      case STATUS_SERVICE.FINALIZED:
+        return (
+          <ThemedText
+            style={{ ...TextStyle.fontBoldFinalized, ...localStyle.textStatus }}
+          >
+            Finalizado
+          </ThemedText>
+        );
     }
   };
+
   return (
     <View style={localStyle.scheduleItem}>
       <View style={GridStyle.rowContentCenter}>
@@ -129,7 +141,7 @@ export const ScheduleItem = ({
               ...ButtonGeneralStyle.btnSaveSthetic,
               ...localStyle.btn,
             }}
-            handleOnPress={acceptService}
+            handleOnPress={() => acceptService(STATUS_SERVICE.ACCEPT)}
           />
           <GeneralButton
             textBtn="Rechazar"
@@ -138,7 +150,29 @@ export const ScheduleItem = ({
               ...ButtonGeneralStyle.btnCancelSthetic,
               ...localStyle.btn,
             }}
-            handleOnPress={rejectService}
+            handleOnPress={() => rejectService(STATUS_SERVICE.REJECT)}
+          />
+        </View>
+      )}
+      {item.statusService === STATUS_SERVICE.ACCEPT && (
+        <View style={localStyle.rowInfo}>
+          <GeneralButton
+            textBtn="Finalizar"
+            styleText={TextStyle.fontBoldWhite}
+            styleBtn={{
+              ...ButtonGeneralStyle.btnSaveSthetic,
+              ...localStyle.btn,
+            }}
+            handleOnPress={() => acceptService(STATUS_SERVICE.FINALIZED)}
+          />
+          <GeneralButton
+            textBtn="Cancelar"
+            styleText={TextStyle.fontBoldWhite}
+            styleBtn={{
+              ...ButtonGeneralStyle.btnCancelSthetic,
+              ...localStyle.btn,
+            }}
+            handleOnPress={() => rejectService(STATUS_SERVICE.CANCEL)}
           />
         </View>
       )}

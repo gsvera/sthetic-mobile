@@ -49,18 +49,18 @@ export const TabsStatusSchedule = ({
         handleOnPress={() => handleChangeStatus(STATUS_SERVICE.PENDIENT)}
       />
       <GeneralButton
-        textBtn="Cancelado"
+        textBtn="Rechazado"
         styleText={
-          statusSelected === STATUS_SERVICE.CANCEL
+          statusSelected === STATUS_SERVICE.REJECT
             ? TextStyle.fontBoldWhite
             : TextStyle.fontBoldBlue
         }
         styleBtn={
-          statusSelected === STATUS_SERVICE.CANCEL
+          statusSelected === STATUS_SERVICE.REJECT
             ? localStyle.btnStatusSelected
             : localStyle.btnStatus
         }
-        handleOnPress={() => handleChangeStatus(STATUS_SERVICE.CANCEL)}
+        handleOnPress={() => handleChangeStatus(STATUS_SERVICE.REJECT)}
       />
       <GeneralButton
         textBtn="Confirmado"
@@ -77,18 +77,32 @@ export const TabsStatusSchedule = ({
         handleOnPress={() => handleChangeStatus(STATUS_SERVICE.ACCEPT)}
       />
       <GeneralButton
-        textBtn="Rechazado"
+        textBtn="Cancelado"
         styleText={
-          statusSelected === STATUS_SERVICE.REJECT
+          statusSelected === STATUS_SERVICE.CANCEL
             ? TextStyle.fontBoldWhite
             : TextStyle.fontBoldBlue
         }
         styleBtn={
-          statusSelected === STATUS_SERVICE.REJECT
+          statusSelected === STATUS_SERVICE.CANCEL
             ? localStyle.btnStatusSelected
             : localStyle.btnStatus
         }
-        handleOnPress={() => handleChangeStatus(STATUS_SERVICE.REJECT)}
+        handleOnPress={() => handleChangeStatus(STATUS_SERVICE.CANCEL)}
+      />
+      <GeneralButton
+        textBtn="Finalizado"
+        styleText={
+          statusSelected === STATUS_SERVICE.FINALIZED
+            ? TextStyle.fontBoldWhite
+            : TextStyle.fontBoldBlue
+        }
+        styleBtn={
+          statusSelected === STATUS_SERVICE.FINALIZED
+            ? localStyle.btnStatusSelected
+            : localStyle.btnStatus
+        }
+        handleOnPress={() => handleChangeStatus(STATUS_SERVICE.FINALIZED)}
       />
     </ScrollView>
   );

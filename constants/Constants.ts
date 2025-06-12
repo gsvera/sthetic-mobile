@@ -58,10 +58,11 @@ export const DEFAULT_VALUES_WEEK = WEEK_DAYS.map((day: string) => ({
 }));
 
 export enum STATUS_SERVICE {
-    REJECT= -1,
+    REJECT = -1,
     PENDIENT = 0,
     ACCEPT = 1,
-    CANCEL = 2
+    CANCEL = 2,
+    FINALIZED = 3
 }
 
 export enum PLATFORM_TYPE {

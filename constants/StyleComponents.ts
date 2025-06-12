@@ -159,7 +159,7 @@ export const TextStyle = StyleSheet.create({
         fontWeight: 'bold'
     },
     fontBoldError: {
-        color: ThemeColorsSthetic.textError,
+        color: ThemeColorsSthetic.textLabels,
         fontWeight: 'bold'
     },
     fontBoldBlue: {
@@ -168,6 +168,10 @@ export const TextStyle = StyleSheet.create({
     },
     fontBoldAccept: {
         color: ThemeColorsSthetic.textOre,
+        fontWeight: 'bold'
+    },
+    fontBoldFinalized: {
+        color: ThemeColorsSthetic.textTitle,
         fontWeight: 'bold'
     },
     fontBoldCancel: {
