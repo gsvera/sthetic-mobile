@@ -20,6 +20,7 @@ import { TYPE_STATUS } from "@/constants/Constants";
 import { useSessionProvider } from "@/provider/SessionProvider";
 import { useWebSocketProvider } from "@/provider/WebSocketProvider";
 import { SOCKET_CHANNELS_TOPICS } from "@/constants/socket-channels";
+import { Audio } from "expo-av";
 
 export default function TabLayout() {
   const navigation = useNavigation();
@@ -100,7 +101,11 @@ export default function TabLayout() {
     }
   }, [token, storeSessionProvider]);
 
-  const handleNotificationWs = (data: any) => {
+  const handleNotificationWs = async (data: any) => {
+    const { sound } = await Audio.Sound.createAsync(
+      require("@/assets/sounds/short-success-sound.mp3")
+    );
+    await sound.playAsync();
     handleNotification({
       type: TYPE_STATUS.UPDATE,
       message: data.message,

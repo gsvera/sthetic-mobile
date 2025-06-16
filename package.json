@@ -65,7 +65,8 @@
     "react-native-webview": "13.13.5",
     "sockjs-client": "^1.6.1",
     "sthetic-mobile": "file:",
-    "yup": "^1.5.0"
+    "yup": "^1.5.0",
+    "expo-av": "~15.1.6"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
