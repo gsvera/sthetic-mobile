@@ -121,7 +121,6 @@ export const CreateServiceModal = ({
   );
 
   const saveService = () => {
-    console.log(serviceMenu);
     if (!entityToEdit) {
       saveMenuService({
         ...serviceMenu,

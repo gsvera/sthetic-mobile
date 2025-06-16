@@ -3,6 +3,7 @@ import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
 import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { Modal, StyleSheet, View } from "react-native";
 import GeneralButton from "../GeneralButton";
+import LoadingView from "../LoadingView";
 
 type modalConfirmProps = {
   open: boolean;
@@ -12,6 +13,7 @@ type modalConfirmProps = {
   handleClose: () => void;
   handleConfirm: () => void;
   IconModal?: JSX.Element;
+  isLoading?: boolean;
 };
 
 export const ModalConfirm = ({
@@ -22,6 +24,7 @@ export const ModalConfirm = ({
   handleConfirm,
   IconModal,
   textBtnConfirm,
+  isLoading,
 }: modalConfirmProps) => {
   return (
     <Modal animationType="fade" transparent={true} visible={open}>
@@ -48,13 +51,18 @@ export const ModalConfirm = ({
               styleText={TextStyle.fontBoldWhite}
               handleOnPress={handleClose}
               textBtn="Cancelar"
+              disabledBtn={isLoading}
+              styleBtndisable={localStyle.btnDisabled}
             />
             <GeneralButton
               styleBtn={localStyle.btnConfirm}
               styleText={TextStyle.fontBoldWhite}
               handleOnPress={handleConfirm}
               textBtn={textBtnConfirm || "Confirmar"}
+              disabledBtn={isLoading}
+              styleBtndisable={localStyle.btnDisabled}
             />
+            {isLoading && <LoadingView />}
           </View>
         </View>
       </View>
@@ -103,6 +111,10 @@ const localStyle = StyleSheet.create({
   },
   btnConfirm: {
     ...ButtonGeneralStyle.btnSaveSthetic,
+  },
+  btnDisabled: {
+    ...ButtonGeneralStyle.btnDisabledSthetic,
+    marginBottom: 10,
   },
   contetIconModal: {
     justifyContent: "center",

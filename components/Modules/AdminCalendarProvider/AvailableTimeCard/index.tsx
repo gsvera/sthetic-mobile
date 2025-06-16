@@ -80,7 +80,7 @@ export const AvailableTimeCard = ({
                   )}
                 </ThemedText>
                 <ThemedText style={TextStyle.value}>
-                  {convertHourToAMorPM(day.startTime)}
+                  {day.startTime && convertHourToAMorPM(day.startTime)}
                 </ThemedText>
               </Pressable>
             </View>
@@ -93,7 +93,7 @@ export const AvailableTimeCard = ({
                   )}
                 </ThemedText>
                 <ThemedText style={TextStyle.value}>
-                  {convertHourToAMorPM(day.endTime)}
+                  {day.endTime && convertHourToAMorPM(day.endTime)}
                 </ThemedText>
               </Pressable>
             </View>

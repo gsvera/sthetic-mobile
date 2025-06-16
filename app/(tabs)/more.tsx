@@ -17,7 +17,7 @@ import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
 import { useNavigation } from "expo-router";
 import { useApiProvider } from "@/provider/InterceptorProvider";
 import { useState } from "react";
-import { COMPONENTS_SETINGS } from "@/constants/Constants";
+import { COMPONENTS_SETINGS, TYPE_STATUS } from "@/constants/Constants";
 import PersonalInformation, {
   formPersonalInformation,
 } from "@/components/Modules/Settings/PersonaleInformation";
@@ -36,13 +36,16 @@ import MyCompany from "@/components/Modules/Settings/MyCompany";
 import CatalogServices from "@/components/Modules/Settings/CatalogServices";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import LoadingView from "@/components/Shared/LoadingView";
+import { useNotificationProvider } from "@/provider/NotificationProvider";
 
 export default function More() {
   const navigation = useNavigation();
+  const { handleNotification } = useNotificationProvider();
   const { setToken } = useApiProvider();
   const [viewComponent, setViewComponent] = useState<string>();
   const [openModalDeleteAccount, setOpenModalDeleteAccount] = useState(false);
   const [openModaloLogout, setOpenModalLogout] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
   // const [openModal, setOpenModal] = useState(false);
 
   const { data: dataUser, isFetching: isFetchingData } = useQuery({
@@ -67,6 +70,11 @@ export default function More() {
 
   const handleSuccessDeleteAccount = (data: ObjectResponse) => {
     if (data.error) return ErrorAlertMessage({ message: data.message });
+    setLoadingDelete(false);
+    handleNotification({
+      type: TYPE_STATUS.SUCCESS,
+      message: "Su cuenta se ha eleminado con éxito",
+    });
     deleteSession();
   };
 
@@ -162,6 +170,7 @@ export default function More() {
   };
 
   const handleDeleteAccount = () => {
+    setLoadingDelete(true);
     deleteAccount();
   };
 
@@ -365,6 +374,7 @@ export default function More() {
             handleClose={() => setOpenModalDeleteAccount((v) => !v)}
             handleConfirm={handleDeleteAccount}
             textBtnConfirm="Eliminar cuenta"
+            isLoading={loadingDelete}
             IconModal={
               <AntDesign
                 name="warning"
