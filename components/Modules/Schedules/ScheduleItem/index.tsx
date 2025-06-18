@@ -12,6 +12,8 @@ import { convertHourToAMorPM, openLink } from "@/utils/GeneralUtils";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { scheduleSelectType } from "..";
+import { useMemo } from "react";
+import dayjs from "dayjs";
 
 type scheduleItemProps = {
   item: ScheduleType;
@@ -28,6 +30,14 @@ export const ScheduleItem = ({
     handleAcceptService({ id: item.id, statusSchedule: status });
   const rejectService = (status: STATUS_SERVICE) =>
     handleRejectSchedule({ id: item.id, statusSchedule: status });
+
+  const isOverTime = useMemo(() => {
+    const [hour, minute] = item.endTime.split(":");
+    const limitTime = dayjs()
+      .set("hour", parseInt(hour))
+      .set("minute", parseInt(minute));
+    return dayjs().isAfter(limitTime);
+  }, [item.endTime]);
 
   const textStatus = (statusSchedule: number) => {
     switch (statusSchedule) {
@@ -61,6 +71,14 @@ export const ScheduleItem = ({
             style={{ ...TextStyle.fontBoldAccept, ...localStyle.textStatus }}
           >
             Confirmado
+          </ThemedText>
+        );
+      case STATUS_SERVICE.NOPRESENT:
+        return (
+          <ThemedText
+            style={{ ...TextStyle.fontBoldCancel, ...localStyle.textStatus }}
+          >
+            No se presento
           </ThemedText>
         );
       case STATUS_SERVICE.FINALIZED:
@@ -166,13 +184,17 @@ export const ScheduleItem = ({
             handleOnPress={() => acceptService(STATUS_SERVICE.FINALIZED)}
           />
           <GeneralButton
-            textBtn="Cancelar"
+            textBtn={isOverTime ? "No se presento" : "Cancelar"}
             styleText={TextStyle.fontBoldWhite}
             styleBtn={{
               ...ButtonGeneralStyle.btnCancelSthetic,
               ...localStyle.btn,
             }}
-            handleOnPress={() => rejectService(STATUS_SERVICE.CANCEL)}
+            handleOnPress={() =>
+              rejectService(
+                isOverTime ? STATUS_SERVICE.NOPRESENT : STATUS_SERVICE.CANCEL
+              )
+            }
           />
         </View>
       )}

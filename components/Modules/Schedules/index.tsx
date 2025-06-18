@@ -9,10 +9,11 @@ import ModalRejectSchedule from "./ModalRejectSchedule";
 import { useState } from "react";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { STATUS_SERVICE, TYPE_STATUS } from "@/constants/Constants";
+import { TYPE_STATUS } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
 import { GridStyle } from "@/constants/StyleComponents";
 import EmptyView from "@/components/Shared/EmptyView";
+import dayjs from "dayjs";
 
 export type scheduleSelectType = {
   id: number;
@@ -106,14 +107,27 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
       ) : (
         <ScrollView>
           {listSchedule.length > 0 ? (
-            listSchedule?.map((item) => (
-              <ScheduleItem
-                key={item.id}
-                item={item}
-                handleAcceptService={handleAcceptSchedule}
-                handleRejectSchedule={handleOpenRejectModal}
-              />
-            ))
+            listSchedule
+              ?.sort((a, b) => {
+                const [hourStart, minuteStart] = a.startTime.split(":");
+                const [hourEnd, minuteEnd] = b.startTime.split(":");
+                const timeA = dayjs()
+                  .set("hour", parseInt(hourStart))
+                  .set("minute", parseInt(minuteStart));
+                const timeB = dayjs()
+                  .set("hour", parseInt(hourEnd))
+                  .set("minute", parseInt(minuteEnd));
+
+                return timeA.valueOf() - timeB.valueOf();
+              })
+              ?.map((item) => (
+                <ScheduleItem
+                  key={item.id}
+                  item={item}
+                  handleAcceptService={handleAcceptSchedule}
+                  handleRejectSchedule={handleOpenRejectModal}
+                />
+              ))
           ) : (
             <View
               style={{ ...GridStyle.rowItemsVerticalCenter, marginTop: 100 }}

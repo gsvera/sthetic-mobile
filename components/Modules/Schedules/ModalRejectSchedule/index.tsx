@@ -38,6 +38,7 @@ export const ModalRejectSchedule = ({
     setShowError(false);
     handleCloseModal();
   };
+
   return (
     <Modal
       visible={open}
@@ -53,7 +54,7 @@ export const ModalRejectSchedule = ({
               <AntDesign name="warning" style={localStyle.icon} />
             </View>
             <ThemedText style={localStyle.text}>
-              Agregue un motivo de rechazo
+              Agregue un comentario
             </ThemedText>
             <TextInput
               style={localStyle.input}
@@ -69,7 +70,7 @@ export const ModalRejectSchedule = ({
               </ThemedText>
             )}
             <GeneralButton
-              textBtn="Rechazar"
+              textBtn="Terminar"
               styleText={TextStyle.fontBoldWhite}
               styleBtn={ButtonGeneralStyle.btnActionSthetic}
               handleOnPress={onHandlerConfirm}

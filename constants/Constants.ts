@@ -62,7 +62,8 @@ export enum STATUS_SERVICE {
     PENDIENT = 0,
     ACCEPT = 1,
     CANCEL = 2,
-    FINALIZED = 3
+    NOPRESENT = 3,
+    FINALIZED = 4
 }
 
 export enum PLATFORM_TYPE {
