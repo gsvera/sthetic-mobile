@@ -11,7 +11,7 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { TYPE_STATUS } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
-import { GridStyle } from "@/constants/StyleComponents";
+import { GridStyle, MarginStyle } from "@/constants/StyleComponents";
 import EmptyView from "@/components/Shared/EmptyView";
 import dayjs from "dayjs";
 
@@ -101,7 +101,7 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
   return (
     <View>
       {isFetchingSchedules ? (
-        <View style={{ marginTop: 100 }}>
+        <View style={MarginStyle.marginT100}>
           <LoadingView />
         </View>
       ) : (
@@ -130,7 +130,10 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
               ))
           ) : (
             <View
-              style={{ ...GridStyle.rowItemsVerticalCenter, marginTop: 100 }}
+              style={{
+                ...GridStyle.rowItemsVerticalCenter,
+                ...MarginStyle.marginT100,
+              }}
             >
               <EmptyView />
             </View>

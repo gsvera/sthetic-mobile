@@ -123,3 +123,11 @@ export type StatusScheduleType = STATUS_SERVICE | undefined;
 
 
 export type weekDays = 'lunes' | 'martes' | 'miércoles' | 'jueves' | 'viernes' | 'sábado' | 'domingo';
+
+export type TrainingType = {
+    id: number;
+    order: number;
+    nameVideo: string;
+    description?: string;
+    linkVideo: string;
+}

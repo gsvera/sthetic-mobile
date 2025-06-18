@@ -3,6 +3,9 @@ import axiosInstance from "..";
 const BASE_URL = "/auth-user-config";
 
 export const apiUserConfig = {
+  getTraining: function () {
+    return axiosInstance.get(`${BASE_URL}/get-training`);
+  },
   getLocationByUser: function (idUser) {
     return axiosInstance.get(
       `${BASE_URL}/get-location-by-provider?id-user=${idUser}`

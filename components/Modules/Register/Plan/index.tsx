@@ -7,6 +7,7 @@ import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { PLATFORM_TYPE } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
+import { MarginStyle } from "@/constants/StyleComponents";
 
 type PlanProps = {
   selectedPlan: (idPlan: PlanCardProps) => void;
@@ -41,7 +42,7 @@ export const Plan = ({ selectedPlan }: PlanProps) => {
       <View style={localStyles.constentScroll}>
         <ScrollView>
           {isLoadingPlans ? (
-            <View style={{ marginTop: 100 }}>
+            <View style={MarginStyle.marginT100}>
               <LoadingView />
             </View>
           ) : (

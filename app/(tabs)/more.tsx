@@ -1,4 +1,10 @@
-import { View, StyleSheet, Pressable, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
 import {
@@ -17,7 +23,11 @@ import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
 import { useNavigation } from "expo-router";
 import { useApiProvider } from "@/provider/InterceptorProvider";
 import { useState } from "react";
-import { COMPONENTS_SETINGS, TYPE_STATUS } from "@/constants/Constants";
+import {
+  COMPONENTS_SETINGS,
+  PLATFORM_TYPE,
+  TYPE_STATUS,
+} from "@/constants/Constants";
 import PersonalInformation, {
   formPersonalInformation,
 } from "@/components/Modules/Settings/PersonaleInformation";
@@ -37,6 +47,7 @@ import CatalogServices from "@/components/Modules/Settings/CatalogServices";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import LoadingView from "@/components/Shared/LoadingView";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
+import Training from "@/components/Modules/Settings/Training";
 
 export default function More() {
   const navigation = useNavigation();
@@ -160,6 +171,10 @@ export default function More() {
         return (
           <MyCompany idUser={dataUser?.id} returnBack={() => handleView("")} />
         );
+      case COMPONENTS_SETINGS.TRAINING:
+        return (
+          <Training idUser={dataUser?.id} returnBack={() => handleView("")} />
+        );
       default:
         return <View></View>;
     }
@@ -202,9 +217,15 @@ export default function More() {
               {isFetchingData ? (
                 <LoadingView />
               ) : (
-                <ThemedText style={localStyle.name}>
-                  {dataUser?.firstName} {dataUser?.lastName}
-                </ThemedText>
+                <View
+                  style={{
+                    width: Platform.OS === PLATFORM_TYPE.IOS ? "92%" : "98%",
+                  }}
+                >
+                  <ThemedText style={localStyle.name}>
+                    {dataUser?.firstName} {dataUser?.lastName}
+                  </ThemedText>
+                </View>
               )}
             </View>
           </View>
@@ -247,7 +268,20 @@ export default function More() {
                 </ThemedText>
               </View>
             </Pressable>
-            <Pressable style={localStyle.itemMenu} onPress={() => {}}>
+            <Pressable
+              style={localStyle.itemMenu}
+              onPress={() => handleView(COMPONENTS_SETINGS.TRAINING)}
+            >
+              <View style={localStyle.itemMenuText}>
+                <Entypo name="folder-video" style={localStyle.iconItem} />
+                <ThemedText darkColor="black">
+                  {"    "}
+                  Tutoriales
+                </ThemedText>
+              </View>
+            </Pressable>
+            {/*  EL APARTADO DE NOTIFICACIONES SE DEJA PARA EL SIGUIENTE RELEASE */}
+            {/* <Pressable style={localStyle.itemMenu} onPress={() => {}}>
               <View style={localStyle.itemMenuText}>
                 <AntDesign name="bells" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
@@ -255,7 +289,7 @@ export default function More() {
                   Notificaciones xxxx
                 </ThemedText>
               </View>
-            </Pressable>
+            </Pressable> */}
           </View>
           <View style={localStyle.contentDivisor}>
             <Pressable
@@ -439,7 +473,7 @@ const localStyle = StyleSheet.create({
   },
   name: {
     ...TextStyle.bold,
-    ...TextStyle.size20,
+    fontSize: Platform.OS === PLATFORM_TYPE.IOS ? 17 : 20,
     color: ThemeColorsSthetic.textOre,
   },
 });

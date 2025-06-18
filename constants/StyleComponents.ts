@@ -144,6 +144,14 @@ export const ButtonGeneralStyle = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
+    btnShortAction: {
+        backgroundColor: ThemeColorsSthetic.accent,
+        paddingVertical: 5,
+        paddingHorizontal:10,
+        alignItems: 'center',
+        borderRadius: 12,
+        elevation: 5,
+    },
     contentBtnSthetic: {
         marginTop: 20, paddingHorizontal: 20 
    }
@@ -289,6 +297,9 @@ export const MarginStyle = StyleSheet.create({
     },
     marginT20: {
         marginTop: 20
+    },
+    marginT100: {
+        marginTop: 100
     }
 });
 

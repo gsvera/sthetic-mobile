@@ -6,6 +6,7 @@ import {
   ButtonGeneralStyle,
   GeneralStyle,
   InputStyle,
+  MarginStyle,
   TextStyle,
 } from "@/constants/StyleComponents";
 import { requestGalleryPermission } from "@/hooks/usePermissionRequest";
@@ -156,7 +157,9 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
         handleReturn={returnBack}
       />
       {isFetchingInfoCompany ? (
-        <LoadingView />
+        <View style={MarginStyle.marginT100}>
+          <LoadingView />
+        </View>
       ) : (
         <ScrollView style={{ height: "85%" }}>
           <View>

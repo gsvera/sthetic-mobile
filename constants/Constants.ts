@@ -20,7 +20,8 @@ export enum COMPONENTS_SETINGS {
     SERVICES_CATALOG = 'servicesCatalog',
     PORFTOLIO_SERVICES = 'portfolioServices',
     MY_SUBSCRIPTION = 'mySupscription',
-    MY_COMPANY = 'myCompany'
+    MY_COMPANY = 'myCompany',
+    TRAINING = 'training'
 }
 
 export enum TYPE_STATUS {
