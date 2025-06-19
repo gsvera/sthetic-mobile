@@ -1,9 +1,15 @@
-import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { AntDesign } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import { ThemedText } from "../../ThemedText";
 
-export default function SuccessNotification() {
+type successNotificationViewProps = {
+  message: string;
+};
+
+export default function SuccessNotificationView({
+  message,
+}: successNotificationViewProps) {
   return (
     <View style={localStyles.backgroundContent}>
       <View style={localStyles.body}>
@@ -13,7 +19,7 @@ export default function SuccessNotification() {
           color={ThemeColorsSthetic.textLight}
         />
         <ThemedText type="subtitle" style={localStyles.textSuccess}>
-          Su cuenta ha sido creada con exito
+          {message}
         </ThemedText>
       </View>
     </View>

@@ -35,4 +35,10 @@ export const apiUser = {
   deleteAccount: function (idUser) {
     return axiosInstance.delete(`${AUTH_BASE_URL}/delete-account/${idUser}`);
   },
+  sendVerificationCode: function (data) {
+    return axiosInstance.post(`${BASE_URL}/send-verification-code`, data);
+  },
+  saveResetPassword: function (data) {
+    return axiosInstance.post(`${BASE_URL}/save-reset-password`, data);
+  },
 };

@@ -14,7 +14,7 @@ import { PlanCardProps } from "@/components/Modules/Register/Plan/PlanCard";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiUser } from "@/api/User";
 import PoliticsAndConditions from "@/components/Modules/Register/PoliticsAndConditions";
-import SuccessNotification from "@/components/Shared/Notifications/SuccessNotification";
+import SuccessNotificationView from "@/components/Shared/Notifications/SuccessNotification";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
 import { useApiProvider } from "@/provider/InterceptorProvider";
@@ -24,6 +24,7 @@ import FormPay from "@/components/Modules/Register/FormPay";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import { LadaType } from "@/constants/GeneralTypes";
+import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
 
 enum STEP_CREATION_PROFILE {
   FIELD_PROFILE = 1,
@@ -136,7 +137,7 @@ export default function newAccount() {
       }}
     >
       {showMessageSucces ? (
-        <SuccessNotification />
+        <SuccessNotificationView message="Su cuenta ha sido creada con exito" />
       ) : (
         <View
           style={{
@@ -144,20 +145,8 @@ export default function newAccount() {
             height: "100%",
           }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-end",
-              paddingRight: 20,
-              marginTop: 20,
-            }}
-          >
-            <AntDesign
-              onPress={() => handleCancel()}
-              name="close"
-              size={24}
-              color={ThemeColorsSthetic.accentReverse}
-            />
+          <View>
+            <ButtonCloseModal handleOnPress={handleCancel} />
           </View>
           <ThemedText style={localStyles.title}>Crear cuenta nueva</ThemedText>
           {stepView === STEP_CREATION_PROFILE.FIELD_PROFILE && (

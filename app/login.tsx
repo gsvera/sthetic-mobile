@@ -33,6 +33,7 @@ import {
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import LoadingView from "@/components/Shared/LoadingView";
+import { imageBg } from "@/constants/Constants";
 
 const schema = yup.object({
   username: yup.string().required("Ingrese un usuario valid"),
@@ -102,8 +103,6 @@ export default function Login() {
       });
     }
   }, [token]);
-
-  const imageBg = require("@/assets/images/background.webp");
 
   const onSubmit = (data: loginData) => {
     setToken(null);
@@ -206,9 +205,13 @@ export default function Login() {
                 />
                 {loadingSession && <LoadingView />}
                 <View style={MarginStyle.marginT20}>
-                  <ThemedText style={styles.textInteraction} onPress={() => {}}>
-                    ¿Has olvidado la contraseña?
-                  </ThemedText>
+                  <Link href="/resetpassword" asChild>
+                    <Pressable>
+                      <ThemedText style={styles.textInteraction}>
+                        ¿Has olvidado la contraseña?
+                      </ThemedText>
+                    </Pressable>
+                  </Link>
                   <Link href="/newaccount" asChild>
                     <Pressable>
                       <ThemedText style={styles.textInteraction}>
