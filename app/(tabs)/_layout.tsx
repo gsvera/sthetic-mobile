@@ -20,9 +20,12 @@ import { TYPE_STATUS } from "@/constants/Constants";
 import { useSessionProvider } from "@/provider/SessionProvider";
 import { useWebSocketProvider } from "@/provider/WebSocketProvider";
 import { SOCKET_CHANNELS_TOPICS } from "@/constants/socket-channels";
-import { Audio } from "expo-av";
+import { useAudioPlayer } from "expo-audio";
 
 export default function TabLayout() {
+  const sound = useAudioPlayer(
+    require("@/assets/sounds/short-success-sound.mp3")
+  );
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -101,11 +104,9 @@ export default function TabLayout() {
     }
   }, [token, storeSessionProvider]);
 
-  const handleNotificationWs = async (data: any) => {
-    const { sound } = await Audio.Sound.createAsync(
-      require("@/assets/sounds/short-success-sound.mp3")
-    );
-    await sound.playAsync();
+  const handleNotificationWs = (data: any) => {
+    sound.seekTo(0);
+    sound.play();
     handleNotification({
       type: TYPE_STATUS.UPDATE,
       message: data.message,
