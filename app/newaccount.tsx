@@ -25,6 +25,7 @@ import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import { LadaType } from "@/constants/GeneralTypes";
 import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
+import dayjs from "dayjs";
 
 enum STEP_CREATION_PROFILE {
   FIELD_PROFILE = 1,
@@ -106,6 +107,7 @@ export default function newAccount() {
         password: parsePasswordEncrypt(personalInformation?.password as string),
         planSelect: planSelected?.id,
         idProfile: 2,
+        createdAt: dayjs().toISOString(),
         paymentPlanDTO: {
           planId: planSelected?.id,
           amountPaid: totalToPay,

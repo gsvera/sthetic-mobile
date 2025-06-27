@@ -85,7 +85,6 @@ export const FormRegister = ({
   ladaSelected,
   handleSelectLada,
 }: PropsFormRegister) => {
-  console.log("🚀 ~ personalInformation:", personalInformation);
   const [hiddenPass, setHiddenPass] = useState(true);
   const [hiddenConfirmPass, setHiddenConfirmPass] = useState(true);
   const [openLadaModal, setOpenLadaModal] = useState(false);
@@ -257,7 +256,6 @@ export const FormRegister = ({
                 keyboardType="email-address"
                 onChangeText={(e) => onChange(e.toLowerCase())}
                 onBlur={onBlur}
-                value={value}
               />
             )}
           />

@@ -16,6 +16,7 @@ import {
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -94,8 +95,7 @@ export const PersonalInformation = ({
   });
 
   const { mutate: updatePersonalInformation } = useMutation({
-    mutationFn: (data: formPersonalInformation) =>
-      apiUser.updatePersonalInformation(data),
+    mutationFn: (data: any) => apiUser.updatePersonalInformation(data),
     onSuccess: (data: ResponseApi) => handleSuccessUpdate(data.data),
     onError: ErrorAlertMessage,
   });
@@ -142,7 +142,7 @@ export const PersonalInformation = ({
     data: formPersonalInformation
   ) => {
     try {
-      updatePersonalInformation(data);
+      updatePersonalInformation({ ...data, updatedAt: dayjs().toISOString() });
     } catch (err) {
       ErrorAlertMessage({});
     }
