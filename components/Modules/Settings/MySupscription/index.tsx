@@ -74,9 +74,23 @@ export const MySupscription = ({
             <ThemedText style={localStyle.textLabel}>Estatus:</ThemedText>
           </View>
           <View>
-            <ThemedText style={localStyle.textValue}>
-              {planData?.isActive ? "Activo" : "Vencido"}
-            </ThemedText>
+            {planData?.isActive ? (
+              <View style={localStyle.badgeActive}>
+                <ThemedText
+                  style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
+                >
+                  Activo
+                </ThemedText>
+              </View>
+            ) : (
+              <View style={localStyle.badgeInactive}>
+                <ThemedText
+                  style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
+                >
+                  Vencido
+                </ThemedText>
+              </View>
+            )}
           </View>
         </View>
         <View style={localStyle.rowData}>
@@ -143,6 +157,20 @@ const localStyle = StyleSheet.create({
   btnPay: {
     ...ButtonGeneralStyle.btnSaveSthetic,
     width: "80%",
+  },
+  badgeActive: {
+    backgroundColor: ThemeColorsSthetic.accent,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    textAlign: "center",
+  },
+  badgeInactive: {
+    backgroundColor: ThemeColorsSthetic.accentReverse,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    textAlign: "center",
   },
 });
 
