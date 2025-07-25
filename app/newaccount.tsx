@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Plan from "@/components/Modules/Register/Plan";
 import { ThemedText } from "@/components/ThemedText";
 import { Container, ThemeColorsSthetic } from "@/constants/Colors";
@@ -6,7 +6,6 @@ import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { AntDesign } from "@expo/vector-icons";
 import FormRegister, {
   FormInputs,
 } from "@/components/Modules/Register/FormRegister";
@@ -23,9 +22,11 @@ import ArrowBack from "@/components/Modules/Register/ArrowBack";
 import FormPay from "@/components/Modules/Register/FormPay";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
-import { LadaType } from "@/constants/GeneralTypes";
+import { LadaType, StripeDataCustomerType } from "@/constants/GeneralTypes";
 import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
 import dayjs from "dayjs";
+import StripePayment from "@/components/Shared/StripePayment";
+import { PAYMENT_TYPE } from "@/constants/Constants";
 
 enum STEP_CREATION_PROFILE {
   FIELD_PROFILE = 1,
@@ -48,6 +49,7 @@ export default function newAccount() {
   const [personalInformation, setPersonalInformation] =
     useState<FormInputs | null>(null);
   const [ladaSelected, setLadaSelected] = useState<LadaType>();
+  const [openModalPayment, setOpenModalPayment] = useState(false);
 
   useEffect(() => navigation.setOptions({ headerShown: false }), [navigation]);
 
@@ -72,6 +74,7 @@ export default function newAccount() {
       return;
     }
     setShowMessageSuccess(true);
+    setOpenModalPayment(false);
     setTimeout(() => {
       setStoreSession({ key: KEY_STORE.userToken, value: data.items.token });
       setStoreSession({ key: KEY_STORE.idUser, value: data.items.idUser });
@@ -99,9 +102,19 @@ export default function newAccount() {
     });
   };
 
+  const objPay = useMemo(
+    () => ({
+      nameProduct: planSelected?.name ?? "",
+      amount: totalToPay,
+      nameCustomer:
+        personalInformation?.firstName + " " + personalInformation?.lastName,
+      emailCustomer: personalInformation?.email ?? "",
+    }),
+    [planSelected, totalToPay, personalInformation]
+  );
+
   function payPlan() {
     if (totalToPay === 0) {
-      // EL ID PROFILE 2 ES PARA LOS QUE PRESENTAN SERVICIOS
       createUser({
         ...personalInformation,
         password: parsePasswordEncrypt(personalInformation?.password as string),
@@ -111,14 +124,32 @@ export default function newAccount() {
         paymentPlanDTO: {
           planId: planSelected?.id,
           amountPaid: totalToPay,
-          paymentMethod: "free",
+          paymentMethod: PAYMENT_TYPE.FREE,
           codeCoupon: coupon,
         },
       });
     } else {
-      // aqui va la logica para pagar lo mas seguro PAYPAL o MERCADO PAGO hay que validar opciones
+      setOpenModalPayment(true);
     }
   }
+
+  const handleNewUserWithPay = (data: StripeDataCustomerType) => {
+    createUser({
+      ...personalInformation,
+      password: parsePasswordEncrypt(personalInformation?.password as string),
+      planSelect: planSelected?.id,
+      idProfile: 2,
+      createdAt: dayjs().toISOString(),
+      paymentPlanDTO: {
+        ...data,
+        planId: planSelected?.id,
+        amountPaid: totalToPay,
+        paymentMethod: PAYMENT_TYPE.STRIPE,
+        paymentDate: dayjs().toISOString(),
+        codeCoupon: coupon,
+      },
+    });
+  };
 
   const handleCancel = () => {
     setStepView(STEP_CREATION_PROFILE.FIELD_PROFILE);
@@ -197,6 +228,14 @@ export default function newAccount() {
             </>
           )}
         </View>
+      )}
+      {openModalPayment && (
+        <StripePayment
+          open={openModalPayment}
+          handleCancel={() => setOpenModalPayment(false)}
+          objPay={objPay}
+          handleSuccesPayment={handleNewUserWithPay}
+        />
       )}
     </View>
   );

@@ -300,7 +300,13 @@ export const MarginStyle = StyleSheet.create({
     },
     marginT100: {
         marginTop: 100
-    }
+    },
+    marginB10: {
+        marginBottom: 10
+    },
+    marginY10: {
+        marginBottom: 10
+    },
 });
 
 export const ModalStyle = StyleSheet.create({

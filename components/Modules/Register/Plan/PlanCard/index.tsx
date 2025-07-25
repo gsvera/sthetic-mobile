@@ -10,7 +10,7 @@ type BenefitsPlan = {
 };
 
 export type PlanCardProps = {
-  id: string;
+  id: number;
   name: string;
   price: number;
   planDetails: BenefitsPlan[];

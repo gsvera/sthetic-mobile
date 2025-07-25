@@ -165,6 +165,8 @@ export default function More() {
           <MySupscription
             idUser={dataUser?.id}
             returnBack={() => handleView("")}
+            nameCustomer={`${dataUser?.firstName} ${dataUser?.lastName}`}
+            emailCustomer={dataUser?.email}
           />
         );
       case COMPONENTS_SETINGS.MY_COMPANY:

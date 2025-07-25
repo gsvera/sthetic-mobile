@@ -74,3 +74,13 @@ export enum PLATFORM_TYPE {
     IOS = 'ios',
     ANDROID = 'android'
 }
+
+export enum STATUS_ACCOUNT_PAY  {
+        OVERDUE_ACCOUNT = 'Cuenta vencida',
+        CURRENT_ACCOUNT = 'Cuenta al corriente'
+}
+
+export enum PAYMENT_TYPE {
+    FREE = 'Free coupon',
+    STRIPE = 'Stripe'
+}

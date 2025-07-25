@@ -41,4 +41,21 @@ export const apiUser = {
   saveResetPassword: function (data) {
     return axiosInstance.post(`${BASE_URL}/save-reset-password`, data);
   },
+  makeOrderToPay: function (data) {
+    return axiosInstance.post(`${BASE_URL}/make-order-paypal`, data);
+  },
+  validOrderStatusPay: function (orderId) {
+    return axiosInstance.get(
+      `${BASE_URL}/valid-order-status-paypal/${orderId}`
+    );
+  },
+  getClientIdStripe: function () {
+    return axiosInstance.get(`${BASE_URL}/get-client-id-stripe`);
+  },
+  makePaymentStrip: function (data) {
+    return axiosInstance.post(`${BASE_URL}/make-order-stripe`, data);
+  },
+  savePayStripe: function (data) {
+    return axiosInstance.post(`${AUTH_BASE_URL}/save-pay-stripe`, data);
+  },
 };

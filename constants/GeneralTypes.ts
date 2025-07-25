@@ -131,3 +131,16 @@ export type TrainingType = {
     description?: string;
     linkVideo: string;
 }
+
+export type ObjPayType = {
+  nameProduct: string;
+  amount: number;
+  nameCustomer: string;
+  emailCustomer: string;
+};
+
+export type StripeDataCustomerType = {
+    customerStripe: string,
+    ephemeralKeyStripe: string,
+    paymentIntentStripe: string,
+}

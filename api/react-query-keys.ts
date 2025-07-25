@@ -46,5 +46,9 @@ export const REACT_QUERY_KEYS = {
         calendarException: {
             getByUser: (key:string) => `get-calendar-exception-by-user-${key}`
         }
+    },
+    payment: {
+        validStatusPay: (key: string) => `get-status-pay-${key}`,
+        getClientIdStripe: (key:string) => `get-client-id-strip-${key}` 
     }
 }

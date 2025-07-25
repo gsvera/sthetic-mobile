@@ -7,22 +7,44 @@ import {
   GridStyle,
   TextStyle,
 } from "@/constants/StyleComponents";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import apiUserConfig from "@/api/UserConfig";
-import { UserPlan } from "@/constants/GeneralTypes";
+import { StripeDataCustomerType, UserPlan } from "@/constants/GeneralTypes";
 import {
   convertCurrency,
   convertDateToGeneralFormat,
 } from "@/utils/GeneralUtils";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
-import { ResponseApi } from "@/api/responseApi";
+import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import { useMemo, useState } from "react";
+import StripePayment from "@/components/Shared/StripePayment";
+import {
+  PAYMENT_TYPE,
+  STATUS_ACCOUNT_PAY,
+  TYPE_STATUS,
+} from "@/constants/Constants";
+import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
+import { useNotificationProvider } from "@/provider/NotificationProvider";
+import { apiUser } from "@/api/User";
+import dayjs from "dayjs";
+
+type mySupscriptionProps = functionServicesType & {
+  nameCustomer: string;
+  emailCustomer: string;
+};
 
 export const MySupscription = ({
   idUser,
+  nameCustomer,
+  emailCustomer,
   returnBack,
-}: functionServicesType) => {
+}: mySupscriptionProps) => {
+  const queryClient = useQueryClient();
+  const { handleNotification } = useNotificationProvider();
+  const [openModalPayment, setOpenModalPayment] = useState(false);
+
   const { data: planData } = useQuery({
     queryKey: [REACT_QUERY_KEYS.plan.getByUser(idUser as string)],
     queryFn: () => apiUserConfig.getPlanByUser(idUser),
@@ -30,6 +52,50 @@ export const MySupscription = ({
       select: (data: ResponseApi) => data.data.items as UserPlan,
     },
   });
+
+  const { mutate: savePaySstripe } = useMutation({
+    mutationFn: (data: any) => apiUser.savePayStripe(data),
+    onSuccess: (data: ResponseApi) => handleSuccessSavePayStripe(data.data),
+    onError: ErrorAlertMessage,
+  });
+
+  const handleSuccessSavePayStripe = (data: ObjectResponse) => {
+    if (data.error)
+      return handleNotification({
+        type: TYPE_STATUS.ERROR,
+        message: data.message,
+      });
+    handleNotification({ type: TYPE_STATUS.SUCCESS, message: data.message });
+    setOpenModalPayment(false);
+  };
+
+  const objPay = useMemo(
+    () => ({
+      nameProduct: planData?.catalogPlanDTO.name ?? "",
+      amount: planData?.catalogPlanDTO.price ?? 0,
+      nameCustomer,
+      emailCustomer,
+    }),
+    [planData, idUser]
+  );
+
+  const handleClosePay = () => {
+    setOpenModalPayment(false);
+    queryClient.invalidateQueries({
+      queryKey: [REACT_QUERY_KEYS.plan.getByUser(idUser as string)],
+    });
+  };
+
+  const handleSuccessPay = (data: StripeDataCustomerType) => {
+    savePaySstripe({
+      ...data,
+      idUser: idUser,
+      planId: planData?.catalogPlanDTO.id,
+      amountPaid: objPay.amount,
+      paymentDate: dayjs().toISOString(),
+      paymentMethod: PAYMENT_TYPE.STRIPE,
+    });
+  };
 
   return (
     <View>
@@ -79,7 +145,7 @@ export const MySupscription = ({
                 <ThemedText
                   style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
                 >
-                  Activo
+                  {STATUS_ACCOUNT_PAY.CURRENT_ACCOUNT}
                 </ThemedText>
               </View>
             ) : (
@@ -87,7 +153,7 @@ export const MySupscription = ({
                 <ThemedText
                   style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
                 >
-                  Vencido
+                  {STATUS_ACCOUNT_PAY.OVERDUE_ACCOUNT}
                 </ThemedText>
               </View>
             )}
@@ -105,13 +171,21 @@ export const MySupscription = ({
         </View>
         <View style={localStyle.contentBtn}>
           <GeneralButton
-            textBtn="Pagar"
+            textBtn="Pagar ahora"
             styleText={TextStyle.fontBoldWhite}
             styleBtn={localStyle.btnPay}
-            handleOnPress={() => {}}
+            handleOnPress={() => setOpenModalPayment(true)}
           />
         </View>
       </View>
+      {openModalPayment && (
+        <StripePayment
+          open={openModalPayment}
+          handleCancel={handleClosePay}
+          objPay={objPay}
+          handleSuccesPayment={handleSuccessPay}
+        />
+      )}
     </View>
   );
 };
