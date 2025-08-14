@@ -17,7 +17,7 @@ export default function Calendar() {
     <View>
       <View style={localStyle.header}>
         <Image
-          source={require("@/assets/images/me-text-worker-logo.png")}
+          source={require("@/assets/images/meraesthetic-work-white-simple-logo.png")}
           style={localStyle.logo}
         />
       </View>
@@ -38,7 +38,7 @@ const localStyle = StyleSheet.create({
     backgroundColor: ThemeColorsSthetic.backgroundStrong,
   },
   logo: {
-    width: 150,
-    height: 50,
+    width: 130,
+    height: 60,
   },
 });

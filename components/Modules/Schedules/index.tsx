@@ -106,7 +106,7 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
         </View>
       ) : (
         <ScrollView>
-          {listSchedule.length > 0 ? (
+          {listSchedule?.length > 0 ? (
             listSchedule
               ?.sort((a, b) => {
                 const [hourStart, minuteStart] = a.startTime.split(":");

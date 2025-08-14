@@ -4,7 +4,7 @@
     "slug": "sthetic-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/meredith-logo-worker.png",
+    "icon": "./assets/images/meraesthetic-logo-work.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -22,7 +22,7 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/meraesthetic-work-logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.abasotech.meredithcarework",
@@ -35,20 +35,20 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/meraesthetic-work-logo.png"
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/meredith-logo-worker.png"
+          "icon": "./assets/images/meraesthetic-work-logo.png"
         }
       ],
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/meredith-logo-worker.png",
+          "image": "./assets/images/meraesthetic-work-logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"

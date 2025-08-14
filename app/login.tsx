@@ -135,7 +135,7 @@ export default function Login() {
             <View>
               <View style={styles.imgContainer}>
                 <Image
-                  source={require("@/assets/images/meredith-logo-worker.png")}
+                  source={require("@/assets/images/meraesthetic-work-logo.png")}
                   style={styles.logo}
                 />
               </View>
@@ -239,8 +239,8 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   logo: {
-    height: 200,
-    width: 230,
+    height: 180,
+    width: 180,
     marginTop: 70,
   },
   title: {
