@@ -126,7 +126,7 @@ export type weekDays = 'lunes' | 'martes' | 'miércoles' | 'jueves' | 'viernes' 
 
 export type TrainingType = {
     id: number;
-    order: number;
+    orderShow: number;
     nameVideo: string;
     description?: string;
     linkVideo: string;

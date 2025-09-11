@@ -37,7 +37,7 @@ export const Training = ({ idUser, returnBack }: functionServicesType) => {
         ) : (
           <ScrollView>
             {listTraining
-              ?.sort((a, b) => a.order - b.order)
+              ?.sort((a, b) => a.orderShow - b.orderShow)
               .map((item) => (
                 <ItemTraining key={item.id} item={item} />
               ))}

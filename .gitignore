@@ -38,4 +38,4 @@ yarn-error.*
 app-example
 
 meredith-care-firebase-adminsdk-fbsvc-05cfb22bd6.json
-google-services.json
+# google-services.json

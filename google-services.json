@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "509989139677",
+    "project_id": "meredith-care",
+    "storage_bucket": "meredith-care.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509989139677:android:e83f4902419aee71069734",
+        "android_client_info": {
+          "package_name": "com.abasotech.meredithcarework"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDf0PY0V1rTBRTMzUhwmZUYNf9eiMelOc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

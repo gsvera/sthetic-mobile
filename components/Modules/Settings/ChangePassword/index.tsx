@@ -74,7 +74,11 @@ export const ChangePassword = ({ returnBack }: changePasswordProps) => {
         </ThemedText>
         <View style={{ flexDirection: "row" }}>
           <TextInput
-            style={{ ...GeneralStyle.simpleInput, width: "100%" }}
+            style={{
+              ...GeneralStyle.simpleInput,
+              width: "100%",
+              color: ThemeColorsSthetic.text,
+            }}
             secureTextEntry={hiddenPass}
             onChangeText={(evt) => handleOnChangePassword(evt)}
           />
