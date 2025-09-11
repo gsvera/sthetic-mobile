@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Meredith Aesthetic Worker",
+    "name": "MerAesthetic Worker",
     "slug": "sthetic-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,7 +13,7 @@
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Esta aplicación necesita acceder a tu ubicación para mostrar tu posición en el mapa."
       },
-      "bundleIdentifier": "com.abasotech.meredithaestheticwork",
+      "bundleIdentifier": "com.abasotech.meredithcarework",
       "config": {
         "usesNonExemptEncryption": false,
         "googleMapsApiKey": "AIzaSyBEPqhm55f6JnlZv_lIxiikGiUiuU7YJ4w"
@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/images/meraesthetic-work-logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.abasotech.meredithaestheticwork",
+      "package": "com.abasotech.meredithcarework",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBEPqhm55f6JnlZv_lIxiikGiUiuU7YJ4w"
