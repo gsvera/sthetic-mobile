@@ -120,7 +120,7 @@ export default function PoliticsAndConditions({
           <ThemedText style={localStyles.text}>
             Tienes derecho a acceder, rectificar, cancelar u oponerte al uso de
             tus datos personales (derechos ARCO). Para ejercerlos, envía una
-            solicitud a: mecare@gmail.com
+            solicitud a: meredith.abasotech@gmail.com
           </ThemedText>
         </View>
         <View>
@@ -169,7 +169,7 @@ export default function PoliticsAndConditions({
           </ThemedText>
           <ThemedText style={localStyles.text}>
             Los pagos son procesados mediante plataformas externas como{" "}
-            <ThemedText style={TextStyle.fontBoldDark}>PayPal</ThemedText>.{" "}
+            <ThemedText style={TextStyle.fontBoldDark}>Stripe</ThemedText>.{" "}
             <ThemedText style={TextStyle.fontBoldDark}>MeCare</ThemedText> no
             almacena información de tarjetas de crédito, cuentas bancarias ni
             otros datos financieros sensibles.
@@ -276,7 +276,7 @@ export default function PoliticsAndConditions({
             Los usuarios tipo proveedor deberán pagar una suscripción
             mensualpara acceder a funciones avanzadas. Los pagos se realizan
             mediante servicios de terceros como{" "}
-            <ThemedText style={TextStyle.fontBoldDark}>PayPal</ThemedText>.
+            <ThemedText style={TextStyle.fontBoldDark}>Stripe</ThemedText>.
           </ThemedText>
           <ThemedText style={localStyles.text}>
             MeCare{" "}

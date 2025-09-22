@@ -115,7 +115,7 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
               >
                 <AntDesign
                   style={localStyles.icon}
-                  name="closecircleo"
+                  name="close-circle"
                   size={24}
                   color="black"
                 />
@@ -126,7 +126,7 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
               >
                 <AntDesign
                   style={localStyles.icon}
-                  name="checkcircleo"
+                  name="check-circle"
                   size={24}
                   color="black"
                 />

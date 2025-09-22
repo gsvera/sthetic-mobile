@@ -13,7 +13,7 @@ export const ArrowBack = ({ view, handleReturn }: arrowBackProps) => {
       style={{ position: "fixed", left: 20, marginBottom: -25 }}
       onPress={() => handleReturn(view)}
     >
-      <AntDesign name="arrowleft" size={24} color={GlobalColors.blackColor} />
+      <AntDesign name="arrow-left" size={24} color={GlobalColors.blackColor} />
     </TouchableOpacity>
   );
 };
