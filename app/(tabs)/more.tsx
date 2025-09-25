@@ -201,12 +201,12 @@ export default function More() {
             <TouchableOpacity onPress={activeCamera}>
               <Image
                 source={
-                  !dataUser?.profilePictureB64
+                  !dataUser?.profilePicture
                     ? require("@/assets/images/profile-default.png")
-                    : { uri: dataUser?.profilePictureB64 }
+                    : { uri: dataUser?.profilePicture }
                 }
                 style={
-                  !dataUser?.profilePictureB64
+                  !dataUser?.profilePicture
                     ? localStyle.avatarMeredith
                     : localStyle.avatar
                 }

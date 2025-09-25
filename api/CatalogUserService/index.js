@@ -4,10 +4,18 @@ const BASE_URL = "/auth/catalog-type-user-service";
 
 export const apiCatalogUserService = {
   saveCatalogService: function (data) {
-    return axiosInstance.post(`${BASE_URL}/save-catalog-user-service`, data);
+    return axiosInstance.post(`${BASE_URL}/save-catalog-user-service`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
   updateCatalogService: function (data) {
-    return axiosInstance.put(`${BASE_URL}/update-catalog-user-service`, data);
+    return axiosInstance.put(`${BASE_URL}/update-catalog-user-service`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
   getCatalogServiceByUser: function (id) {
     return axiosInstance.get(`${BASE_URL}/service-get-by-user/${id}`);

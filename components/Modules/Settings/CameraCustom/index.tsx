@@ -1,6 +1,11 @@
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
 import { ThemedText } from "@/components/ThemedText";
-import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
+import {
+  CameraCapturedPicture,
+  CameraType,
+  CameraView,
+  useCameraPermissions,
+} from "expo-camera";
 import { useRef, useState } from "react";
 import {
   Button,
@@ -33,10 +38,12 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView | null>(null);
-  const [imageBase64, setImageBase64] = useState<string | undefined>("");
+  const [imagePhoto, setImagePhoto] = useState<
+    CameraCapturedPicture | undefined
+  >(undefined);
 
-  const { mutate: savePicture } = useMutation({
-    mutationFn: (data: any) => apiUserConfig.saveProfilePicture(data),
+  const { mutate: savePicture } = useMutation<ResponseApi, Error, FormData>({
+    mutationFn: (data: FormData) => apiUserConfig.saveProfilePicture(data),
     onSuccess: (data: ResponseApi) => handleSuccessSavePicture(data.data),
     onError: ErrorAlertMessage,
   });
@@ -79,28 +86,39 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
   const takePicture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync({
-        base64: true,
+        quality: 0.7,
+        base64: false,
       });
-      setImageBase64(`data:image/png;base64,${photo?.base64}`);
+      setImagePhoto(photo);
     }
   };
 
   const backToTakePicture = () => {
-    setImageBase64("");
+    setImagePhoto(undefined);
   };
 
   const handleSavePicture = () => {
-    savePicture({ id: idUser, profilePictureB64: imageBase64 });
+    if (imagePhoto) {
+      const formData = new FormData();
+      formData.append("id-user", idUser);
+      formData.append("file", {
+        uri: imagePhoto.uri,
+        type: "image/png",
+        name: `profile_${idUser}.jpg`,
+      } as any);
+
+      savePicture(formData);
+    }
   };
 
   return (
     <View>
       <SubHeaderReturn subtitle="Foto de perfil" handleReturn={returnBack} />
       <View style={localStyles.container}>
-        {imageBase64 ? (
+        {imagePhoto ? (
           <View style={localStyles.containerImage}>
             <Image
-              source={{ uri: imageBase64 }}
+              source={{ uri: imagePhoto.uri }}
               style={localStyles.imgCaptured}
             />
             <View

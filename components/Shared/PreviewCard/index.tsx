@@ -9,7 +9,7 @@ import GeneralButton from "../GeneralButton";
 
 type detailPrevieCardType = {
   id: number;
-  fileBase64: string;
+  fileUrl: string;
 };
 
 export type previewCardProps = {
@@ -42,7 +42,7 @@ export const PreviewCard = (element: previewCardProps) => {
       {/* {element.catalogUserServiceDetailDTO.fileBase64.includes("image") ? ( */}
       <ImageWithOptions
         id={element.id}
-        uri={element.catalogUserServiceDetailDTO.fileBase64}
+        uri={element.catalogUserServiceDetailDTO.fileUrl}
         deleteAction={handleDeleteProject}
         iconDelete="trash"
         styleImg={localStyle.previewCardImage}

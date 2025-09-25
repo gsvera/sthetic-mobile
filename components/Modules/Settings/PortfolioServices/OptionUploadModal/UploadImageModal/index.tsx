@@ -42,6 +42,8 @@ const schema = yup.object().shape({
 // Se agrega la key solo como identificador para el array
 type customImagePickerAsset = ImagePicker.ImagePickerAsset & {
   key: number;
+  mimeType: string;
+  id?: number;
 };
 
 export const UploadImageModal = ({
@@ -90,9 +92,17 @@ export const UploadImageModal = ({
         entityToEdit.detail?.map((item: any, index: number) => ({
           ...item,
           key: index,
-          uri: item.fileBase64,
+          uri: item.fileUrl,
+          name: item.fileName,
         }))
       );
+    } else {
+      setValue("nameService", "");
+      setValue("minPrice", 0);
+      setValue("maxPrice", 0);
+      setMinPriceTextAux("");
+      setMaxPriceTextAux("");
+      setListImage([]);
     }
   }, [entityToEdit]);
 
@@ -136,8 +146,8 @@ export const UploadImageModal = ({
       // aspect: [4, 3],
       allowsMultipleSelection: true,
       selectionLimit: 5,
-      quality: 0.5,
-      base64: true,
+      quality: 0.7,
+      base64: false,
     });
 
     if (!result?.canceled) {
@@ -145,7 +155,9 @@ export const UploadImageModal = ({
         ...listImage,
         ...result.assets.map((item) => ({
           ...item,
-          fileBase64: `data:image/png;base64,${item.base64}`,
+          uri: item.uri,
+          mimeType: item.mimeType || "image/png",
+          name: item.fileName,
         })),
       ];
 
@@ -171,20 +183,38 @@ export const UploadImageModal = ({
   };
 
   const handleSaveCatalogUserService = async (data: formProjectToImgtype) => {
+    const formData = new FormData();
+    const localFiles = listImage.filter((f) => f.uri.startsWith("file://"));
+    const existingFile = listImage.filter((f) => f.uri.startsWith("http"));
     try {
+      localFiles.forEach((image) => {
+        formData.append("files", {
+          uri: image.uri,
+          type: image.mimeType,
+          name: image.fileName,
+        } as any);
+      });
+
       if (idEntity) {
-        handleUpdate?.({
-          ...data,
-          id: idEntity,
-          idUser,
-          items: listImage,
-        });
+        formData.append(
+          "catalogUserServiceDTOJson",
+          JSON.stringify({
+            ...data,
+            idUser,
+            id: idEntity,
+            existingFiles: existingFile.map((f) => f?.id),
+          })
+        );
+        handleUpdate?.(formData);
       } else {
-        handleSave({
-          ...data,
-          idUser,
-          items: listImage,
-        });
+        formData.append(
+          "catalogUserServiceDTOJson",
+          JSON.stringify({
+            ...data,
+            idUser,
+          })
+        );
+        handleSave(formData);
       }
 
       handleClose();

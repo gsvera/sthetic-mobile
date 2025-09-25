@@ -67,7 +67,9 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
   } = useForm<formCompanyInfo>({
     resolver: yupResolver(schema),
   });
-  const [companyPicture, setCompanyPicture] = useState("");
+  const [companyPicture, setCompanyPicture] = useState<string | undefined>(
+    undefined
+  );
 
   const { data: dataInfoCompany, isFetching: isFetchingInfoCompany } = useQuery(
     {
@@ -107,7 +109,8 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
         instagram: dataInfoCompany?.instagram,
         webPage: dataInfoCompany?.webPage,
       });
-      setCompanyPicture(dataInfoCompany.companyPicture || "");
+      if (dataInfoCompany.companyPictureUrl)
+        setCompanyPicture(dataInfoCompany.companyPictureUrl);
     }
   }, [isFetchingInfoCompany]);
 
@@ -128,11 +131,10 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
       allowsEditing: true,
       selectionLimit: 1,
       quality: 0.5,
-      base64: true,
     });
 
     if (!result?.canceled) {
-      setCompanyPicture(`data:image/png;base64,${result.assets[0].base64}`);
+      setCompanyPicture(result?.assets?.[0].uri);
     } else {
       console.info("El usuario canceló la selección.");
     }
@@ -140,11 +142,20 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
 
   const handleSaveInfoCompany = async () => {
     try {
-      updateInfoCompany({
-        ...getValues(),
-        idUser,
-        companyPicture,
-      });
+      const formData = new FormData();
+      formData.append("file", {
+        uri: companyPicture,
+        type: "image/png",
+        name: `company-picture_${idUser}.jpg`,
+      } as any);
+      formData.append(
+        "infoCompanyDTOJson",
+        JSON.stringify({
+          ...getValues(),
+          idUser,
+        })
+      );
+      updateInfoCompany(formData);
     } catch (Exception) {
       ErrorAlertMessage({});
     }

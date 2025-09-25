@@ -4,7 +4,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "@/components/ThemedText";
 import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
 import { functionServicesType } from "../types";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { OptionUploadModal } from "./OptionUploadModal";
 import { UploadImageModal } from "./OptionUploadModal/UploadImageModal";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -53,25 +53,32 @@ export const PortfolioServices = ({
     },
   });
 
-  const { mutate: saveCatalogService } = useMutation({
+  const { mutate: saveCatalogService, isPending: isPendingSave } = useMutation({
     mutationFn: (data: any) => apiCatalogUserService.saveCatalogService(data),
     onSuccess: (data: ResponseApi) =>
       handleSuccessSaveCatalogService(data.data),
     onError: (err) => ErrorAlertMessage,
   });
 
-  const { mutate: updateCatalogService } = useMutation({
-    mutationFn: (data: any) => apiCatalogUserService.updateCatalogService(data),
-    onSuccess: (data: ResponseApi) =>
-      handleSuccessUpdateCatalogService(data.data),
-    onError: (err) => ErrorAlertMessage,
-  });
+  const { mutate: updateCatalogService, isPending: isPendingUpdate } =
+    useMutation({
+      mutationFn: (data: any) =>
+        apiCatalogUserService.updateCatalogService(data),
+      onSuccess: (data: ResponseApi) =>
+        handleSuccessUpdateCatalogService(data.data),
+      onError: (err) => ErrorAlertMessage,
+    });
 
-  const { mutate: deleteProject } = useMutation({
+  const { mutate: deleteProject, isPending: isPendinDelete } = useMutation({
     mutationFn: (data: any) => apiCatalogUserService.deleteProject(data),
     onSuccess: (data: ResponseApi) => handleSuccessDeleteProject(data.data),
     onError: (err) => ErrorAlertMessage,
   });
+
+  const isPendindLoading = useMemo(
+    () => isPendingLoad || isPendingSave || isPendingUpdate || isPendinDelete,
+    [isPendingLoad, isPendingSave, isPendingUpdate, isPendinDelete]
+  );
 
   const handleSuccessSaveCatalogService = (data: ObjectResponse) => {
     if (data.error) return ErrorAlertMessage({ message: data.message });
@@ -166,8 +173,10 @@ export const PortfolioServices = ({
           handleOnPress={() => handleOpenTypeModalUpload("image")}
         />
       </View>
-      {isPendingLoad ? (
-        <LoadingView />
+      {isPendindLoading ? (
+        <View style={{ marginVertical: 100 }}>
+          <LoadingView />
+        </View>
       ) : (
         <ScrollView style={localStyle.scrollViewGallery}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>

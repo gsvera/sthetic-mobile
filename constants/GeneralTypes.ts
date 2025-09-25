@@ -77,7 +77,7 @@ export type InfoCompanyType = {
     idUser: string;
     generalDescription: string;
     companyName: string;
-    companyPicture?: string;
+    companyPictureUrl?: string;
     facebook?: string;
     instagram?: string;
     webPage?: string;

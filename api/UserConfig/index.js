@@ -21,10 +21,18 @@ export const apiUserConfig = {
     return axiosInstance.post(`${BASE_URL}/save-location`, data);
   },
   saveProfilePicture: function (data) {
-    return axiosInstance.put(`${BASE_URL}/save-profile-picture`, data);
+    return axiosInstance.put(`${BASE_URL}/save-profile-picture`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
   updateInfoCompany: function (data) {
-    return axiosInstance.put(`${BASE_URL}/update-info-company`, data);
+    return axiosInstance.put(`${BASE_URL}/update-info-company`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
   saveTokenNotification: function (data) {
     return axiosInstance.put(`${BASE_URL}/save-notifications-token`, data);
