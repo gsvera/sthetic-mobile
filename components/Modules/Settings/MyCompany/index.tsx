@@ -146,7 +146,7 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
       formData.append("file", {
         uri: companyPicture,
         type: "image/png",
-        name: `company-picture_${idUser}.jpg`,
+        name: `company-picture_${Date.now()}_${idUser}.jpg`,
       } as any);
       formData.append(
         "infoCompanyDTOJson",

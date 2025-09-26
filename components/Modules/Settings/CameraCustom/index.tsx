@@ -35,7 +35,7 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
   const platformOs = Platform.OS;
   const { handleNotification } = useNotificationProvider();
   const queryClient = useQueryClient();
-  const [facing, setFacing] = useState<CameraType>("back");
+  const [facing, setFacing] = useState<CameraType>("front");
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView | null>(null);
   const [imagePhoto, setImagePhoto] = useState<
@@ -104,7 +104,7 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
       formData.append("file", {
         uri: imagePhoto.uri,
         type: "image/png",
-        name: `profile_${idUser}.jpg`,
+        name: `profile-picture_${Date.now()}_${idUser}.jpg`,
       } as any);
 
       savePicture(formData);

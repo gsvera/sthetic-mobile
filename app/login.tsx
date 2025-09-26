@@ -33,7 +33,7 @@ import {
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import LoadingView from "@/components/Shared/LoadingView";
-import { imageBg } from "@/constants/Constants";
+import { imageBg, VERSION } from "@/constants/Constants";
 
 const schema = yup.object({
   username: yup.string().required("Ingrese un usuario valid"),
@@ -220,6 +220,13 @@ export default function Login() {
                     </Pressable>
                   </Link>
                 </View>
+              </View>
+              <View style={{ marginTop: 100 }}>
+                <ThemedText
+                  style={{ ...TextStyle.fontBoldCancel, ...TextStyle.center }}
+                >
+                  {VERSION}
+                </ThemedText>
               </View>
             </View>
           </View>

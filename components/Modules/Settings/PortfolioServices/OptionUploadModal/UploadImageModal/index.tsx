@@ -191,7 +191,7 @@ export const UploadImageModal = ({
         formData.append("files", {
           uri: image.uri,
           type: image.mimeType,
-          name: image.fileName,
+          name: `${Date.now()}_${image.fileName}`,
         } as any);
       });
 
