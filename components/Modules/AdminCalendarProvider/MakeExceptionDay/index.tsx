@@ -133,7 +133,7 @@ export const MakeExceptionDay = ({
       <View
         style={{
           ...localStyle.contentBody,
-          top: Platform.OS === PLATFORM_TYPE.IOS ? insets.top : 0,
+          top: insets.top,
           flex: 1,
         }}
       >

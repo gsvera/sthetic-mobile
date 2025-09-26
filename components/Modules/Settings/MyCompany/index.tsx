@@ -134,7 +134,16 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
     });
 
     if (!result?.canceled) {
-      setCompanyPicture(result?.assets?.[0].uri);
+      if (result?.assets?.[0]) {
+        const fileSize = result?.assets?.[0]?.fileSize || 0;
+        if (fileSize > 20 * 1024 * 1024) {
+          ErrorAlertMessage({
+            message: "Las imagenes son demasiado grande (máximo 20 MB)",
+          });
+          return;
+        }
+        setCompanyPicture(result?.assets?.[0].uri);
+      }
     } else {
       console.info("El usuario canceló la selección.");
     }

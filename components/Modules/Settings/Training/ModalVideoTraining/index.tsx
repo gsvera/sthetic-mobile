@@ -26,7 +26,7 @@ export const ModalVideoTraining = ({
       <View
         style={{
           ...localStyle.modalView,
-          top: Platform.OS === PLATFORM_TYPE.IOS ? insets.top : 0,
+          top: insets.top,
           flex: 1,
         }}
       >

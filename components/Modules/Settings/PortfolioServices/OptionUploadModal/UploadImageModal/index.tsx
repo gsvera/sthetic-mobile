@@ -158,6 +158,7 @@ export const UploadImageModal = ({
           uri: item.uri,
           mimeType: item.mimeType || "image/png",
           name: item.fileName,
+          fileSize: item.fileSize,
         })),
       ];
 
@@ -187,6 +188,17 @@ export const UploadImageModal = ({
     const localFiles = listImage.filter((f) => f.uri.startsWith("file://"));
     const existingFile = listImage.filter((f) => f.uri.startsWith("http"));
     try {
+      const totalSize = localFiles.reduce(
+        (acc, asset) => acc + (asset?.fileSize ? asset.fileSize : 0),
+        0
+      );
+
+      if (totalSize > 20 * 1024 * 1024) {
+        ErrorAlertMessage({
+          message: "Las imagenes son demasiado grande (máximo 20 MB)",
+        });
+        return;
+      }
       localFiles.forEach((image) => {
         formData.append("files", {
           uri: image.uri,
@@ -230,9 +242,7 @@ export const UploadImageModal = ({
       visible={open}
       onRequestClose={handleClose}
     >
-      <View
-        style={{ top: Platform.OS === PLATFORM_TYPE.ANDROID ? 0 : insets.top }}
-      >
+      <View style={{ top: insets.top }}>
         <ButtonCloseModal handleOnPress={handleClose} />
         {loadingData ? (
           <LoadingView />

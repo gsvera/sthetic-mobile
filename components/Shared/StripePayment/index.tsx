@@ -117,7 +117,7 @@ export const StripePayment = ({
             backgroundColor: ThemeColorsSthetic.shadowBackground,
             justifyContent: "center",
             alignItems: "center",
-            top: Platform.OS === PLATFORM_TYPE.IOS ? insets.top : 0,
+            top: insets.top,
           }}
         >
           <View

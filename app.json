@@ -2,7 +2,7 @@
   "expo": {
     "name": "MerAesthetic Worker",
     "slug": "sthetic-mobile",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/meraesthetic-work-logo.png",
     "scheme": "myapp",
@@ -20,7 +20,7 @@
       }
     },
     "android": {
-      "versionCode": 3,
+      "versionCode": 4,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/meraesthetic-work-logo.png",

@@ -65,7 +65,7 @@ export default function MiniNotification({
       }
       case TYPE_STATUS.ERROR: {
         setBgColor(ThemeColorsSthetic.errorNotification);
-        setIcon(<AntDesign name="closecircleo" size={20} color="white" />);
+        setIcon(<AntDesign name="close-circle" size={20} color="white" />);
         break;
       }
     }

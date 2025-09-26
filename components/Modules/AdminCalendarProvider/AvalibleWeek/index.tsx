@@ -136,7 +136,7 @@ export const AvailibleWeek = ({
           ...localStyle.contentBody,
           backgroundColor: ThemeColorsSthetic.backgroundLight,
           flex: 1,
-          top: Platform.OS === PLATFORM_TYPE.IOS ? insets.top : 0,
+          top: insets.top,
         }}
       >
         <ButtonCloseModal handleOnPress={handleCloseModal} />
