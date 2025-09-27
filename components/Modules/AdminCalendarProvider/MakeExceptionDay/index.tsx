@@ -1,4 +1,11 @@
-import { Modal, Platform, StyleSheet, TextInput, View } from "react-native";
+import {
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
 import { exceptionDayType, weekDaysProps } from "../types";
 import AvailableTimeCard from "../AvailableTimeCard";
 import { modalCustomProps } from "@/constants/GeneralTypes";
@@ -135,9 +142,10 @@ export const MakeExceptionDay = ({
           ...localStyle.contentBody,
           top: insets.top,
           flex: 1,
+          bottom: insets.bottom,
         }}
       >
-        <ContentKeyboardAutoScroll>
+        <ScrollView>
           <ButtonCloseModal handleOnPress={handleCloseModalException} />
           <View style={{ marginBottom: 10 }}>
             <ThemedText style={TextStyle.titleModal}>
@@ -168,7 +176,7 @@ export const MakeExceptionDay = ({
               />
             </View>
           </View>
-        </ContentKeyboardAutoScroll>
+        </ScrollView>
       </View>
     </Modal>
   );

@@ -45,7 +45,7 @@ export default function Home() {
     <View style={Container.container}>
       <View style={localStyle.header}>
         <Image
-          source={require("@/assets/images/meraesthetic-work-white-simple-logo.png")}
+          source={require("@/assets/images/me-logo-header.png")}
           style={localStyle.logo}
         />
       </View>
@@ -108,8 +108,9 @@ const localStyle = StyleSheet.create({
     width: 100,
   },
   logo: {
-    width: 130,
+    width: 60,
     height: 60,
+    borderRadius: 50,
   },
   labelDate: {
     ...TextStyle.label,

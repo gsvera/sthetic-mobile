@@ -22,22 +22,22 @@ export default function PoliticsAndConditions({
           </ThemedText>
         </View>
         <ThemedText style={localStyles.textDate}>
-          Fecha de última actualización: 30 de junio de 2025
+          Fecha de última actualización: 27 de Septiembre de 2025
         </ThemedText>
         <ThemedText style={localStyles.text}>
-          En MeCare, la privacidad de nuestros usuarios es una prioridad. Esta
-          Política de Privacidad describe cómo recolectamos, usamos, almacenamos
-          y protegemos tus datos personales, conforme a lo establecido en la Ley
-          Federal de Protección de Datos Personales en Posesión de los
-          Particulares (LFPDPPP).
+          En Meredith Aesthetic, la privacidad de nuestros usuarios es una
+          prioridad. Esta Política de Privacidad describe cómo recolectamos,
+          usamos, almacenamos y protegemos tus datos personales, conforme a lo
+          establecido en la Ley Federal de Protección de Datos Personales en
+          Posesión de los Particulares (LFPDPPP).
         </ThemedText>
         <View>
           <ThemedText style={localStyles.subtitle}>
             1. Responsable del tratamiento de datos
           </ThemedText>
           <ThemedText style={localStyles.text}>
-            Meredith es responsable del uso y protección de tus datos
-            personales. Puedes contactarnos en: mecare@gmail.com
+            Meredith Aesthetic es responsable del uso y protección de tus datos
+            personales. Puedes contactarnos en: meredith.abasotech@gmail.com
           </ThemedText>
         </View>
         <View>
@@ -170,8 +170,10 @@ export default function PoliticsAndConditions({
           <ThemedText style={localStyles.text}>
             Los pagos son procesados mediante plataformas externas como{" "}
             <ThemedText style={TextStyle.fontBoldDark}>Stripe</ThemedText>.{" "}
-            <ThemedText style={TextStyle.fontBoldDark}>MeCare</ThemedText> no
-            almacena información de tarjetas de crédito, cuentas bancarias ni
+            <ThemedText style={TextStyle.fontBoldDark}>
+              Meredith Aesthetic
+            </ThemedText>{" "}
+            no almacena información de tarjetas de crédito, cuentas bancarias ni
             otros datos financieros sensibles.
           </ThemedText>
           <ThemedText style={localStyles.text}>
@@ -197,21 +199,21 @@ export default function PoliticsAndConditions({
         </View>
         <View>
           <ThemedText style={localStyles.textDate}>
-            Fecha de última actualización: 30 de junio de 2025
+            Fecha de última actualización: 27 de Septiembre de 2025
           </ThemedText>
         </View>
         <View>
           <ThemedText style={localStyles.subtitle}>1. Aceptación</ThemedText>
           <ThemedText style={localStyles.text}>
-            Al utilizar MeCare, aceptas estos términos y condiciones. Si no
-            estás de acuerdo, no uses la aplicación.
+            Al utilizar Meredith Aesthetic, aceptas estos términos y
+            condiciones. Si no estás de acuerdo, no uses la aplicación.
           </ThemedText>
         </View>
         <View>
           <ThemedText style={localStyles.subtitle}>2. Uso de la app</ThemedText>
           <ThemedText style={localStyles.text}>
             La app sirve como plataforma de contacto entre profesionales y
-            clientes. MeCare{" "}
+            clientes. Meredith Aesthetic{" "}
             <ThemedText style={TextStyle.fontBoldDark}>
               no garantiza:
             </ThemedText>
@@ -258,7 +260,7 @@ export default function PoliticsAndConditions({
             5. Limitación de responsabilidad
           </ThemedText>
           <ThemedText style={localStyles.text}>
-            MeCare no se hace responsable por:
+            Meredith Aesthetic no se hace responsable por:
           </ThemedText>
           <ThemedText style={localStyles.textList}>
             * Acuerdos o conflictos entre usuarios
@@ -279,7 +281,7 @@ export default function PoliticsAndConditions({
             <ThemedText style={TextStyle.fontBoldDark}>Stripe</ThemedText>.
           </ThemedText>
           <ThemedText style={localStyles.text}>
-            MeCare{" "}
+            Meredith Aesthetic{" "}
             <ThemedText style={TextStyle.fontBoldDark}>
               no almacena ni procesa directamente información bancaria o de
               tarjetas.
@@ -295,7 +297,7 @@ export default function PoliticsAndConditions({
           <ThemedText style={localStyles.text}>
             Las suscripciones no son reembolsables, salvo en casos excepcionales
             evaluados individualmente. Para solicitar revisión, escríbenos a:
-            mecare@gmail.com
+            meredith.abasotech@gmail.com
           </ThemedText>
         </View>
         <View>

@@ -137,6 +137,7 @@ export const AvailibleWeek = ({
           backgroundColor: ThemeColorsSthetic.backgroundLight,
           flex: 1,
           top: insets.top,
+          bottom: insets.bottom,
         }}
       >
         <ButtonCloseModal handleOnPress={handleCloseModal} />
@@ -146,7 +147,7 @@ export const AvailibleWeek = ({
           </ThemedText>
         </View>
         <View
-          style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "75%" : "80%" }}
+          style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "75%" : "75%" }}
         >
           <ScrollView>
             {availableTimeWeek.map((day, i) => (

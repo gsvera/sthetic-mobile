@@ -14,7 +14,7 @@ export default function SuccessNotificationView({
     <View style={localStyles.backgroundContent}>
       <View style={localStyles.body}>
         <AntDesign
-          name="checkcircle"
+          name="check-circle"
           size={60}
           color={ThemeColorsSthetic.textLight}
         />

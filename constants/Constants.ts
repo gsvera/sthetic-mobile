@@ -1,6 +1,6 @@
 import { weekDays } from "./GeneralTypes";
 
-export const VERSION = "v.1.0.4";
+export const VERSION = "v.1.0.5";
 
 export const imageBg = require("@/assets/images/background.webp");
 

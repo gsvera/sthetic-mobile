@@ -187,10 +187,10 @@ export const TextStyle = StyleSheet.create({
         fontWeight: 'bold'
     },
     darkColor: {
-        color: GlobalColors.blackColor
+        color: ThemeColorsSthetic.text
     },
     lightColor: {
-        color: GlobalColors.whiteColor
+        color: ThemeColorsSthetic.textLight
     },
     blueColor: {
         color: GlobalColors.blueColor
