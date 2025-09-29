@@ -135,7 +135,7 @@ export default function Login() {
             <View>
               <View style={styles.imgContainer}>
                 <Image
-                  source={require("@/assets/images/meraesthetic-work-logo.png")}
+                  source={require("@/assets/images/meredith-aesthetic-work.png")}
                   style={styles.logo}
                 />
               </View>

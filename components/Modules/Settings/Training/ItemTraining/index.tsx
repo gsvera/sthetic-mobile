@@ -27,7 +27,7 @@ export const ItemTraining = ({ item }: itemTrainingProps) => {
       >
         <View style={{ width: "70%" }}>
           <ThemedText style={localStyle.labelVideo}>
-            {`${item.order} - ${item.nameVideo}`}
+            {`${item.orderShow} - ${item.nameVideo}`}
           </ThemedText>
           {item?.description && (
             <ThemedText style={TextStyle.textNote}>

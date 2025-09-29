@@ -45,7 +45,7 @@ export default function Home() {
     <View style={Container.container}>
       <View style={localStyle.header}>
         <Image
-          source={require("@/assets/images/me-logo-header.png")}
+          source={require("@/assets/images/meredith-aesthetic-work-logo.png")}
           style={localStyle.logo}
         />
       </View>

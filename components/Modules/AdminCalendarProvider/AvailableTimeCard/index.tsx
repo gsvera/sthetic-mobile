@@ -87,7 +87,7 @@ export const AvailableTimeCard = ({
             <View style={localStyle.cardRowItem}>
               <Pressable onPress={() => handleShowTimePicker("end")}>
                 <ThemedText style={TextStyle.label}>
-                  Hora inicio:{" "}
+                  Hora fin:{" "}
                   {!day.endTime && (
                     <Feather name="alert-circle" size={24} color="red" />
                   )}

@@ -1,10 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { functionServicesType } from "../types";
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
 import { ThemedText } from "@/components/ThemedText";
 import {
   ButtonGeneralStyle,
   GridStyle,
+  InputStyle,
   TextStyle,
 } from "@/constants/StyleComponents";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -18,7 +19,7 @@ import {
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import StripePayment from "@/components/Shared/StripePayment";
 import {
   PAYMENT_TYPE,
@@ -29,6 +30,9 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { apiUser } from "@/api/User";
 import dayjs from "dayjs";
+import { apiCoupon } from "@/api/Coupon";
+import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
+import LoadingView from "@/components/Shared/LoadingView";
 
 type mySupscriptionProps = functionServicesType & {
   nameCustomer: string;
@@ -44,12 +48,27 @@ export const MySupscription = ({
   const queryClient = useQueryClient();
   const { handleNotification } = useNotificationProvider();
   const [openModalPayment, setOpenModalPayment] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const [coupon, setCoupon] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [totalPay, setTotalPay] = useState(0);
 
   const { data: planData } = useQuery({
     queryKey: [REACT_QUERY_KEYS.plan.getByUser(idUser as string)],
     queryFn: () => apiUserConfig.getPlanByUser(idUser),
     ...{
       select: (data: ResponseApi) => data.data.items as UserPlan,
+    },
+  });
+
+  const { data: couponData, isFetching: isFetchingCoupon } = useQuery({
+    queryKey: [
+      REACT_QUERY_KEYS.catalogs.coupon.getByCode("get-coupon-renew-pay"),
+    ],
+    queryFn: () => apiCoupon.getCoupon(coupon as string),
+    ...{
+      enabled: shouldFetch,
+      select: (data: ResponseApi) => data.data,
     },
   });
 
@@ -65,19 +84,59 @@ export const MySupscription = ({
         type: TYPE_STATUS.ERROR,
         message: data.message,
       });
+    setCoupon("");
     handleNotification({ type: TYPE_STATUS.SUCCESS, message: data.message });
     setOpenModalPayment(false);
+    queryClient.invalidateQueries({
+      queryKey: [REACT_QUERY_KEYS.plan.getByUser(idUser as string)],
+    });
   };
+
+  useEffect(() => {
+    if (planData?.catalogPlanDTO.price) {
+      if (
+        couponData !== undefined &&
+        !couponData?.error &&
+        planData?.catalogPlanDTO.price
+      ) {
+        setTotalPay(
+          planData?.catalogPlanDTO.price - couponData?.items.discountAmount
+        );
+        setDiscount(couponData?.items.discountAmount);
+      } else {
+        setTotalPay(planData?.catalogPlanDTO.price ?? 0);
+        setDiscount(0);
+      }
+    }
+  }, [planData, couponData]);
 
   const objPay = useMemo(
     () => ({
       nameProduct: planData?.catalogPlanDTO.name ?? "",
-      amount: planData?.catalogPlanDTO.price ?? 0,
+      amount: totalPay,
       nameCustomer,
       emailCustomer,
     }),
-    [planData, idUser]
+    [planData, idUser, totalPay]
   );
+
+  useEffect(() => {
+    if (coupon === null || coupon === undefined || coupon === "") {
+      queryClient.setQueryData(
+        [REACT_QUERY_KEYS.catalogs.coupon.getByCode("get-coupon-renew-pay")],
+        null
+      );
+      setTotalPay(planData?.catalogPlanDTO.price ?? 0);
+      setDiscount(0);
+    }
+    const handler = setTimeout(() => {
+      if (coupon) setShouldFetch(true);
+    }, 1000);
+    return () => {
+      clearTimeout(handler);
+      setShouldFetch(false);
+    };
+  }, [coupon]);
 
   const handleClosePay = () => {
     setOpenModalPayment(false);
@@ -86,98 +145,147 @@ export const MySupscription = ({
     });
   };
 
-  const handleSuccessPay = (data: StripeDataCustomerType) => {
+  const handleSuccessPay = (data: StripeDataCustomerType | null) => {
     savePaySstripe({
       ...data,
       idUser: idUser,
       planId: planData?.catalogPlanDTO.id,
       amountPaid: objPay.amount,
       paymentDate: dayjs().toISOString(),
-      paymentMethod: PAYMENT_TYPE.STRIPE,
+      paymentMethod: totalPay === 0 ? PAYMENT_TYPE.FREE : PAYMENT_TYPE.STRIPE,
+      codeCoupon: coupon,
     });
+  };
+
+  const handlePayment = () => {
+    if (totalPay === 0) {
+      handleSuccessPay(null);
+    } else {
+      setOpenModalPayment(true);
+    }
   };
 
   return (
     <View>
       <SubHeaderReturn subtitle="Mi subscripción" handleReturn={returnBack} />
-      <View
-        style={{
-          paddingHorizontal: 15,
-          paddingTop: 20,
-        }}
-      >
-        <View style={localStyle.contentTitlePlan}>
-          <View>
-            <ThemedText style={localStyle.textLabelTitle}>Plan</ThemedText>
-            <Text style={localStyle.titlePlan}>
-              {planData?.catalogPlanDTO.name}
-            </Text>
+      <ContentKeyboardAutoScroll>
+        <View
+          style={{
+            paddingHorizontal: 15,
+          }}
+        >
+          <View style={localStyle.contentTitlePlan}>
+            <View>
+              <ThemedText style={localStyle.textLabelTitle}>Plan</ThemedText>
+              <Text style={localStyle.titlePlan}>
+                {planData?.catalogPlanDTO.name}
+              </Text>
+            </View>
           </View>
-        </View>
 
-        <View style={localStyle.rowData}>
-          <View>
-            <ThemedText style={localStyle.textLabel}>Fecha Inicio:</ThemedText>
+          <View style={localStyle.rowData}>
+            <View>
+              <ThemedText style={localStyle.textLabel}>
+                Fecha Inicio:
+              </ThemedText>
+            </View>
+            <View>
+              <ThemedText style={localStyle.textValue}>
+                {convertDateToGeneralFormat(planData?.startDate)}
+              </ThemedText>
+            </View>
           </View>
-          <View>
-            <ThemedText style={localStyle.textValue}>
-              {convertDateToGeneralFormat(planData?.startDate)}
-            </ThemedText>
+          <View style={localStyle.rowData}>
+            <View>
+              <ThemedText style={localStyle.textLabel}>Fecha Fin:</ThemedText>
+            </View>
+            <View>
+              <ThemedText style={localStyle.textValue}>
+                {convertDateToGeneralFormat(planData?.endDate)}
+              </ThemedText>
+            </View>
           </View>
-        </View>
-        <View style={localStyle.rowData}>
-          <View>
-            <ThemedText style={localStyle.textLabel}>Fecha Fin:</ThemedText>
+          <View style={localStyle.rowData}>
+            <View>
+              <ThemedText style={localStyle.textLabel}>Estatus:</ThemedText>
+            </View>
+            <View>
+              {planData?.isActive ? (
+                <View style={localStyle.badgeActive}>
+                  <ThemedText
+                    style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
+                  >
+                    {STATUS_ACCOUNT_PAY.CURRENT_ACCOUNT}
+                  </ThemedText>
+                </View>
+              ) : (
+                <View style={localStyle.badgeInactive}>
+                  <ThemedText
+                    style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
+                  >
+                    {STATUS_ACCOUNT_PAY.OVERDUE_ACCOUNT}
+                  </ThemedText>
+                </View>
+              )}
+            </View>
           </View>
-          <View>
-            <ThemedText style={localStyle.textValue}>
-              {convertDateToGeneralFormat(planData?.endDate)}
-            </ThemedText>
+          <View style={localStyle.rowData}>
+            <View>
+              <ThemedText style={localStyle.textLabel}>Costo:</ThemedText>
+            </View>
+            <View>
+              <ThemedText style={localStyle.textValue}>
+                {convertCurrency(planData?.catalogPlanDTO.price)}
+              </ThemedText>
+            </View>
           </View>
-        </View>
-        <View style={localStyle.rowData}>
-          <View>
-            <ThemedText style={localStyle.textLabel}>Estatus:</ThemedText>
+          <View style={localStyle.rowData}>
+            <ThemedText style={TextStyle.label}>¿Tiene un cupon?</ThemedText>
+            <TextInput
+              style={localStyle.inputCoupon}
+              onChangeText={setCoupon}
+              value={coupon}
+            />
           </View>
-          <View>
-            {planData?.isActive ? (
-              <View style={localStyle.badgeActive}>
-                <ThemedText
-                  style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
-                >
-                  {STATUS_ACCOUNT_PAY.CURRENT_ACCOUNT}
-                </ThemedText>
+          {isFetchingCoupon ? (
+            <LoadingView styleProps={localStyle.loader} />
+          ) : coupon && couponData ? (
+            <View style={localStyle.rowData}>
+              <View>
+                <ThemedText style={TextStyle.label}>Descuento de:</ThemedText>
+                {couponData.error && (
+                  <ThemedText style={TextStyle.redColor}>
+                    {couponData.message}
+                  </ThemedText>
+                )}
               </View>
-            ) : (
-              <View style={localStyle.badgeInactive}>
-                <ThemedText
-                  style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
-                >
-                  {STATUS_ACCOUNT_PAY.OVERDUE_ACCOUNT}
-                </ThemedText>
-              </View>
-            )}
+              <ThemedText style={TextStyle.value}>
+                {couponData?.items?.discountAmount && convertCurrency(discount)}
+              </ThemedText>
+            </View>
+          ) : (
+            <></>
+          )}
+          <View style={localStyle.rowData}>
+            <View>
+              <ThemedText style={TextStyle.label}>Total a pagar:</ThemedText>
+            </View>
+            <View>
+              <ThemedText style={TextStyle.value}>
+                {totalPay && convertCurrency(totalPay)}
+              </ThemedText>
+            </View>
+          </View>
+          <View style={localStyle.contentBtn}>
+            <GeneralButton
+              textBtn="Pagar ahora"
+              styleText={TextStyle.fontBoldWhite}
+              styleBtn={localStyle.btnPay}
+              handleOnPress={handlePayment}
+            />
           </View>
         </View>
-        <View style={localStyle.rowData}>
-          <View>
-            <ThemedText style={localStyle.textLabel}>Costo:</ThemedText>
-          </View>
-          <View>
-            <ThemedText style={localStyle.textValue}>
-              {convertCurrency(planData?.catalogPlanDTO.price)}
-            </ThemedText>
-          </View>
-        </View>
-        <View style={localStyle.contentBtn}>
-          <GeneralButton
-            textBtn="Pagar ahora"
-            styleText={TextStyle.fontBoldWhite}
-            styleBtn={localStyle.btnPay}
-            handleOnPress={() => setOpenModalPayment(true)}
-          />
-        </View>
-      </View>
+      </ContentKeyboardAutoScroll>
       {openModalPayment && (
         <StripePayment
           open={openModalPayment}
@@ -245,6 +353,17 @@ const localStyle = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     textAlign: "center",
+  },
+  inputCoupon: {
+    ...InputStyle.withBorder,
+    ...TextStyle.value,
+    padding: 5,
+    fontSize: 18,
+    width: 100,
+  },
+  loader: {
+    marginTop: 10,
+    height: 40,
   },
 });
 

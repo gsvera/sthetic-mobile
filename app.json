@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "MerAesthetic Worker",
+    "name": "Meredith Aesthetic Worker",
     "slug": "sthetic-mobile",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "orientation": "portrait",
-    "icon": "./assets/images/meraesthetic-work-logo.png",
+    "icon": "./assets/images/meredith-aesthetic-work-logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -20,7 +20,7 @@
       }
     },
     "android": {
-      "versionCode": 5,
+      "versionCode": 6,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/meraesthetic-work-logo.png",
@@ -36,20 +36,20 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/meraesthetic-work-logo.png"
+      "favicon": "./assets/images/meredith-aesthetic-work-logo.png"
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/meraesthetic-work-logo.png"
+          "icon": "./assets/images/meredith-aesthetic-work-logo.png"
         }
       ],
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/meraesthetic-work-logo.png",
+          "image": "./assets/images/meredith-aesthetic-work-logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"

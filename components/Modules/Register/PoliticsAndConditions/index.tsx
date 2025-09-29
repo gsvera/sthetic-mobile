@@ -1,8 +1,9 @@
 import { ThemedText } from "@/components/ThemedText";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import Checkbox from "expo-checkbox";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { TextStyle } from "@/constants/StyleComponents";
+import { openLink } from "@/utils/GeneralUtils";
 
 type PoliticstAndConditionsProps = {
   stateCheck: boolean;
@@ -37,7 +38,7 @@ export default function PoliticsAndConditions({
           </ThemedText>
           <ThemedText style={localStyles.text}>
             Meredith Aesthetic es responsable del uso y protección de tus datos
-            personales. Puedes contactarnos en: meredith.abasotech@gmail.com
+            personales. Puedes contactarnos en: hola@meredith-aesthetic.com
           </ThemedText>
         </View>
         <View>
@@ -120,7 +121,7 @@ export default function PoliticsAndConditions({
           <ThemedText style={localStyles.text}>
             Tienes derecho a acceder, rectificar, cancelar u oponerte al uso de
             tus datos personales (derechos ARCO). Para ejercerlos, envía una
-            solicitud a: meredith.abasotech@gmail.com
+            solicitud a: hola@meredith-aesthetic.com
           </ThemedText>
         </View>
         <View>
@@ -297,7 +298,7 @@ export default function PoliticsAndConditions({
           <ThemedText style={localStyles.text}>
             Las suscripciones no son reembolsables, salvo en casos excepcionales
             evaluados individualmente. Para solicitar revisión, escríbenos a:
-            meredith.abasotech@gmail.com
+            hola@meredith-aesthetic.com
           </ThemedText>
         </View>
         <View>
@@ -318,6 +319,21 @@ export default function PoliticsAndConditions({
             Mexicanos. Cualquier disputa será resuelta en los tribunales
             competentes de Cancún, Quintana Roo.
           </ThemedText>
+        </View>
+        <View>
+          <ThemedText style={localStyles.text}>
+            También puedes verificar nuestras políticas de aviso y privacidad en
+            el siguiente link:
+          </ThemedText>
+          <TouchableOpacity
+            onPress={() =>
+              openLink("https://meredith-aesthetic.com/privacidad")
+            }
+          >
+            <ThemedText style={localStyles.text}>
+              https://meredith-aesthetic.com/privacidad
+            </ThemedText>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       <View style={localStyles.contentCheck}>
@@ -356,6 +372,11 @@ export const localStyles = StyleSheet.create({
   },
   text: {
     color: ThemeColorsSthetic.text,
+    marginBottom: 10,
+    textAlign: "justify",
+  },
+  textLink: {
+    color: ThemeColorsSthetic.textTitle,
     marginBottom: 10,
     textAlign: "justify",
   },
