@@ -38,7 +38,7 @@ export const FormPay = ({
 
   const { data: couponData, isFetching: isFetchingCoupon } = useQuery({
     queryKey: [REACT_QUERY_KEYS.catalogs.coupon.getByCode("get-coupon")],
-    queryFn: () => apiCoupon.getCoupon(coupon as string),
+    queryFn: () => apiCoupon.getCoupon({ code: coupon as string }),
     ...{
       enabled: shouldFetch,
       select: (data: ResponseApi) => data.data,

@@ -65,7 +65,7 @@ export const MySupscription = ({
     queryKey: [
       REACT_QUERY_KEYS.catalogs.coupon.getByCode("get-coupon-renew-pay"),
     ],
-    queryFn: () => apiCoupon.getCoupon(coupon as string),
+    queryFn: () => apiCoupon.getCoupon({ code: coupon as string, idUser }),
     ...{
       enabled: shouldFetch,
       select: (data: ResponseApi) => data.data,
