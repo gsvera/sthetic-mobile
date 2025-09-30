@@ -23,7 +23,7 @@
       "versionCode": 6,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/meraesthetic-work-logo.png",
+        "foregroundImage": "./assets/images/meredith-aesthetic-work-logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.abasotech.meredithcarework",
