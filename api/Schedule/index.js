@@ -21,4 +21,17 @@ export const apiSchedule = {
       }`
     );
   },
+  getTempClients: function (idProvider) {
+    return axiosInstance.get(
+      `${BASE_URL}/get-temp-client-by-provider/${idProvider}`
+    );
+  },
+  deleteTempClient: function (idContact, idProvider) {
+    return axiosInstance.delete(
+      `${BASE_URL}/delete-temp-contact-by-provider/${idProvider}?id-temp-contact=${idContact}`
+    );
+  },
+  makeOurScheduleService: function (data) {
+    return axiosInstance.post(`${BASE_URL}/make-our-schedule-service`, data);
+  },
 };

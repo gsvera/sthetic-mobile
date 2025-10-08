@@ -1,11 +1,4 @@
-import {
-  Modal,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
-} from "react-native";
+import { Modal, ScrollView, StyleSheet, TextInput, View } from "react-native";
 import { exceptionDayType, weekDaysProps } from "../types";
 import AvailableTimeCard from "../AvailableTimeCard";
 import { modalCustomProps } from "@/constants/GeneralTypes";
@@ -20,9 +13,8 @@ import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessag
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiCalendar } from "@/api/Calendar";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { FORMAT_DATE, PLATFORM_TYPE, TYPE_STATUS } from "@/constants/Constants";
+import { FORMAT_DATE, TYPE_STATUS } from "@/constants/Constants";
 import { convertDateToGeneralFormat } from "@/utils/GeneralUtils";
-import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";

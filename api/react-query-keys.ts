@@ -4,7 +4,8 @@ export const REACT_QUERY_KEYS = {
         getDataUser: (key: string) => `get-data-user-${key}`,
     },
     schedule: {
-        getAllByDay: (key: string) => `schedule-get-all-${key}`
+        getAllByDay: (key: string) => `schedule-get-all-${key}`,
+        getTempClients: (key: string | undefined) => `schedule-get-temp-clients-${key}`
     },
     userConfig: {
         getLocationByUser: (key:string) => `get-location-by-user${key}`,
@@ -41,14 +42,19 @@ export const REACT_QUERY_KEYS = {
     },
     calendar: {
         calendarByUser: {
-            getByIdUser: (key:string | undefined) => `get-calendar-by-user-id-${key}`
+            getByIdUser: (key:string | undefined) => `get-calendar-by-user-id-${key}`,
+            getTimeCalendarByProvider:(key: string) => `get-calendar-available-by-provider-${key}`
         },
         calendarException: {
             getByUser: (key:string) => `get-calendar-exception-by-user-${key}`
-        }
+        },
+        
     },
     payment: {
         validStatusPay: (key: string) => `get-status-pay-${key}`,
         getClientIdStripe: (key:string) => `get-client-id-strip-${key}` 
+    },
+    provider: {
+        getServicesByProvider: (key: string | undefined) => `get-service-by-provider-${key}`
     }
 }

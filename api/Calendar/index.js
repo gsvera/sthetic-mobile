@@ -11,6 +11,16 @@ export const apiCalendar = {
       `${BASE_URL}/get-calendar-exception-by-user/${idUser}?date-tostring=${date}`
     );
   },
+  getTimeCalendarByPovider: function (iProvider, day, date) {
+    return axiosInstance.get(
+      `${BASE_URL}/get-time-by-provider/${iProvider}?day=${day}&date=${date}`
+    );
+  },
+  getServicesByProvider: function (idProvider) {
+    return axiosInstance.get(
+      `${BASE_URL}/get-services-by-provider/${idProvider}`
+    );
+  },
   saveCalendar: function (data) {
     return axiosInstance.post(`${BASE_URL}/save-calendar`, data);
   },

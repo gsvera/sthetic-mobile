@@ -4,16 +4,20 @@ import { TextStyle } from "@/constants/StyleComponents";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 
-export const EmptyView = () => {
+type emptyViewPrps = {
+  message?: string;
+};
+
+export const EmptyView = ({
+  message = "No se encontraron registros",
+}: emptyViewPrps) => {
   return (
     <View style={localStyle.emptyComponent}>
       <MaterialCommunityIcons
         name="clipboard-text-search-outline"
         style={localStyle.icon}
       />
-      <ThemedText style={TextStyle.textNote}>
-        No se encontraron registros
-      </ThemedText>
+      <ThemedText style={TextStyle.textNote}>{message}</ThemedText>
     </View>
   );
 };

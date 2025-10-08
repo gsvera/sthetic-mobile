@@ -32,6 +32,7 @@ import { useNotificationProvider } from "@/provider/NotificationProvider";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import LoadingView from "@/components/Shared/LoadingView";
+import { MakeScheduleDate } from "./MakeScheduleDate";
 
 dayjs.locale("es"); // Esta config se debera establecer a futuro para ingles tambien
 
@@ -42,6 +43,7 @@ type adminCalendarProvider = {
 export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
   const { handleNotification } = useNotificationProvider();
   const [openForm, setOpenForm] = useState(false);
+  const [openScheduleModal, setOpenScheduleModal] = useState(false);
   const [openExceptionForm, setOpenExceptionForm] = useState(false);
   const [openModalDeleteException, setOpenModalDeleteException] =
     useState(false);
@@ -150,9 +152,15 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
     <View style={localStyle.contentCalendar}>
       <View style={localStyle.contentBtn}>
         <GeneralButton
+          styleBtn={ButtonGeneralStyle.btnSaveSthetic}
+          styleText={TextStyle.fontBoldWhite}
+          textBtn={"Crear cita"}
+          handleOnPress={() => setOpenScheduleModal(true)}
+        />
+        <GeneralButton
           styleBtn={ButtonGeneralStyle.btnActionSthetic}
           styleText={TextStyle.fontBoldWhite}
-          textBtn="Registrar horarios semanal"
+          textBtn="Horarios semanal"
           handleOnPress={() => setOpenForm((v) => !v)}
         />
       </View>
@@ -229,6 +237,17 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
           entityToEdit={dataCalendarException}
         />
       )}
+      {openScheduleModal && selectedDate?.dateString && (
+        <MakeScheduleDate
+          open={openScheduleModal}
+          handleCloseModal={() => setOpenScheduleModal(false)}
+          selectedDate={{
+            day: selectedDate.day,
+            dateString: selectedDate.dateString,
+          }}
+          idUser={idUser}
+        />
+      )}
       <ModalConfirm
         open={openModalDeleteException}
         handleClose={() => setOpenModalDeleteException((v) => !v)}
@@ -247,7 +266,7 @@ export const localStyle = StyleSheet.create({
   },
   contentBtn: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     marginVertical: 10,
   },
   contentDateSelected: {

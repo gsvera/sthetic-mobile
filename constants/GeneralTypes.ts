@@ -91,6 +91,13 @@ export type CatalogService = {
     people: number
 }
 
+export type MenuServiceType = {
+    id: number;
+    nameService: string;
+    people: number;
+    price: number;
+}
+
 export type ScheduleTypeUser = {
     id: string;
     firstName: string;
@@ -102,8 +109,11 @@ export type ScheduleTypeUser = {
 
 export type ScheduleType = {
     id: number;
-    idClient: ScheduleTypeUser;
+    idClient?: ScheduleTypeUser;
     idProvider: string;
+    tempNameClient?: string;
+    tempLadaClient?: string;
+    tempPhoneClient?: string;
     scheduleDate: string;
     startTime: string;
     endTime: string;
@@ -123,6 +133,34 @@ export type StatusScheduleType = STATUS_SERVICE | undefined;
 
 
 export type weekDays = 'lunes' | 'martes' | 'miércoles' | 'jueves' | 'viernes' | 'sábado' | 'domingo';
+
+export type TimeScheduleType = {
+    start: string;
+    end: string
+}
+
+export type ScheduleServiceType = {
+    idProviderAux: string;
+    tempNameClient: string;
+    tempLadaClient: string | undefined;
+    tempPhoneClient: string;
+    saveTempClient: boolean;
+    scheduleDate: string;
+    startTime: string;
+    endTime: string;
+    nameService: string;
+    people: number;
+    amount: number;
+    statusService: STATUS_SERVICE;
+}
+
+export type TempClientType = {
+    id: number;
+    idProvider: string;
+    tempLadaClient: string;
+    tempPhoneClient: string;
+    tempNameClient: string;
+}
 
 export type TrainingType = {
     id: number;

@@ -227,6 +227,10 @@ export const TextStyle = StyleSheet.create({
         fontWeight: 'bold',
         color: ThemeColorsSthetic.textTitle 
     },
+    fontTitleBold: {
+        color: ThemeColorsSthetic.textTitle,
+        fontWeight: 'bold'
+    },
     label: {
         fontSize: Platform.OS === PLATFORM_TYPE.ANDROID ? 18 : 16,
         fontWeight: 'bold',

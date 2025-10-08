@@ -91,6 +91,20 @@ export const TabsStatusSchedule = ({
         handleOnPress={() => handleChangeStatus(STATUS_SERVICE.CANCEL)}
       />
       <GeneralButton
+        textBtn="No se presento"
+        styleText={
+          statusSelected === STATUS_SERVICE.NOPRESENT
+            ? TextStyle.fontBoldWhite
+            : TextStyle.fontBoldBlue
+        }
+        styleBtn={
+          statusSelected === STATUS_SERVICE.NOPRESENT
+            ? localStyle.btnStatusSelected
+            : localStyle.btnStatus
+        }
+        handleOnPress={() => handleChangeStatus(STATUS_SERVICE.NOPRESENT)}
+      />
+      <GeneralButton
         textBtn="Finalizado"
         styleText={
           statusSelected === STATUS_SERVICE.FINALIZED

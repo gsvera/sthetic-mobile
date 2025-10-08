@@ -8,7 +8,11 @@ import {
   GridStyle,
   TextStyle,
 } from "@/constants/StyleComponents";
-import { convertHourToAMorPM, openLink } from "@/utils/GeneralUtils";
+import {
+  convertCurrency,
+  convertHourToAMorPM,
+  openLink,
+} from "@/utils/GeneralUtils";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { scheduleSelectType } from "..";
@@ -92,6 +96,26 @@ export const ScheduleItem = ({
     }
   };
 
+  const dataClient = useMemo(() => {
+    if (!item.idClient)
+      return {
+        name: item.tempNameClient,
+        completePhone: `${item.tempLadaClient?.replace("+", "")}${
+          item.tempPhoneClient
+        }`,
+        phone: item.tempPhoneClient,
+      };
+    else {
+      return {
+        name: `${item.idClient.firstName} ${item.idClient.lastName}`,
+        completePhone: `${item.idClient.lada.replace("+", "")}${
+          item.idClient.phone
+        }`,
+        phone: item.idClient.phone,
+      };
+    }
+  }, [item]);
+
   return (
     <View style={localStyle.scheduleItem}>
       <View style={GridStyle.rowContentCenter}>
@@ -121,35 +145,44 @@ export const ScheduleItem = ({
         <ThemedText style={TextStyle.title}>{item.nameService}</ThemedText>
       </View>
       <View style={localStyle.rowInfo}>
-        <ThemedText style={TextStyle.label}>Cliente:</ThemedText>
+        <ThemedText style={TextStyle.label}>Precio: </ThemedText>
         <ThemedText style={TextStyle.value}>
-          {item.idClient.firstName} {item.idClient.lastName}
+          {convertCurrency(item.amount)}
         </ThemedText>
       </View>
       <View style={localStyle.rowInfo}>
-        <ThemedText style={TextStyle.label}>Contactar: </ThemedText>
-        <View style={GridStyle.rowSpaceBetween}>
-          <TouchableOpacity
-            onPress={() => openLink(`tel:${item.idClient.phone}`)}
-          >
-            <Feather name="phone-outgoing" style={localStyle.iconSocialMedia} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              openLink(
-                `https://wa.me/${item.idClient.lada.substring(0, 1)}${
-                  item.idClient.phone
-                }`
-              )
-            }
-          >
-            <MaterialCommunityIcons
-              name="whatsapp"
-              style={localStyle.iconSocialMedia}
-            />
-          </TouchableOpacity>
-        </View>
+        <ThemedText style={TextStyle.label}>Cliente:</ThemedText>
+        <ThemedText style={TextStyle.value}>{dataClient.name}</ThemedText>
       </View>
+      {dataClient.phone ? (
+        <View style={{ ...localStyle.rowInfo, marginBottom: 25 }}>
+          <ThemedText style={TextStyle.label}>Contactar: </ThemedText>
+          <View style={GridStyle.rowSpaceBetween}>
+            <TouchableOpacity
+              onPress={() => openLink(`tel:${dataClient.phone}`)}
+            >
+              <Feather
+                name="phone-outgoing"
+                style={localStyle.iconSocialMedia}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                openLink(`https://wa.me/${dataClient.completePhone}`)
+              }
+            >
+              <MaterialCommunityIcons
+                name="whatsapp"
+                style={localStyle.iconSocialMedia}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      ) : (
+        <ThemedText style={localStyle.messageDelete}>
+          El usuario a eliminado su cuenta
+        </ThemedText>
+      )}
       {item.statusService === STATUS_SERVICE.PENDIENT && (
         <View style={localStyle.rowInfo}>
           <GeneralButton
@@ -225,6 +258,11 @@ const localStyle = StyleSheet.create({
   textStatus: {
     fontSize: 20,
     marginTop: 10,
+  },
+  messageDelete: {
+    ...TextStyle.textNote,
+    ...TextStyle.center,
+    marginBottom: 25,
   },
 });
 export default ScheduleItem;

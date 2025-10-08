@@ -2,7 +2,7 @@
   "expo": {
     "name": "Meredith Aesthetic Worker",
     "slug": "sthetic-mobile",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/images/meredith-aesthetic-work-logo.png",
     "scheme": "myapp",
@@ -20,7 +20,7 @@
       }
     },
     "android": {
-      "versionCode": 7,
+      "versionCode": 8,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/meredith-aesthetic-work-logo.png",
@@ -31,7 +31,19 @@
         "googleMaps": {
           "apiKey": "AIzaSyBEPqhm55f6JnlZv_lIxiikGiUiuU7YJ4w"
         }
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "wa.me"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "bundler": "metro",
