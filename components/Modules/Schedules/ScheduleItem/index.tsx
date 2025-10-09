@@ -12,6 +12,7 @@ import {
   convertCurrency,
   convertHourToAMorPM,
   openLink,
+  openWhatsApp,
 } from "@/utils/GeneralUtils";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
@@ -167,9 +168,7 @@ export const ScheduleItem = ({
               />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() =>
-                openLink(`https://wa.me/${dataClient.completePhone}`)
-              }
+              onPress={() => openWhatsApp(dataClient.completePhone)}
             >
               <MaterialCommunityIcons
                 name="whatsapp"

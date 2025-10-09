@@ -94,10 +94,10 @@ export const UploadVideoModal = ({
         alert("El archivo es demasiado grande (máx. 5MB)");
         return;
       }
-      const base64video = await getBase64FromVideo(result.assets[0].uri);
+      // const base64video = await getBase64FromVideo(result.assets[0].uri);
       setVideoSelected({
         ...result.assets[0],
-        base64: `data:video/mp4;base64,${base64video}`,
+        // base64: `data:video/mp4;base64,${base64video}`,
       });
     } else {
       console.info("El usuario canceló la selección.");

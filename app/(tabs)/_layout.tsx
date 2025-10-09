@@ -1,5 +1,5 @@
 import { Tabs, useNavigation } from "expo-router";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
@@ -11,16 +11,20 @@ import { AntDesign, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { useApiProvider } from "@/provider/InterceptorProvider";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import apiUserConfig from "@/api/UserConfig";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { TYPE_STATUS } from "@/constants/Constants";
+import { PLATFORM_TYPE, TYPE_STATUS, VERSION } from "@/constants/Constants";
 import { useSessionProvider } from "@/provider/SessionProvider";
 import { useWebSocketProvider } from "@/provider/WebSocketProvider";
 import { SOCKET_CHANNELS_TOPICS } from "@/constants/socket-channels";
 import { useAudioPlayer } from "expo-audio";
+import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
+import { apiUser } from "@/api/User";
+import { CurrentVersionType } from "@/constants/GeneralTypes";
+import ModalUpdateVersion from "@/components/Shared/ModalUpdateVersion";
 
 export default function TabLayout() {
   const sound = useAudioPlayer(
@@ -38,6 +42,15 @@ export default function TabLayout() {
     null
   );
   const responseListener = useRef<Notifications.EventSubscription | null>(null);
+  const [showUpdateVersion, setShowUpdateVersion] = useState(false);
+
+  const { data: currentVersion } = useQuery({
+    queryKey: [REACT_QUERY_KEYS.userConfig.configVersion("version")],
+    queryFn: () => apiUser.getCurrentVersion(),
+    ...{
+      select: (data: ResponseApi) => data.data,
+    },
+  });
 
   const { mutate: saveTokenNotification } = useMutation({
     mutationFn: (data: any) => apiUserConfig.saveTokenNotification(data),
@@ -53,6 +66,24 @@ export default function TabLayout() {
         message: data.message,
       });
   };
+
+  useEffect(() => {
+    if (!currentVersion?.error && currentVersion?.items) {
+      const dataVersion: CurrentVersionType = currentVersion?.items;
+      if (
+        Platform.OS === PLATFORM_TYPE.IOS &&
+        dataVersion.versionIos !== VERSION
+      ) {
+        setShowUpdateVersion(true);
+      }
+      if (
+        Platform.OS === PLATFORM_TYPE.ANDROID &&
+        dataVersion.versionAndroid !== VERSION
+      ) {
+        setShowUpdateVersion(true);
+      }
+    }
+  }, [currentVersion]);
 
   useEffect(() => {
     getStoreSession({ key: KEY_STORE.userToken }).then((value) => {
@@ -208,6 +239,7 @@ export default function TabLayout() {
           />
         </Tabs>
       </View>
+      {showUpdateVersion && <ModalUpdateVersion open={showUpdateVersion} />}
     </View>
   );
 }

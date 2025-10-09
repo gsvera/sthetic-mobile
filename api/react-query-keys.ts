@@ -10,7 +10,8 @@ export const REACT_QUERY_KEYS = {
     userConfig: {
         getLocationByUser: (key:string) => `get-location-by-user${key}`,
         getInfoCompanyByUer: (key:string) => `get-info-company-by-user-${key}`,
-        getTraining: (key: string) => `get-training-${key}`
+        getTraining: (key: string) => `get-training-${key}`,
+        configVersion: (key:string) => `get-current-version-${key}`
     },
     plan: {
         getFilterData: (key:string) => `get-plan-filter-data-${key}`,

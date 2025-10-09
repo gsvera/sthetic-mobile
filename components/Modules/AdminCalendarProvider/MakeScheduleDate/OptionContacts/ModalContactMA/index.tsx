@@ -110,7 +110,7 @@ const localStyle = StyleSheet.create({
     ...TextStyle.value,
     borderWidth: 1,
     borderRadius: 2,
-    height: 35,
+    height: 40,
     padding: 10,
     marginTop: 10,
   },

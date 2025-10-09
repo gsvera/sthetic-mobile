@@ -357,11 +357,9 @@ export const MakeScheduleDate = ({
                       style={localStyle.contentLada}
                       onPress={() => setOpenLadaModal((v) => !v)}
                     >
-                      <TextInput
-                        onPress={() => setOpenLadaModal((v) => !v)}
-                        style={TextStyle.value}
-                        value={ladaClient ? `${ladaClient.lada}` : ""}
-                      />
+                      <ThemedText style={TextStyle.value}>
+                        {ladaClient?.lada ? `${ladaClient.lada}` : ""}
+                      </ThemedText>
                     </TouchableOpacity>
                     <TextInput
                       style={localStyle.contentPhone}

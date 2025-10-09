@@ -6,6 +6,12 @@ export type loginData = {
     isProvider?: boolean;
 }
 
+export type CurrentVersionType = {
+    id: number;
+    versionAndroid: string;
+    versionIos: string;
+}
+
 export type selectOptionType = {
     key: number | string,
     value: string,
