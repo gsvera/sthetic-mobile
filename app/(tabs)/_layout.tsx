@@ -16,7 +16,12 @@ import apiUserConfig from "@/api/UserConfig";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { PLATFORM_TYPE, TYPE_STATUS, VERSION } from "@/constants/Constants";
+import {
+  APP_NAME_SLUG,
+  PLATFORM_TYPE,
+  TYPE_STATUS,
+  VERSION,
+} from "@/constants/Constants";
 import { useSessionProvider } from "@/provider/SessionProvider";
 import { useWebSocketProvider } from "@/provider/WebSocketProvider";
 import { SOCKET_CHANNELS_TOPICS } from "@/constants/socket-channels";
@@ -46,7 +51,7 @@ export default function TabLayout() {
 
   const { data: currentVersion } = useQuery({
     queryKey: [REACT_QUERY_KEYS.userConfig.configVersion("version")],
-    queryFn: () => apiUser.getCurrentVersion(),
+    queryFn: () => apiUser.getCurrentVersion(APP_NAME_SLUG),
     ...{
       select: (data: ResponseApi) => data.data,
     },

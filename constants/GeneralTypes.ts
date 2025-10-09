@@ -10,6 +10,7 @@ export type CurrentVersionType = {
     id: number;
     versionAndroid: string;
     versionIos: string;
+    slugName: string;
 }
 
 export type selectOptionType = {

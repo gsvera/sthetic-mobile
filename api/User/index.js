@@ -58,7 +58,9 @@ export const apiUser = {
   savePayStripe: function (data) {
     return axiosInstance.post(`${AUTH_BASE_URL}/save-pay-stripe`, data);
   },
-  getCurrentVersion: function () {
-    return axiosInstance.get(`${BASE_URL}/get-current-version`);
+  getCurrentVersion: function (slugName) {
+    return axiosInstance.get(
+      `${BASE_URL}/get-current-version?slug-name=${slugName}`
+    );
   },
 };
