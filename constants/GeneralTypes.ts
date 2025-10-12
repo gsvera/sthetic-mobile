@@ -189,3 +189,11 @@ export type StripeDataCustomerType = {
     ephemeralKeyStripe: string,
     paymentIntentStripe: string,
 }
+
+export type HistoryPayType = {
+    id: number;
+    amountPaid: number;
+    discountApplied: number;
+    paymentDate: string;
+    namePlan: string;
+}

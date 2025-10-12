@@ -1,6 +1,6 @@
 import { weekDays } from "./GeneralTypes";
 
-export const VERSION = "v.1.0.10";
+export const VERSION = "v.1.0.11";
 export const APP_NAME_SLUG = 'meredith-aesthetic-work';
 export const PACKAGE_NAME_ANDROID = "com.abasotech.meredithcarework";
 export const APP_STORE_ID = ""; // FALTA EL ID

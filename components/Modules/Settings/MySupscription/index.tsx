@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { functionServicesType } from "../types";
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
 import { ThemedText } from "@/components/ThemedText";
@@ -23,6 +29,7 @@ import { useEffect, useMemo, useState } from "react";
 import StripePayment from "@/components/Shared/StripePayment";
 import {
   PAYMENT_TYPE,
+  PLATFORM_TYPE,
   STATUS_ACCOUNT_PAY,
   TYPE_STATUS,
 } from "@/constants/Constants";
@@ -33,6 +40,7 @@ import dayjs from "dayjs";
 import { apiCoupon } from "@/api/Coupon";
 import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
 import LoadingView from "@/components/Shared/LoadingView";
+import HistoryPayModal from "./HistoryPayModal";
 
 type mySupscriptionProps = functionServicesType & {
   nameCustomer: string;
@@ -52,6 +60,7 @@ export const MySupscription = ({
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
+  const [openHistoryPayModal, setOpenHistoryPayModal] = useState(false);
 
   const { data: planData } = useQuery({
     queryKey: [REACT_QUERY_KEYS.plan.getByUser(idUser as string)],
@@ -177,9 +186,16 @@ export const MySupscription = ({
           <View style={localStyle.contentTitlePlan}>
             <View>
               <ThemedText style={localStyle.textLabelTitle}>Plan</ThemedText>
-              <Text style={localStyle.titlePlan}>
+              <ThemedText style={localStyle.titlePlan}>
                 {planData?.catalogPlanDTO.name}
-              </Text>
+              </ThemedText>
+              <View style={GridStyle.rowContentCenter}>
+                <TouchableOpacity onPress={() => setOpenHistoryPayModal(true)}>
+                  <ThemedText style={localStyle.textHistory}>
+                    Historial de pagos
+                  </ThemedText>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
 
@@ -294,6 +310,13 @@ export const MySupscription = ({
           handleSuccesPayment={handleSuccessPay}
         />
       )}
+      {openHistoryPayModal && (
+        <HistoryPayModal
+          open={openHistoryPayModal}
+          handleCloseModal={() => setOpenHistoryPayModal(false)}
+          idUser={idUser}
+        />
+      )}
     </View>
   );
 };
@@ -314,6 +337,12 @@ const localStyle = StyleSheet.create({
     ...TextStyle.bold,
     ...TextStyle.size40,
     color: ThemeColorsSthetic.textOre,
+    paddingVertical: Platform.OS === PLATFORM_TYPE.ANDROID ? 10 : 15,
+    marginBottom: Platform.OS === PLATFORM_TYPE.ANDROID ? 10 : 0,
+  },
+  textHistory: {
+    ...TextStyle.textNote,
+    textDecorationLine: "underline",
   },
   textLabelTitle: {
     ...TextStyle.center,

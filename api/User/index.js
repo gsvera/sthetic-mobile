@@ -63,4 +63,7 @@ export const apiUser = {
       `${BASE_URL}/get-current-version?slug-name=${slugName}`
     );
   },
+  getHistoryPay: function (idUser) {
+    return axiosInstance.get(`${AUTH_BASE_URL}/get-history-pay/${idUser}`);
+  },
 };

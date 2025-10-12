@@ -2,6 +2,7 @@ export const REACT_QUERY_KEYS = {
     user: {
         findDuplicatedUser: (key:string) => `get-plan-filter-data-${key}`,
         getDataUser: (key: string) => `get-data-user-${key}`,
+        getHistoryPay: (key: string | undefined) => `get-history-pay-${key}`
     },
     schedule: {
         getAllByDay: (key: string) => `schedule-get-all-${key}`,
