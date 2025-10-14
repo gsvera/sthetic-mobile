@@ -17,6 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import * as ImagePicker from "expo-image-picker";
 import {
   Image,
+  Keyboard,
   Platform,
   Pressable,
   ScrollView,
@@ -34,6 +35,7 @@ import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { InfoCompanyType } from "@/constants/GeneralTypes";
 import LoadingView from "@/components/Shared/LoadingView";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
+import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
 
 type myCompanyProps = {
   idUser: string;
@@ -57,6 +59,9 @@ const schema = yup.object().shape({
 });
 
 export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
+  const heightWithKeyBoard = Platform.OS === PLATFORM_TYPE.IOS ? "70%" : "67%";
+  const heightWithoutKeyboard =
+    Platform.OS === PLATFORM_TYPE.IOS ? "85%" : "87%";
   const { handleNotification } = useNotificationProvider();
   const {
     control,
@@ -70,6 +75,7 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
   const [companyPicture, setCompanyPicture] = useState<string | undefined>(
     undefined
   );
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const { data: dataInfoCompany, isFetching: isFetchingInfoCompany } = useQuery(
     {
@@ -113,6 +119,22 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
         setCompanyPicture(dataInfoCompany.companyPictureUrl);
     }
   }, [isFetchingInfoCompany]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => setIsKeyboardVisible(true)
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => setIsKeyboardVisible(false)
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const disableBtn = useMemo(
     () => !watch("companyName") || !watch("generalDescription"),
@@ -181,154 +203,162 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
           <LoadingView />
         </View>
       ) : (
-        <ScrollView style={{ height: "85%" }}>
-          <View>
-            <Pressable
-              style={{
-                width: "100%",
-                height: 150,
-                borderWidth: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: ThemeColorsSthetic.backgroundLight,
-              }}
-              onPress={showFileManager}
-            >
-              {!companyPicture ? (
-                <MaterialIcons
-                  name="add-photo-alternate"
-                  size={30}
-                  color={ThemeColorsSthetic.accentReverse}
-                />
-              ) : (
-                <Image
-                  style={{ width: "100%", height: "100%" }}
-                  source={{ uri: companyPicture }}
-                />
-              )}
-            </Pressable>
-          </View>
-          <View style={localStyle.contentForm}>
-            <View style={{ width: "80%", paddingTop: 20 }}>
-              <View style={{ marginVertical: 10 }}>
-                <ThemedText style={localStyle.label}>
-                  * Nombre del negocio
-                </ThemedText>
-                <Controller
-                  control={control}
-                  name="companyName"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      style={GeneralStyle.simpleInput}
-                      placeholder="Ingrese el nombre de tu negocio"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      maxLength={255}
-                    />
-                  )}
-                />
-                {errors.companyName && (
-                  <ThemedText style={TextStyle.textError}>
-                    {errors.companyName.message}
-                  </ThemedText>
+        <View
+          style={{
+            height: isKeyboardVisible
+              ? heightWithKeyBoard
+              : heightWithoutKeyboard,
+          }}
+        >
+          <ScrollView>
+            <View>
+              <Pressable
+                style={{
+                  width: "100%",
+                  height: 150,
+                  borderWidth: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: ThemeColorsSthetic.backgroundLight,
+                }}
+                onPress={showFileManager}
+              >
+                {!companyPicture ? (
+                  <MaterialIcons
+                    name="add-photo-alternate"
+                    size={30}
+                    color={ThemeColorsSthetic.accentReverse}
+                  />
+                ) : (
+                  <Image
+                    style={{ width: "100%", height: "100%" }}
+                    source={{ uri: companyPicture }}
+                  />
                 )}
-              </View>
-              <View style={{ marginVertical: 10 }}>
-                <ThemedText style={localStyle.label}>
-                  * Descripción de tu servicio
-                </ThemedText>
-                <Controller
-                  control={control}
-                  name="generalDescription"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <>
-                      <View style={localStyle.descriptionBox}>
-                        <TextInput
-                          placeholder="Ingrese una breve descripción de sus servicios"
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                          value={value}
-                          multiline
-                          numberOfLines={5}
-                          maxLength={5000}
-                        />
-                      </View>
-                      <ThemedText style={localStyle.suffix}>
-                        {value?.length}/5000
-                      </ThemedText>
-                    </>
-                  )}
-                />
-                {errors.generalDescription && (
-                  <ThemedText style={TextStyle.textError}>
-                    {errors.generalDescription.message}
+              </Pressable>
+            </View>
+            <View style={localStyle.contentForm}>
+              <View style={{ width: "80%", paddingTop: 20 }}>
+                <View style={{ marginVertical: 10 }}>
+                  <ThemedText style={localStyle.label}>
+                    * Nombre del negocio
                   </ThemedText>
-                )}
-              </View>
-              <View style={{ marginVertical: 10 }}>
-                <ThemedText style={localStyle.label}>Facebook</ThemedText>
-                <Controller
-                  control={control}
-                  name="facebook"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      style={GeneralStyle.simpleInput}
-                      placeholder="Ingrese la url del facebook de tu negocio"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      maxLength={255}
-                    />
+                  <Controller
+                    control={control}
+                    name="companyName"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        style={GeneralStyle.simpleInput}
+                        placeholder="Ingrese el nombre de tu negocio"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        maxLength={255}
+                      />
+                    )}
+                  />
+                  {errors.companyName && (
+                    <ThemedText style={TextStyle.textError}>
+                      {errors.companyName.message}
+                    </ThemedText>
                   )}
-                />
-              </View>
-              <View style={{ marginVertical: 10 }}>
-                <ThemedText style={localStyle.label}>Instagram</ThemedText>
-                <Controller
-                  control={control}
-                  name="instagram"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      style={GeneralStyle.simpleInput}
-                      placeholder="Ingrese la url del instagram de tu negocio"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      maxLength={255}
-                    />
+                </View>
+                <View style={{ marginVertical: 10 }}>
+                  <ThemedText style={localStyle.label}>
+                    * Descripción de tu servicio
+                  </ThemedText>
+                  <Controller
+                    control={control}
+                    name="generalDescription"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <>
+                        <View style={localStyle.descriptionBox}>
+                          <TextInput
+                            placeholder="Ingrese una breve descripción de sus servicios"
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            multiline
+                            numberOfLines={5}
+                            maxLength={5000}
+                          />
+                        </View>
+                        <ThemedText style={localStyle.suffix}>
+                          {value?.length}/5000
+                        </ThemedText>
+                      </>
+                    )}
+                  />
+                  {errors.generalDescription && (
+                    <ThemedText style={TextStyle.textError}>
+                      {errors.generalDescription.message}
+                    </ThemedText>
                   )}
-                />
-              </View>
-              <View style={{ marginVertical: 10 }}>
-                <ThemedText style={localStyle.label}>Página web</ThemedText>
-                <Controller
-                  control={control}
-                  name="webPage"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      style={GeneralStyle.simpleInput}
-                      placeholder="Ingrese la url de la página web de tu negocio"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      maxLength={255}
-                    />
-                  )}
-                />
+                </View>
+                <View style={{ marginVertical: 10 }}>
+                  <ThemedText style={localStyle.label}>Facebook</ThemedText>
+                  <Controller
+                    control={control}
+                    name="facebook"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        style={GeneralStyle.simpleInput}
+                        placeholder="Ingrese la url del facebook de tu negocio"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        maxLength={255}
+                      />
+                    )}
+                  />
+                </View>
+                <View style={{ marginVertical: 10 }}>
+                  <ThemedText style={localStyle.label}>Instagram</ThemedText>
+                  <Controller
+                    control={control}
+                    name="instagram"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        style={GeneralStyle.simpleInput}
+                        placeholder="Ingrese la url del instagram de tu negocio"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        maxLength={255}
+                      />
+                    )}
+                  />
+                </View>
+                <View style={{ marginVertical: 10 }}>
+                  <ThemedText style={localStyle.label}>Página web</ThemedText>
+                  <Controller
+                    control={control}
+                    name="webPage"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        style={GeneralStyle.simpleInput}
+                        placeholder="Ingrese la url de la página web de tu negocio"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        maxLength={255}
+                      />
+                    )}
+                  />
+                </View>
               </View>
             </View>
-          </View>
-          <View style={localStyle.contentBtn}>
-            <GeneralButton
-              textBtn="Guardar"
-              styleText={TextStyle.fontBoldWhite}
-              styleBtn={ButtonGeneralStyle.btnSaveSthetic}
-              handleOnPress={handleSaveInfoCompany}
-              disabledBtn={disableBtn}
-            />
-          </View>
-        </ScrollView>
+            <View style={localStyle.contentBtn}>
+              <GeneralButton
+                textBtn="Guardar"
+                styleText={TextStyle.fontBoldWhite}
+                styleBtn={ButtonGeneralStyle.btnSaveSthetic}
+                handleOnPress={handleSaveInfoCompany}
+                disabledBtn={disableBtn}
+              />
+            </View>
+          </ScrollView>
+        </View>
       )}
     </View>
   );

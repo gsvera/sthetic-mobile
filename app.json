@@ -2,7 +2,7 @@
   "expo": {
     "name": "Meredith Aesthetic Worker",
     "slug": "sthetic-mobile",
-    "version": "1.0.11",
+    "version": "1.0.12",
     "orientation": "portrait",
     "icon": "./assets/images/meredith-aesthetic-work-logo.png",
     "scheme": "myapp",
@@ -20,7 +20,7 @@
       }
     },
     "android": {
-      "versionCode": 11,
+      "versionCode": 12,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/meredith-aesthetic-work-logo.png",
