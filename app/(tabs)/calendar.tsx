@@ -14,8 +14,8 @@ export default function Calendar() {
   if (!idUser) return <></>;
 
   return (
-    <View>
-      <View style={localStyle.header}>
+    <View style={{ flex: 1 }}>
+      <View style={{ ...localStyle.header }}>
         <Image
           source={require("@/assets/images/meredith-aesthetic-work-logo.png")}
           style={localStyle.logo}
@@ -28,7 +28,6 @@ export default function Calendar() {
 
 const localStyle = StyleSheet.create({
   header: {
-    height: 70,
     paddingVertical: 10,
     marginBottom: 10,
     flexDirection: "row",

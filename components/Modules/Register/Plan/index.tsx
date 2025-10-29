@@ -1,11 +1,10 @@
-import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { ThemedText } from "../../../ThemedText";
 import PlanCard, { PlanCardProps } from "./PlanCard";
 import { useQuery } from "@tanstack/react-query";
 import { apiPlan } from "@/api/Plan";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { ThemeColorsSthetic } from "@/constants/Colors";
-import { PLATFORM_TYPE } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
 import { MarginStyle } from "@/constants/StyleComponents";
 
@@ -27,7 +26,7 @@ export const Plan = ({ selectedPlan }: PlanProps) => {
   });
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View
         style={{
           marginBottom: 15,
@@ -40,7 +39,7 @@ export const Plan = ({ selectedPlan }: PlanProps) => {
         </ThemedText>
       </View>
       <View style={localStyles.constentScroll}>
-        <ScrollView>
+        <ScrollView style={{ flexGrow: 1 }}>
           {isLoadingPlans ? (
             <View style={MarginStyle.marginT100}>
               <LoadingView />
@@ -67,7 +66,7 @@ export const localStyles = StyleSheet.create({
     fontWeight: "bold",
   },
   constentScroll: {
-    height: Platform.OS === PLATFORM_TYPE.ANDROID ? 560 : 600,
+    flex: 1,
   },
   content: {
     flexGrow: 1,

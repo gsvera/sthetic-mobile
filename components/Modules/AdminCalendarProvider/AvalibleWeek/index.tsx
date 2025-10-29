@@ -147,7 +147,7 @@ export const AvailibleWeek = ({
           </ThemedText>
         </View>
         <View
-          style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "75%" : "75%" }}
+          style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "75%" : "72%" }}
         >
           <ScrollView>
             {availableTimeWeek.map((day, i) => (

@@ -8,11 +8,12 @@ import {
 } from "@/constants/StyleComponents";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Dimensions,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -27,7 +28,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiUserConfig } from "@/api/UserConfig";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { TYPE_STATUS } from "@/constants/Constants";
+import { PLATFORM_TYPE, TYPE_STATUS } from "@/constants/Constants";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
@@ -81,6 +82,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   **/
   }
   // const mapRef = useRef<MapView>(null);
+  const { height } = Dimensions.get("window");
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [enableBtn, setEnableBtn] = useState(false);
   const [requiredLocation, setRequiredLocation] = useState(false);
@@ -285,10 +287,15 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
   };
 
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? height * 0.05 : 0,
+      }}
+    >
       <SubHeaderReturn subtitle="Mi Ubicación" handleReturn={returnBack} />
-      <View style={{ height: "100%" }}>
-        <View style={localStyle.contentBody}>
+      <View style={{ flex: 1 }}>
+        <ScrollView style={localStyle.contentBody}>
           <ThemedText style={localStyle.textDescription}>
             Seleccione el estado y municipio y/o utilice el boton para obtener
             la ubicación de su dispositivo
@@ -327,6 +334,8 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
             <ThemedText style={TextStyle.label}>* Referencia:</ThemedText>
             <TextInput
               style={localStyle.referenceInput}
+              placeholder="Agrega una referencia descriptiva sobre como ubicar tu negocio"
+              placeholderTextColor={ThemeColorsSthetic.muted}
               onChangeText={setReference}
               maxLength={100}
               value={reference}
@@ -439,7 +448,7 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
               disabledBtn={enableBtn}
             />
           </View>
-        </View>
+        </ScrollView>
       </View>
 
       <SelectStateModal
@@ -470,7 +479,8 @@ const localStyle = StyleSheet.create({
   contentBody: { flex: 1, padding: 10 },
   textDescription: {
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: 20,
+    paddingBottom: 20,
     color: ThemeColorsSthetic.textLabels,
   },
   referenceInput: {

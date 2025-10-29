@@ -166,6 +166,7 @@ export const PersonalInformation = ({
                   <TextInput
                     style={GeneralStyle.simpleInput}
                     placeholder="Ingrese su nombre"
+                    placeholderTextColor={ThemeColorsSthetic.muted}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
@@ -187,6 +188,7 @@ export const PersonalInformation = ({
                   <TextInput
                     style={GeneralStyle.simpleInput}
                     placeholder="Ingrese su apellido"
+                    placeholderTextColor={ThemeColorsSthetic.muted}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
@@ -208,18 +210,12 @@ export const PersonalInformation = ({
               >
                 <View style={{ width: "35%" }}>
                   <ThemedText style={localStyle.label}>Lada</ThemedText>
-                  {/* <Controller
-                    control={control}
-                    name="lada"
-                    render={({ field: { value } }) => ( */}
                   <TextInput
                     style={GeneralStyle.simpleInput}
                     value={lada}
                     editable={false}
                     selectTextOnFocus={false}
                   />
-                  {/* )}
-                  /> */}
                 </View>
                 <View style={{ width: "60%" }}>
                   <ThemedText style={localStyle.label}>* Telefono</ThemedText>
@@ -230,6 +226,7 @@ export const PersonalInformation = ({
                       <TextInput
                         style={GeneralStyle.simpleInput}
                         placeholder="Ingrese su numero de telefono"
+                        placeholderTextColor={ThemeColorsSthetic.muted}
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
@@ -254,6 +251,7 @@ export const PersonalInformation = ({
                   <TextInput
                     style={GeneralStyle.simpleInput}
                     placeholder="Ingrese su email"
+                    placeholderTextColor={ThemeColorsSthetic.muted}
                     keyboardType="email-address"
                     onChangeText={(e) => onChange(e.toLowerCase())}
                     onBlur={onBlur}

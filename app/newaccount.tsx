@@ -175,7 +175,7 @@ export default function newAccount() {
         <View
           style={{
             backgroundColor: ThemeColorsSthetic.backgroundLight,
-            height: "100%",
+            flex: 1,
           }}
         >
           <View>

@@ -20,6 +20,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import {
+  Dimensions,
   Keyboard,
   StyleSheet,
   TextInput,
@@ -30,6 +31,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function resetPassword() {
+  const { height } = Dimensions.get("window");
   const { handleNotification } = useNotificationProvider();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
@@ -132,7 +134,7 @@ export default function resetPassword() {
           <View
             style={{
               backgroundColor: ThemeColorsSthetic.backgroundLight,
-              height: "100%",
+              flex: 1,
             }}
           >
             <View>
@@ -141,93 +143,30 @@ export default function resetPassword() {
             <ThemedText style={localStyle.title}>
               Restablecer contraseña
             </ThemedText>
-            <View
-              style={{
-                height: "100%",
-                width: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <View>
               {!viewNewPassword ? (
-                <View style={localStyle.content}>
-                  <ThemedText style={localStyle.label}>
-                    Ingrese su correo electronico
-                  </ThemedText>
-                  <TextInput
-                    style={localStyle.input}
-                    keyboardType="email-address"
-                    onChangeText={(e) =>
-                      setRequestData((prev) => ({ ...prev, email: e }))
-                    }
-                  />
-                  {showError && (
-                    <ThemedText style={localStyle.error}>
-                      Ingrese un email valido
-                    </ThemedText>
-                  )}
-                  <GeneralButton
-                    textBtn="Enviar"
-                    styleText={TextStyle.fontBoldWhite}
-                    styleBtn={ButtonGeneralStyle.btnSaveSthetic}
-                    handleOnPress={handleSendRecovery}
-                    disabledBtn={isLoading}
-                  />
-                  {isLoading && (
-                    <View style={MarginStyle.marginT10}>
-                      <LoadingView />
-                    </View>
-                  )}
-                </View>
-              ) : (
-                <View style={localStyle.content}>
-                  <View>
+                <View style={{ ...localStyle.content, height: height * 0.4 }}>
+                  <View style={{ marginVertical: "auto" }}>
                     <ThemedText style={localStyle.label}>
-                      Ingrese el código de verificación
+                      Ingrese su correo electronico
                     </ThemedText>
                     <TextInput
                       style={localStyle.input}
-                      keyboardType="numeric"
+                      keyboardType="email-address"
                       onChangeText={(e) =>
-                        setRequestData((prev) => ({ ...prev, token: e }))
+                        setRequestData((prev) => ({ ...prev, email: e }))
                       }
                     />
-                  </View>
-                  <View>
-                    <ThemedText style={localStyle.label}>
-                      Ingrese su nueva contraseña
-                    </ThemedText>
-                    <View>
-                      <TextInput
-                        style={localStyle.input}
-                        onChangeText={(e) =>
-                          setRequestData((prev) => ({ ...prev, password: e }))
-                        }
-                        secureTextEntry={hiddenPass}
-                      />
-                      <TouchableOpacity
-                        style={localStyle.icon}
-                        onPress={() => setHiddenPass((prev) => !prev)}
-                      >
-                        <Ionicons
-                          name={hiddenPass ? "eye-off" : "eye"}
-                          size={24}
-                          color="gray"
-                        />
-                      </TouchableOpacity>
-                    </View>
                     {showError && (
                       <ThemedText style={localStyle.error}>
-                        La contraseña debe incluir al menos una letra mayúscula,
-                        un número y un carácter especial
+                        Ingrese un email valido
                       </ThemedText>
                     )}
                     <GeneralButton
-                      textBtn="Restablecer contraseña"
+                      textBtn="Enviar"
                       styleText={TextStyle.fontBoldWhite}
                       styleBtn={ButtonGeneralStyle.btnSaveSthetic}
-                      handleOnPress={handleResetPassword}
+                      handleOnPress={handleSendRecovery}
                       disabledBtn={isLoading}
                     />
                     {isLoading && (
@@ -235,6 +174,65 @@ export default function resetPassword() {
                         <LoadingView />
                       </View>
                     )}
+                  </View>
+                </View>
+              ) : (
+                <View style={{ ...localStyle.content, height: height * 0.7 }}>
+                  <View style={{ marginVertical: "auto" }}>
+                    <View>
+                      <ThemedText style={localStyle.label}>
+                        Ingrese el código de verificación
+                      </ThemedText>
+                      <TextInput
+                        style={localStyle.input}
+                        keyboardType="numeric"
+                        onChangeText={(e) =>
+                          setRequestData((prev) => ({ ...prev, token: e }))
+                        }
+                      />
+                    </View>
+                    <View>
+                      <ThemedText style={localStyle.label}>
+                        Ingrese su nueva contraseña
+                      </ThemedText>
+                      <View>
+                        <TextInput
+                          style={localStyle.input}
+                          onChangeText={(e) =>
+                            setRequestData((prev) => ({ ...prev, password: e }))
+                          }
+                          secureTextEntry={hiddenPass}
+                        />
+                        <TouchableOpacity
+                          style={localStyle.icon}
+                          onPress={() => setHiddenPass((prev) => !prev)}
+                        >
+                          <Ionicons
+                            name={hiddenPass ? "eye-off" : "eye"}
+                            size={24}
+                            color="gray"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {showError && (
+                        <ThemedText style={localStyle.error}>
+                          La contraseña debe incluir al menos una letra
+                          mayúscula, un número y un carácter especial
+                        </ThemedText>
+                      )}
+                      <GeneralButton
+                        textBtn="Restablecer contraseña"
+                        styleText={TextStyle.fontBoldWhite}
+                        styleBtn={ButtonGeneralStyle.btnSaveSthetic}
+                        handleOnPress={handleResetPassword}
+                        disabledBtn={isLoading}
+                      />
+                      {isLoading && (
+                        <View style={MarginStyle.marginT10}>
+                          <LoadingView />
+                        </View>
+                      )}
+                    </View>
                   </View>
                 </View>
               )}
@@ -255,7 +253,6 @@ const localStyle = StyleSheet.create({
     marginTop: 30,
   },
   content: {
-    marginTop: 150,
     margin: "auto",
     width: "90%",
   },

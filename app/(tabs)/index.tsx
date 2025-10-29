@@ -1,7 +1,7 @@
 import Schedules from "@/components/Modules/Schedules";
 import { ThemedText } from "@/components/ThemedText";
 
-import { Container, ThemeColorsSthetic } from "@/constants/Colors";
+import { ThemeColorsSthetic } from "@/constants/Colors";
 import { FORMAT_DATE, PLATFORM_TYPE } from "@/constants/Constants";
 import { GridStyle, TextStyle } from "@/constants/StyleComponents";
 import { getStoreSession, KEY_STORE } from "@/hooks/StoreDataSecure";
@@ -9,6 +9,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import dayjs from "dayjs";
 import { useState } from "react";
 import {
+  Dimensions,
   Image,
   Platform,
   StyleSheet,
@@ -19,6 +20,7 @@ import { StatusScheduleType } from "@/constants/GeneralTypes";
 import TabsStatusSchedule from "@/components/Modules/Schedules/TabsStatusSchedule";
 
 export default function Home() {
+  const { height } = Dimensions.get("window");
   const [openDatePicker, setOpenDatePicker] = useState(false);
   const [idUser, setIdUser] = useState("");
   const [dateSearch, setDateSearch] = useState(
@@ -42,36 +44,43 @@ export default function Home() {
   };
 
   return (
-    <View style={Container.container}>
-      <View style={localStyle.header}>
+    <View style={{ flex: 1 }}>
+      <View style={{ ...localStyle.header }}>
         <Image
           source={require("@/assets/images/meredith-aesthetic-work-logo.png")}
           style={localStyle.logo}
         />
       </View>
-      <View style={localStyle.headerTitle}>
-        <ThemedText style={TextStyle.titleModal}>Mis citas del día:</ThemedText>
-        <TouchableOpacity
-          style={localStyle.contentDate}
-          onPress={() => setOpenDatePicker(true)}
-        >
-          <ThemedText style={localStyle.labelDate}>{dateSearch}</ThemedText>
-        </TouchableOpacity>
-      </View>
-      <View style={localStyle.contentTabs}>
-        <TabsStatusSchedule
-          statusSelected={statusSelected}
-          handleChangeStatus={onChangeStatus}
-        />
-      </View>
       <View
-        style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "66%" : "71%" }}
+        style={{
+          flex: 1,
+          marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? height * 0.06 : 0,
+        }}
       >
-        <Schedules
-          idUser={idUser}
-          day={dateSearch}
-          statusSchedule={statusSelected}
-        />
+        <View style={localStyle.headerTitle}>
+          <ThemedText style={TextStyle.titleModal}>
+            Mis citas del día:
+          </ThemedText>
+          <TouchableOpacity
+            style={localStyle.contentDate}
+            onPress={() => setOpenDatePicker(true)}
+          >
+            <ThemedText style={localStyle.labelDate}>{dateSearch}</ThemedText>
+          </TouchableOpacity>
+        </View>
+        <View style={localStyle.contentTabs}>
+          <TabsStatusSchedule
+            statusSelected={statusSelected}
+            handleChangeStatus={onChangeStatus}
+          />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Schedules
+            idUser={idUser}
+            day={dateSearch}
+            statusSchedule={statusSelected}
+          />
+        </View>
       </View>
       <DateTimePickerModal
         isVisible={openDatePicker}
@@ -85,7 +94,6 @@ export default function Home() {
 
 const localStyle = StyleSheet.create({
   header: {
-    height: 70,
     paddingVertical: 10,
     marginBottom: 10,
     flexDirection: "row",

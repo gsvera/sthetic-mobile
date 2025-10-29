@@ -1,7 +1,8 @@
 import {
+  Dimensions,
+  Platform,
   ScrollView,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -17,13 +18,14 @@ import { selectOptionType } from "@/constants/GeneralTypes";
 import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useNotificationProvider } from "@/provider/NotificationProvider";
-import { TYPE_STATUS } from "@/constants/Constants";
+import { PLATFORM_TYPE, TYPE_STATUS } from "@/constants/Constants";
 import LoadingView from "@/components/Shared/LoadingView";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 
 export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
+  const { height } = Dimensions.get("window");
   const { handleNotification } = useNotificationProvider();
   const [selectedKeys, setSelectedKeys] = useState<number[]>([]);
 
@@ -134,20 +136,32 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
   };
 
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? height * 0.05 : 0,
+      }}
+    >
       <SubHeaderReturn subtitle="Tipo de servicios" handleReturn={returnBack} />
       {isPendingLoad ? (
         <LoadingView />
       ) : (
-        <View style={{ width: "90%", marginHorizontal: "auto" }}>
-          <View>
+        <View
+          style={{
+            flex: 1,
+            width: "90%",
+            marginHorizontal: "auto",
+            marginBottom: 10,
+          }}
+        >
+          <View style={{ flex: 1 }}>
             <View style={localStyle.textDescription}>
               <ThemedText style={localStyle.label}>
                 Debe seleccionar al menos un tipo de servicio que ofrece, esto
                 ayuda al cliente para realizar búsquedas mas precisas.
               </ThemedText>
             </View>
-            <ScrollView style={{ height: "65%" }}>
+            <ScrollView style={{ flexGrow: 1 }}>
               {listOption.map((item: selectOptionType) => {
                 return (
                   <TouchableOpacity
@@ -196,7 +210,8 @@ export const TypeServices = ({ returnBack, idUser }: functionServicesType) => {
 const localStyle = StyleSheet.create({
   textDescription: {
     paddingLeft: 10,
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 10,
   },
   contentElement: {
     flexDirection: "row",
@@ -216,7 +231,7 @@ const localStyle = StyleSheet.create({
     color: ThemeColorsSthetic.muted,
     fontSize: 15,
   },
-  contentBtn: { marginTop: 25, paddingHorizontal: 20 },
+  contentBtn: { marginTop: 15, paddingHorizontal: 20 },
 });
 
 export default TypeServices;

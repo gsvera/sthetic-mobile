@@ -273,6 +273,7 @@ export const GeneralStyle = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: "gray",
         paddingHorizontal: 10,
+        color: ThemeColorsSthetic.text
     }
 })
 

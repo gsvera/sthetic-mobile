@@ -1,5 +1,4 @@
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
-import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
 import { PLATFORM_TYPE, REGEX } from "@/constants/Constants";
 import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,8 +8,10 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { apiLada } from "@/api/Lada";
 import {
+  Keyboard,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -85,6 +86,7 @@ export const FormRegister = ({
   ladaSelected,
   handleSelectLada,
 }: PropsFormRegister) => {
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [hiddenPass, setHiddenPass] = useState(true);
   const [hiddenConfirmPass, setHiddenConfirmPass] = useState(true);
   const [openLadaModal, setOpenLadaModal] = useState(false);
@@ -126,6 +128,22 @@ export const FormRegister = ({
     }
   }, [personalInformation]);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => setIsKeyboardVisible(true)
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => setIsKeyboardVisible(false)
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   const handleSavePersonalData = async (data: FormInputs) => {
     try {
       const searchUser: ResponseApi = await apiUser.findDuplicateUser(
@@ -153,198 +171,215 @@ export const FormRegister = ({
   };
 
   return (
-    <ContentKeyboardAutoScroll>
-      <View style={localStyles.ContentForm}>
-        <View>
-          <ThemedText style={TextStyle.titleRegister}>
-            Ingrese sus datos
-          </ThemedText>
-        </View>
-        <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>* Nombre(s)</Text>
-          <Controller
-            control={control}
-            name="firstName"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={localStyles.input}
-                placeholder="Ingrese su nombre"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-          />
-          {errors.firstName && (
-            <Text style={TextStyle.textError}>{errors.firstName.message}</Text>
-          )}
-        </View>
-        <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>* Apellido(s)</Text>
-          <Controller
-            control={control}
-            name="lastName"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={localStyles.input}
-                placeholder="Ingrese su apellido"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-          />
-          {errors.lastName && (
-            <Text style={TextStyle.textError}>{errors.lastName.message}</Text>
-          )}
-        </View>
-        <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>* Numero de telefono</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <Pressable
-              style={localStyles.contentLada}
-              onPress={() => setOpenLadaModal((v) => !v)}
-            >
-              <ThemedText
-                style={
-                  !ladaSelected
-                    ? localStyles.textLadaPlaceholder
-                    : localStyles.textLada
-                }
-              >
-                {!ladaSelected
-                  ? "Seleccione Lada"
-                  : `${ladaSelected.lada} ${ladaSelected.code}`}
-              </ThemedText>
-            </Pressable>
+    <View
+      style={
+        isKeyboardVisible
+          ? localStyles.withKeyboard
+          : localStyles.withoutKeyboard
+      }
+    >
+      <ScrollView style={{ flexGrow: 1 }}>
+        <View style={localStyles.ContentForm}>
+          <View>
+            <ThemedText style={TextStyle.titleRegister}>
+              Ingrese sus datos
+            </ThemedText>
+          </View>
+          <View style={localStyles.contentInput}>
+            <Text style={localStyles.label}>* Nombre(s)</Text>
             <Controller
               control={control}
-              name="phone"
+              name="firstName"
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={{ ...localStyles.input, width: "60%" }}
-                  placeholder="Ingrese su numero de telefono"
+                  style={localStyles.input}
+                  placeholderTextColor={ThemeColorsSthetic.muted}
+                  placeholder="Ingrese su nombre"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  maxLength={13}
                 />
               )}
             />
+            {errors.firstName && (
+              <Text style={TextStyle.textError}>
+                {errors.firstName.message}
+              </Text>
+            )}
           </View>
-          {showErrorLada && (
-            <Text style={TextStyle.textError}>La lada es requerida</Text>
-          )}
-          {errors.phone && (
-            <Text style={TextStyle.textError}>{errors.phone.message}</Text>
-          )}
-        </View>
-        <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>* Email</Text>
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={localStyles.input}
-                placeholder="Ingrese su email"
-                keyboardType="email-address"
-                onChangeText={(e) => onChange(e.toLowerCase())}
-                onBlur={onBlur}
+          <View style={localStyles.contentInput}>
+            <Text style={localStyles.label}>* Apellido(s)</Text>
+            <Controller
+              control={control}
+              name="lastName"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={localStyles.input}
+                  placeholderTextColor={ThemeColorsSthetic.muted}
+                  placeholder="Ingrese su apellido"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
+            {errors.lastName && (
+              <Text style={TextStyle.textError}>{errors.lastName.message}</Text>
+            )}
+          </View>
+          <View style={localStyles.contentInput}>
+            <Text style={localStyles.label}>* Numero de telefono</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Pressable
+                style={localStyles.contentLada}
+                onPress={() => setOpenLadaModal((v) => !v)}
+              >
+                <ThemedText
+                  style={
+                    !ladaSelected
+                      ? localStyles.textLadaPlaceholder
+                      : localStyles.textLada
+                  }
+                >
+                  {!ladaSelected
+                    ? "Seleccione Lada"
+                    : `${ladaSelected.lada} ${ladaSelected.code}`}
+                </ThemedText>
+              </Pressable>
+              <Controller
+                control={control}
+                name="phone"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={{ ...localStyles.input, width: "60%" }}
+                    placeholderTextColor={ThemeColorsSthetic.muted}
+                    placeholder="Ingrese su numero de telefono"
+                    keyboardType="numeric"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    maxLength={13}
+                  />
+                )}
               />
+            </View>
+            {showErrorLada && (
+              <Text style={TextStyle.textError}>La lada es requerida</Text>
             )}
-          />
-          {errors.email && (
-            <Text style={TextStyle.textError}>{errors.email.message}</Text>
-          )}
-        </View>
-        <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>* Contraseña</Text>
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View style={localStyles.input}>
+            {errors.phone && (
+              <Text style={TextStyle.textError}>{errors.phone.message}</Text>
+            )}
+          </View>
+          <View style={localStyles.contentInput}>
+            <Text style={localStyles.label}>* Email</Text>
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={{ width: "80%" }}
-                  onChangeText={onChange}
+                  style={localStyles.input}
+                  placeholderTextColor={ThemeColorsSthetic.muted}
+                  placeholder="Ingrese su email"
+                  keyboardType="email-address"
+                  onChangeText={(e) => onChange(e.toLowerCase())}
                   onBlur={onBlur}
-                  value={value}
-                  secureTextEntry={hiddenPass}
-                  placeholder="Ingrese su contraseña"
                 />
-                <TouchableOpacity
-                  style={localStyles.icon}
-                  onPress={() => setHiddenPass((prev) => !prev)}
-                >
-                  <Ionicons
-                    name={hiddenPass ? "eye-off" : "eye"}
-                    size={24}
-                    color="gray"
-                  />
-                </TouchableOpacity>
-              </View>
+              )}
+            />
+            {errors.email && (
+              <Text style={TextStyle.textError}>{errors.email.message}</Text>
             )}
-          />
-          {errors.password && (
-            <Text style={TextStyle.textError}>{errors.password.message}</Text>
-          )}
-        </View>
-        <View style={localStyles.contentInput}>
-          <Text style={localStyles.label}>* Confirmar Contraseña</Text>
-          <Controller
-            control={control}
-            name="confirmPassword"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View style={localStyles.input}>
-                <TextInput
-                  style={{ width: "80%" }}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  secureTextEntry={hiddenConfirmPass}
-                  placeholder="Ingrese nuevamente su contraseña"
-                />
-                <TouchableOpacity
-                  style={localStyles.icon}
-                  onPress={() => setHiddenConfirmPass((prev) => !prev)}
-                >
-                  <Ionicons
-                    name={hiddenConfirmPass ? "eye-off" : "eye"}
-                    size={24}
-                    color="gray"
+          </View>
+          <View style={localStyles.contentInput}>
+            <Text style={localStyles.label}>* Contraseña</Text>
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <View style={localStyles.input}>
+                  <TextInput
+                    style={{ width: "80%", color: ThemeColorsSthetic.text }}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    secureTextEntry={hiddenPass}
+                    placeholderTextColor={ThemeColorsSthetic.muted}
+                    placeholder="Ingrese su contraseña"
                   />
-                </TouchableOpacity>
-              </View>
+                  <TouchableOpacity
+                    style={localStyles.icon}
+                    onPress={() => setHiddenPass((prev) => !prev)}
+                  >
+                    <Ionicons
+                      name={hiddenPass ? "eye-off" : "eye"}
+                      size={24}
+                      color="gray"
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+            {errors.password && (
+              <Text style={TextStyle.textError}>{errors.password.message}</Text>
             )}
-          />
-          {errors.confirmPassword && (
-            <Text style={TextStyle.textError}>
-              {errors.confirmPassword.message}
-            </Text>
-          )}
+          </View>
+          <View style={localStyles.contentInput}>
+            <Text style={localStyles.label}>* Confirmar Contraseña</Text>
+            <Controller
+              control={control}
+              name="confirmPassword"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <View style={localStyles.input}>
+                  <TextInput
+                    style={{ width: "80%", color: ThemeColorsSthetic.text }}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    secureTextEntry={hiddenConfirmPass}
+                    placeholderTextColor={ThemeColorsSthetic.muted}
+                    placeholder="Ingrese nuevamente su contraseña"
+                  />
+                  <TouchableOpacity
+                    style={localStyles.icon}
+                    onPress={() => setHiddenConfirmPass((prev) => !prev)}
+                  >
+                    <Ionicons
+                      name={hiddenConfirmPass ? "eye-off" : "eye"}
+                      size={24}
+                      color="gray"
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+            {errors.confirmPassword && (
+              <Text style={TextStyle.textError}>
+                {errors.confirmPassword.message}
+              </Text>
+            )}
+          </View>
+          <View style={localStyles.contentButton}>
+            <GeneralButton
+              textBtn="Confirmar datos"
+              styleText={TextStyle.fontBoldWhite}
+              styleBtn={ButtonGeneralStyle.btnSaveSthetic}
+              handleOnPress={handleSubmit(handleSavePersonalData)}
+            />
+          </View>
         </View>
-        <View style={localStyles.contentButton}>
-          <GeneralButton
-            textBtn="Confirmar datos"
-            styleText={TextStyle.fontBoldWhite}
-            styleBtn={ButtonGeneralStyle.btnSaveSthetic}
-            handleOnPress={handleSubmit(handleSavePersonalData)}
-          />
-        </View>
-      </View>
-      <LadaOptionModal
-        open={openLadaModal}
-        handleCloseModal={() => setOpenLadaModal((v) => !v)}
-        listLada={catalogLada}
-        handleSelect={handleOnSelectLada}
-      />
-    </ContentKeyboardAutoScroll>
+        <LadaOptionModal
+          open={openLadaModal}
+          handleCloseModal={() => setOpenLadaModal((v) => !v)}
+          listLada={catalogLada}
+          handleSelect={handleOnSelectLada}
+        />
+      </ScrollView>
+    </View>
   );
 };
 
@@ -371,6 +406,7 @@ const localStyles = StyleSheet.create({
     height: 40,
     textAlignVertical: "center", // Android
     paddingVertical: Platform.OS === PLATFORM_TYPE.IOS ? 10 : 0,
+    color: ThemeColorsSthetic.text,
   },
   contentLada: {
     ...TextStyle.textNote,
@@ -408,6 +444,8 @@ const localStyles = StyleSheet.create({
     marginVertical: 15,
     width: "80%",
   },
+  withKeyboard: { height: Platform.OS === PLATFORM_TYPE.IOS ? "50%" : "50%" },
+  withoutKeyboard: { flex: 1 },
 });
 
 export default FormRegister;

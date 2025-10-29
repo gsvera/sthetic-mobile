@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, TextInput, View } from "react-native";
 import { PlanCardProps } from "../Plan/PlanCard";
 import { ThemedText } from "@/components/ThemedText";
 import {
@@ -75,63 +75,67 @@ export const FormPay = ({
         padding: 15,
         marginHorizontal: "auto",
         width: "90%",
+        flex: 1,
       }}
     >
-      <View>
-        <ThemedText style={TextStyle.titleRegister}>
-          Confirme su compra
-        </ThemedText>
-      </View>
-      <View style={localStyle.rowContent}>
-        <ThemedText style={TextStyle.label}>Plan seleccionado:</ThemedText>
-        <ThemedText style={TextStyle.value}>{plan?.name}</ThemedText>
-      </View>
-      <View style={localStyle.rowContent}>
-        <ThemedText style={TextStyle.label}>Costo:</ThemedText>
-        <ThemedText style={TextStyle.value}>
-          {plan?.price && convertCurrency(plan?.price, 0)}
-        </ThemedText>
-      </View>
-      <View style={localStyle.rowContent}>
-        <ThemedText style={TextStyle.label}>¿Tiene un cupon?</ThemedText>
-        <TextInput style={localStyle.inputCoupon} onChangeText={changeCoupon} />
-      </View>
-
-      {isFetchingCoupon ? (
-        <LoadingView styleProps={localStyle.loader} />
-      ) : couponData ? (
-        <View style={localStyle.rowContent}>
-          <View>
-            <ThemedText style={TextStyle.label}>Descuento de:</ThemedText>
-            {couponData.error && (
-              <ThemedText style={TextStyle.redColor}>
-                {couponData.message}
-              </ThemedText>
-            )}
-          </View>
-          <ThemedText style={TextStyle.value}>
-            {couponData?.items?.discountAmount &&
-              convertCurrency(couponData?.items?.discountAmount, 0)}
+      <ScrollView style={{ flexGrow: 1 }}>
+        <View>
+          <ThemedText style={TextStyle.titleRegister}>
+            Confirme su compra
           </ThemedText>
         </View>
-      ) : (
-        <></>
-      )}
-
-      <View style={localStyle.rowContent}>
-        <ThemedText style={TextStyle.label}>Total a pagar:</ThemedText>
-        <ThemedText style={TextStyle.value}>
-          {totalToPay && convertCurrency(totalToPay, 0)}
-        </ThemedText>
-      </View>
-      <View style={localStyle.rowContent}>
-        <GeneralButton
-          textBtn="Pagar"
-          styleText={TextStyle.fontBoldWhite}
-          styleBtn={localStyle.btnPay}
-          handleOnPress={handlePay}
-        />
-      </View>
+        <View style={localStyle.rowContent}>
+          <ThemedText style={TextStyle.label}>Plan seleccionado:</ThemedText>
+          <ThemedText style={TextStyle.value}>{plan?.name}</ThemedText>
+        </View>
+        <View style={localStyle.rowContent}>
+          <ThemedText style={TextStyle.label}>Costo:</ThemedText>
+          <ThemedText style={TextStyle.value}>
+            {plan?.price && convertCurrency(plan?.price, 0)}
+          </ThemedText>
+        </View>
+        <View style={localStyle.rowContent}>
+          <ThemedText style={TextStyle.label}>¿Tiene un cupon?</ThemedText>
+          <TextInput
+            style={localStyle.inputCoupon}
+            onChangeText={changeCoupon}
+          />
+        </View>
+        {isFetchingCoupon ? (
+          <LoadingView styleProps={localStyle.loader} />
+        ) : couponData ? (
+          <View style={localStyle.rowContent}>
+            <View>
+              <ThemedText style={TextStyle.label}>Descuento de:</ThemedText>
+              {couponData.error && (
+                <ThemedText style={TextStyle.redColor}>
+                  {couponData.message}
+                </ThemedText>
+              )}
+            </View>
+            <ThemedText style={TextStyle.value}>
+              {couponData?.items?.discountAmount &&
+                convertCurrency(couponData?.items?.discountAmount, 0)}
+            </ThemedText>
+          </View>
+        ) : (
+          <></>
+        )}
+        <View style={localStyle.rowContent}>
+          <ThemedText style={TextStyle.label}>Total a pagar:</ThemedText>
+          <ThemedText style={TextStyle.value}>
+            {totalToPay && convertCurrency(totalToPay, 0)}
+          </ThemedText>
+        </View>
+        <View style={localStyle.rowContent}>
+          <GeneralButton
+            textBtn="Pagar"
+            styleText={TextStyle.fontBoldWhite}
+            styleBtn={localStyle.btnPay}
+            handleOnPress={handlePay}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };

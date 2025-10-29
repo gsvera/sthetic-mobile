@@ -1,5 +1,6 @@
 import {
   Platform,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -175,133 +176,144 @@ export const MySupscription = ({
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <SubHeaderReturn subtitle="Mi subscripción" handleReturn={returnBack} />
-      <ContentKeyboardAutoScroll>
-        <View
-          style={{
-            paddingHorizontal: 15,
-          }}
-        >
-          <View style={localStyle.contentTitlePlan}>
-            <View>
-              <ThemedText style={localStyle.textLabelTitle}>Plan</ThemedText>
-              <ThemedText style={localStyle.titlePlan}>
-                {planData?.catalogPlanDTO.name}
-              </ThemedText>
-              <View style={GridStyle.rowContentCenter}>
-                <TouchableOpacity onPress={() => setOpenHistoryPayModal(true)}>
-                  <ThemedText style={localStyle.textHistory}>
-                    Historial de pagos
-                  </ThemedText>
-                </TouchableOpacity>
+      <View style={{ flex: 1 }}>
+        <ScrollView>
+          <View
+            style={{
+              paddingHorizontal: 15,
+            }}
+          >
+            <View style={localStyle.contentTitlePlan}>
+              <View>
+                <ThemedText style={localStyle.textLabelTitle}>Plan</ThemedText>
+                <ThemedText style={localStyle.titlePlan}>
+                  {planData?.catalogPlanDTO.name}
+                </ThemedText>
+                <View style={GridStyle.rowContentCenter}>
+                  <TouchableOpacity
+                    onPress={() => setOpenHistoryPayModal(true)}
+                  >
+                    <ThemedText style={localStyle.textHistory}>
+                      Historial de pagos
+                    </ThemedText>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
 
-          <View style={localStyle.rowData}>
-            <View>
-              <ThemedText style={localStyle.textLabel}>
-                Fecha Inicio:
-              </ThemedText>
-            </View>
-            <View>
-              <ThemedText style={localStyle.textValue}>
-                {convertDateToGeneralFormat(planData?.startDate)}
-              </ThemedText>
-            </View>
-          </View>
-          <View style={localStyle.rowData}>
-            <View>
-              <ThemedText style={localStyle.textLabel}>Fecha Fin:</ThemedText>
-            </View>
-            <View>
-              <ThemedText style={localStyle.textValue}>
-                {convertDateToGeneralFormat(planData?.endDate)}
-              </ThemedText>
-            </View>
-          </View>
-          <View style={localStyle.rowData}>
-            <View>
-              <ThemedText style={localStyle.textLabel}>Estatus:</ThemedText>
-            </View>
-            <View>
-              {planData?.isActive ? (
-                <View style={localStyle.badgeActive}>
-                  <ThemedText
-                    style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
-                  >
-                    {STATUS_ACCOUNT_PAY.CURRENT_ACCOUNT}
-                  </ThemedText>
-                </View>
-              ) : (
-                <View style={localStyle.badgeInactive}>
-                  <ThemedText
-                    style={{ ...TextStyle.fontBoldWhite, ...TextStyle.center }}
-                  >
-                    {STATUS_ACCOUNT_PAY.OVERDUE_ACCOUNT}
-                  </ThemedText>
-                </View>
-              )}
-            </View>
-          </View>
-          <View style={localStyle.rowData}>
-            <View>
-              <ThemedText style={localStyle.textLabel}>Costo:</ThemedText>
-            </View>
-            <View>
-              <ThemedText style={localStyle.textValue}>
-                {convertCurrency(planData?.catalogPlanDTO.price)}
-              </ThemedText>
-            </View>
-          </View>
-          <View style={localStyle.rowData}>
-            <ThemedText style={TextStyle.label}>¿Tiene un cupon?</ThemedText>
-            <TextInput
-              style={localStyle.inputCoupon}
-              onChangeText={setCoupon}
-              value={coupon}
-            />
-          </View>
-          {isFetchingCoupon ? (
-            <LoadingView styleProps={localStyle.loader} />
-          ) : coupon && couponData ? (
             <View style={localStyle.rowData}>
               <View>
-                <ThemedText style={TextStyle.label}>Descuento de:</ThemedText>
-                {couponData.error && (
-                  <ThemedText style={TextStyle.redColor}>
-                    {couponData.message}
-                  </ThemedText>
+                <ThemedText style={localStyle.textLabel}>
+                  Fecha Inicio:
+                </ThemedText>
+              </View>
+              <View>
+                <ThemedText style={localStyle.textValue}>
+                  {convertDateToGeneralFormat(planData?.startDate)}
+                </ThemedText>
+              </View>
+            </View>
+            <View style={localStyle.rowData}>
+              <View>
+                <ThemedText style={localStyle.textLabel}>Fecha Fin:</ThemedText>
+              </View>
+              <View>
+                <ThemedText style={localStyle.textValue}>
+                  {convertDateToGeneralFormat(planData?.endDate)}
+                </ThemedText>
+              </View>
+            </View>
+            <View style={localStyle.rowData}>
+              <View>
+                <ThemedText style={localStyle.textLabel}>Estatus:</ThemedText>
+              </View>
+              <View>
+                {planData?.isActive ? (
+                  <View style={localStyle.badgeActive}>
+                    <ThemedText
+                      style={{
+                        ...TextStyle.fontBoldWhite,
+                        ...TextStyle.center,
+                      }}
+                    >
+                      {STATUS_ACCOUNT_PAY.CURRENT_ACCOUNT}
+                    </ThemedText>
+                  </View>
+                ) : (
+                  <View style={localStyle.badgeInactive}>
+                    <ThemedText
+                      style={{
+                        ...TextStyle.fontBoldWhite,
+                        ...TextStyle.center,
+                      }}
+                    >
+                      {STATUS_ACCOUNT_PAY.OVERDUE_ACCOUNT}
+                    </ThemedText>
+                  </View>
                 )}
               </View>
-              <ThemedText style={TextStyle.value}>
-                {couponData?.items?.discountAmount && convertCurrency(discount)}
-              </ThemedText>
             </View>
-          ) : (
-            <></>
-          )}
-          <View style={localStyle.rowData}>
-            <View>
-              <ThemedText style={TextStyle.label}>Total a pagar:</ThemedText>
+            <View style={localStyle.rowData}>
+              <View>
+                <ThemedText style={localStyle.textLabel}>Costo:</ThemedText>
+              </View>
+              <View>
+                <ThemedText style={localStyle.textValue}>
+                  {convertCurrency(planData?.catalogPlanDTO.price)}
+                </ThemedText>
+              </View>
             </View>
-            <View>
-              <ThemedText style={TextStyle.value}>
-                {totalPay && convertCurrency(totalPay)}
-              </ThemedText>
+            <View style={localStyle.rowData}>
+              <ThemedText style={TextStyle.label}>¿Tiene un cupon?</ThemedText>
+              <TextInput
+                style={localStyle.inputCoupon}
+                onChangeText={setCoupon}
+                value={coupon}
+              />
+            </View>
+            {isFetchingCoupon ? (
+              <LoadingView styleProps={localStyle.loader} />
+            ) : coupon && couponData ? (
+              <View style={localStyle.rowData}>
+                <View>
+                  <ThemedText style={TextStyle.label}>Descuento de:</ThemedText>
+                  {couponData.error && (
+                    <ThemedText style={TextStyle.redColor}>
+                      {couponData.message}
+                    </ThemedText>
+                  )}
+                </View>
+                <ThemedText style={TextStyle.value}>
+                  {couponData?.items?.discountAmount &&
+                    convertCurrency(discount)}
+                </ThemedText>
+              </View>
+            ) : (
+              <></>
+            )}
+            <View style={localStyle.rowData}>
+              <View>
+                <ThemedText style={TextStyle.label}>Total a pagar:</ThemedText>
+              </View>
+              <View>
+                <ThemedText style={TextStyle.value}>
+                  {totalPay && convertCurrency(totalPay)}
+                </ThemedText>
+              </View>
+            </View>
+            <View style={localStyle.contentBtn}>
+              <GeneralButton
+                textBtn="Pagar ahora"
+                styleText={TextStyle.fontBoldWhite}
+                styleBtn={localStyle.btnPay}
+                handleOnPress={handlePayment}
+              />
             </View>
           </View>
-          <View style={localStyle.contentBtn}>
-            <GeneralButton
-              textBtn="Pagar ahora"
-              styleText={TextStyle.fontBoldWhite}
-              styleBtn={localStyle.btnPay}
-              handleOnPress={handlePayment}
-            />
-          </View>
-        </View>
-      </ContentKeyboardAutoScroll>
+        </ScrollView>
+      </View>
       {openModalPayment && (
         <StripePayment
           open={openModalPayment}

@@ -6,7 +6,10 @@ import { Controller, useForm } from "react-hook-form";
 import {
   Image,
   ImageBackground,
+  Keyboard,
+  Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -21,7 +24,6 @@ import { apiUser } from "@/api/User";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
 import { useApiProvider } from "@/provider/InterceptorProvider";
-import ContentKeyboardAutoScroll from "@/components/Shared/ContentKeyboardAutoScroll";
 import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
 import { loginData } from "@/constants/GeneralTypes";
 import { Ionicons } from "@expo/vector-icons";
@@ -33,7 +35,12 @@ import {
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import LoadingView from "@/components/Shared/LoadingView";
-import { imageBg, VERSION } from "@/constants/Constants";
+import {
+  imageBg,
+  PLATFORM_TYPE,
+  VERSION_ANDROID,
+  VERSION_IOS,
+} from "@/constants/Constants";
 
 const schema = yup.object({
   username: yup.string().required("Ingrese un usuario valid"),
@@ -41,6 +48,7 @@ const schema = yup.object({
 });
 
 export default function Login() {
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -95,6 +103,22 @@ export default function Login() {
   }, [navigation]);
 
   useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => setIsKeyboardVisible(true)
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => setIsKeyboardVisible(false)
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  useEffect(() => {
     if (token) {
       setLoadingSession(false);
       navigation.reset({
@@ -123,114 +147,124 @@ export default function Login() {
             : ThemeColorsSthetic.backgroundLight,
       }}
     >
-      <ImageBackground source={imageBg} style={styles.imgBg}>
-        <ContentKeyboardAutoScroll>
-          <View
-            style={{
-              justifyContent: "center",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <View>
-              <View style={styles.imgContainer}>
-                <Image
-                  source={require("@/assets/images/meredith-aesthetic-work.png")}
-                  style={styles.logo}
-                />
-              </View>
-              <View style={styles.centerInput}>
-                <ThemedText style={styles.label}>Usuario</ThemedText>
-                <Controller
-                  control={control}
-                  name="username"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      style={{ ...loginStyle.input, ...TextStyle.value }}
-                      placeholder="Ingrese su usuario"
-                      keyboardType="email-address"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                    />
-                  )}
-                />
-                {errors.username && (
-                  <ThemedText style={{ color: ThemeColorsSthetic.dangerColor }}>
-                    {errors.username.message}
-                  </ThemedText>
-                )}
-              </View>
-              <View style={styles.centerInput}>
-                <ThemedText style={styles.label}>Contraseña</ThemedText>
-                <Controller
-                  control={control}
-                  name="password"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <View style={{ flexDirection: "row" }}>
+      <ImageBackground source={imageBg} style={styles.imgBg} resizeMode="cover">
+        <View
+          style={
+            isKeyboardVisible ? styles.withKeyboard : styles.withoutKeyboard
+          }
+        >
+          <ScrollView style={{ flexGrow: 1 }}>
+            <View
+              style={{
+                justifyContent: "center",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <View>
+                <View style={styles.imgContainer}>
+                  <Image
+                    source={require("@/assets/images/meredith-aesthetic-work.png")}
+                    style={styles.logo}
+                  />
+                </View>
+                <View style={styles.centerInput}>
+                  <ThemedText style={styles.label}>Usuario</ThemedText>
+                  <Controller
+                    control={control}
+                    name="username"
+                    render={({ field: { onChange, onBlur, value } }) => (
                       <TextInput
                         style={{ ...loginStyle.input, ...TextStyle.value }}
-                        placeholder="Ingrese su password"
+                        placeholder="Ingrese su usuario"
+                        keyboardType="email-address"
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
-                        secureTextEntry={hiddenPass}
                       />
-                      <TouchableOpacity
-                        style={styles.icon}
-                        onPress={() => setHiddenPass((prev) => !prev)}
-                      >
-                        <Ionicons
-                          name={hiddenPass ? "eye-off" : "eye"}
-                          size={24}
-                          color="gray"
-                        />
-                      </TouchableOpacity>
-                    </View>
+                    )}
+                  />
+                  {errors.username && (
+                    <ThemedText
+                      style={{ color: ThemeColorsSthetic.dangerColor }}
+                    >
+                      {errors.username.message}
+                    </ThemedText>
                   )}
-                />
-              </View>
-              <View
-                style={{
-                  ...loginStyle.centerInput,
-                  ...loginStyle.buttonSubmit,
-                }}
-              >
-                <GeneralButton
-                  textBtn="Iniciar sesión"
-                  styleBtn={ButtonGeneralStyle.btnSaveSthetic}
-                  styleText={TextStyle.fontBoldWhite}
-                  handleOnPress={handleSubmit(onSubmit)}
-                  disabledBtn={loadingSession}
-                />
-                {loadingSession && <LoadingView />}
-                <View style={MarginStyle.marginT20}>
-                  <Link href="/resetpassword" asChild>
-                    <Pressable>
-                      <ThemedText style={styles.textInteraction}>
-                        ¿Has olvidado la contraseña?
-                      </ThemedText>
-                    </Pressable>
-                  </Link>
-                  <Link href="/newaccount" asChild>
-                    <Pressable>
-                      <ThemedText style={styles.textInteraction}>
-                        ¿No tiene una cuenta? Cree una.
-                      </ThemedText>
-                    </Pressable>
-                  </Link>
+                </View>
+                <View style={styles.centerInput}>
+                  <ThemedText style={styles.label}>Contraseña</ThemedText>
+                  <Controller
+                    control={control}
+                    name="password"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <View style={{ flexDirection: "row" }}>
+                        <TextInput
+                          style={{ ...loginStyle.input, ...TextStyle.value }}
+                          placeholder="Ingrese su password"
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          value={value}
+                          secureTextEntry={hiddenPass}
+                        />
+                        <TouchableOpacity
+                          style={styles.icon}
+                          onPress={() => setHiddenPass((prev) => !prev)}
+                        >
+                          <Ionicons
+                            name={hiddenPass ? "eye-off" : "eye"}
+                            size={24}
+                            color="gray"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  />
+                </View>
+                <View
+                  style={{
+                    ...loginStyle.centerInput,
+                    ...loginStyle.buttonSubmit,
+                  }}
+                >
+                  <GeneralButton
+                    textBtn="Iniciar sesión"
+                    styleBtn={ButtonGeneralStyle.btnSaveSthetic}
+                    styleText={TextStyle.fontBoldWhite}
+                    handleOnPress={handleSubmit(onSubmit)}
+                    disabledBtn={loadingSession}
+                  />
+                  {loadingSession && <LoadingView />}
+                  <View style={MarginStyle.marginT20}>
+                    <Link href="/resetpassword" asChild>
+                      <Pressable>
+                        <ThemedText style={styles.textInteraction}>
+                          ¿Has olvidado la contraseña?
+                        </ThemedText>
+                      </Pressable>
+                    </Link>
+                    <Link href="/newaccount" asChild>
+                      <Pressable>
+                        <ThemedText style={styles.textInteraction}>
+                          ¿No tiene una cuenta? Cree una.
+                        </ThemedText>
+                      </Pressable>
+                    </Link>
+                  </View>
+                </View>
+                <View style={{ marginTop: 50, marginBottom: 20 }}>
+                  <ThemedText
+                    style={{ ...TextStyle.fontBoldCancel, ...TextStyle.center }}
+                  >
+                    {Platform.OS === PLATFORM_TYPE.IOS
+                      ? VERSION_IOS
+                      : VERSION_ANDROID}
+                  </ThemedText>
                 </View>
               </View>
-              <View style={{ marginTop: 100 }}>
-                <ThemedText
-                  style={{ ...TextStyle.fontBoldCancel, ...TextStyle.center }}
-                >
-                  {VERSION}
-                </ThemedText>
-              </View>
             </View>
-          </View>
-        </ContentKeyboardAutoScroll>
+          </ScrollView>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -243,7 +277,7 @@ const styles = StyleSheet.create({
   },
   imgBg: {
     width: "100%",
-    height: "100%",
+    flex: 1,
   },
   logo: {
     height: 180,
@@ -278,4 +312,6 @@ const styles = StyleSheet.create({
     color: ThemeColorsSthetic.primary,
     marginBottom: 10,
   },
+  withKeyboard: { height: Platform.OS === PLATFORM_TYPE.IOS ? "70%" : "60%" },
+  withoutKeyboard: { flex: 1 },
 });

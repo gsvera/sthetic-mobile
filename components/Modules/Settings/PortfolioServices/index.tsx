@@ -1,5 +1,11 @@
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
-import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "@/components/ThemedText";
 import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
@@ -33,6 +39,7 @@ export const PortfolioServices = ({
   returnBack,
   idUser,
 }: functionServicesType) => {
+  const { height } = Dimensions.get("window");
   const { handleNotification } = useNotificationProvider();
   // const [openModalOption, setOpenModalOption] = useState(false);
   const [openModalUpload, setOpenModalUpload] = useState<fileTypes>(null);
@@ -145,7 +152,12 @@ export const PortfolioServices = ({
   );
 
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? height * 0.06 : 0,
+      }}
+    >
       <SubHeaderReturn
         subtitle="Portafolio de servicios"
         handleReturn={returnBack}
@@ -253,7 +265,7 @@ const localStyle = StyleSheet.create({
     alignItems: "center",
   },
   scrollViewGallery: {
-    height: Platform.OS === PLATFORM_TYPE.ANDROID ? "79%" : "76%",
+    flexGrow: 1,
     paddingHorizontal: 10,
     marginTop: 10,
   },

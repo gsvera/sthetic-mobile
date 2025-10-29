@@ -1,5 +1,11 @@
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
-import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { functionServicesType } from "../types";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ThemedText } from "@/components/ThemedText";
@@ -8,7 +14,7 @@ import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
 import CreateServiceModal from "./CreateServiceModal";
 import { useState } from "react";
 import { ThemeColorsSthetic } from "@/constants/Colors";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import apiMenuService from "@/api/MenuService";
 import { CatalogService } from "@/constants/GeneralTypes";
@@ -24,6 +30,7 @@ export const CatalogServices = ({
   returnBack,
   idUser,
 }: functionServicesType) => {
+  const { height } = Dimensions.get("window");
   const { handleNotification } = useNotificationProvider();
   const [openCreateServiceModal, setOpenCreateServiceModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -84,12 +91,17 @@ export const CatalogServices = ({
   };
 
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? height * 0.06 : 0,
+      }}
+    >
       <SubHeaderReturn
-        subtitle="Catalogo de servicios"
+        subtitle="Catálogo de servicios"
         handleReturn={returnBack}
       />
-      <View>
+      <View style={{ flex: 1 }}>
         <View style={localStyle.contentBtnAdd}>
           <GeneralButton
             styleBtn={localStyle.btnUpload}
@@ -171,7 +183,7 @@ const localStyle = StyleSheet.create({
     height: 35,
   },
   contentMenuList: {
-    height: Platform.OS === PLATFORM_TYPE.IOS ? "67%" : "68%",
+    flexGrow: 1,
     paddingHorizontal: 15,
     marginTop: 10,
     paddingBottom: 10,

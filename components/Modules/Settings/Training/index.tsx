@@ -1,5 +1,5 @@
 import SubHeaderReturn from "@/components/Shared/SubHeaderReturn";
-import { Platform, ScrollView, View } from "react-native";
+import { Dimensions, Platform, ScrollView, View } from "react-native";
 import { functionServicesType } from "../types";
 import ItemTraining from "./ItemTraining";
 import { useQuery } from "@tanstack/react-query";
@@ -12,6 +12,7 @@ import { MarginStyle } from "@/constants/StyleComponents";
 import { PLATFORM_TYPE } from "@/constants/Constants";
 
 export const Training = ({ idUser, returnBack }: functionServicesType) => {
+  const { height } = Dimensions.get("window");
   const { data: listTraining = [], isLoading: isLoadingTraining } = useQuery({
     queryKey: [REACT_QUERY_KEYS.userConfig.getTraining(idUser as string)],
     queryFn: () => apiUserConfig.getTraining(),
@@ -22,12 +23,17 @@ export const Training = ({ idUser, returnBack }: functionServicesType) => {
   });
 
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? height * 0.05 : 0,
+      }}
+    >
       <SubHeaderReturn subtitle="Tutoriales" handleReturn={returnBack} />
       <View
         style={{
           padding: 10,
-          height: Platform.OS === PLATFORM_TYPE.IOS ? "87%" : "88%",
+          flex: 1,
         }}
       >
         {isLoadingTraining ? (
@@ -35,7 +41,7 @@ export const Training = ({ idUser, returnBack }: functionServicesType) => {
             <LoadingView />
           </View>
         ) : (
-          <ScrollView>
+          <ScrollView style={{ flexGrow: 1 }}>
             {listTraining
               ?.sort((a, b) => a.orderShow - b.orderShow)
               .map((item) => (

@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { Platform, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { Calendar } from "react-native-calendars";
 import { exceptionDayType, weekDaysProps } from "./types";
 import { ThemedText } from "@/components/ThemedText";
@@ -42,6 +48,7 @@ type adminCalendarProvider = {
 
 export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
   const { handleNotification } = useNotificationProvider();
+  const { height } = Dimensions.get("window");
   const [openForm, setOpenForm] = useState(false);
   const [openScheduleModal, setOpenScheduleModal] = useState(false);
   const [openExceptionForm, setOpenExceptionForm] = useState(false);
@@ -149,113 +156,128 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
   };
 
   return (
-    <View style={localStyle.contentCalendar}>
-      <View style={localStyle.contentBtn}>
-        <GeneralButton
-          styleBtn={ButtonGeneralStyle.btnSaveSthetic}
-          styleText={TextStyle.fontBoldWhite}
-          textBtn={"Crear cita"}
-          handleOnPress={() => setOpenScheduleModal(true)}
-        />
-        <GeneralButton
-          styleBtn={ButtonGeneralStyle.btnActionSthetic}
-          styleText={TextStyle.fontBoldWhite}
-          textBtn="Horarios semanal"
-          handleOnPress={() => setOpenForm((v) => !v)}
-        />
-      </View>
-      <Calendar
-        onDayPress={(day: any) => handleSelectedDate(day.dateString)}
-        markedDates={{
-          [selectedDate?.dateString as string]: {
-            selected: true,
-            selectedColor: ThemeColorsSthetic.accent,
-          },
-        }}
-      />
+    <View
+      style={{
+        flex: 1,
+        marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? height * 0.06 : 0.01,
+        paddingBottom:
+          Platform.OS === PLATFORM_TYPE.ANDROID ? height * 0.01 : 0,
+      }}
+    >
       <ScrollView
         style={{
-          height: Platform.OS === PLATFORM_TYPE.IOS ? "36%" : "31%",
+          ...localStyle.contentCalendar,
+          flexGrow: 1,
         }}
       >
-        <View style={{ ...GridStyle.rowSpaceBetween, marginTop: 10 }}>
-          <View style={localStyle.contentDateSelected}>
-            <View>
-              <ThemedText style={TextStyle.label}>
-                Día seleccionado:{" "}
-              </ThemedText>
-              <ThemedText style={TextStyle.value}>
-                {selectedDate?.dateString || "ninguno"}
-              </ThemedText>
+        <View style={localStyle.contentBtn}>
+          <GeneralButton
+            styleBtn={ButtonGeneralStyle.btnSaveSthetic}
+            styleText={TextStyle.fontBoldWhite}
+            textBtn={"Crear cita"}
+            handleOnPress={() => setOpenScheduleModal(true)}
+          />
+          <GeneralButton
+            styleBtn={ButtonGeneralStyle.btnActionSthetic}
+            styleText={TextStyle.fontBoldWhite}
+            textBtn="Horario semanal"
+            handleOnPress={() => setOpenForm((v) => !v)}
+          />
+        </View>
+        <Calendar
+          onDayPress={(day: any) => handleSelectedDate(day.dateString)}
+          markedDates={{
+            [selectedDate?.dateString as string]: {
+              selected: true,
+              selectedColor: ThemeColorsSthetic.accent,
+            },
+          }}
+        />
+        <View
+          style={{
+            flex: 1,
+            marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? 0 : 10,
+          }}
+        >
+          <View style={{ ...GridStyle.rowSpaceBetween, marginTop: 10 }}>
+            <View style={localStyle.contentDateSelected}>
+              <View>
+                <ThemedText style={TextStyle.label}>
+                  Día seleccionado:{" "}
+                </ThemedText>
+                <ThemedText style={TextStyle.value}>
+                  {selectedDate?.dateString || "ninguno"}
+                </ThemedText>
+              </View>
+            </View>
+            <View
+              style={{
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              <GeneralButton
+                styleBtn={ButtonGeneralStyle.btnActionSthetic}
+                styleText={TextStyle.fontBoldWhite}
+                textBtn={
+                  !dataCalendarException
+                    ? "Agregar excepción"
+                    : "Editar excepción"
+                }
+                handleOnPress={() => setOpenExceptionForm((v) => !v)}
+              />
+              {dataCalendarException && (
+                <GeneralButton
+                  styleBtn={localStyle.btnDelete}
+                  styleText={TextStyle.bold}
+                  textBtn={<Feather name="trash" size={24} color="white" />}
+                  handleOnPress={() => setOpenModalDeleteException((v) => !v)}
+                />
+              )}
             </View>
           </View>
-          <View
-            style={{
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <GeneralButton
-              styleBtn={ButtonGeneralStyle.btnActionSthetic}
-              styleText={TextStyle.fontBoldWhite}
-              textBtn={
-                !dataCalendarException
-                  ? "Agregar excepción"
-                  : "Editar excepción"
-              }
-              handleOnPress={() => setOpenExceptionForm((v) => !v)}
-            />
-            {dataCalendarException && (
-              <GeneralButton
-                styleBtn={localStyle.btnDelete}
-                styleText={TextStyle.bold}
-                textBtn={<Feather name="trash" size={24} color="white" />}
-                handleOnPress={() => setOpenModalDeleteException((v) => !v)}
-              />
-            )}
-          </View>
-        </View>
-        {isLoadingExceptionDay ? (
-          <LoadingView />
-        ) : (
-          dataCalendarException && <ExceptionDay {...dataCalendarException} />
-        )}
+          {isLoadingExceptionDay ? (
+            <LoadingView />
+          ) : (
+            dataCalendarException && <ExceptionDay {...dataCalendarException} />
+          )}
 
-        <AvailibleWeek
-          open={openForm}
-          handleCloseModal={() => setOpenForm((v) => !v)}
-          idUser={idUser}
-          daysByweek={dataCalendar}
+          <AvailibleWeek
+            open={openForm}
+            handleCloseModal={() => setOpenForm((v) => !v)}
+            idUser={idUser}
+            daysByweek={dataCalendar}
+          />
+        </View>
+        {selectedDate && (
+          <MakeExceptionDay
+            open={openExceptionForm}
+            day={selectedDate}
+            idUser={idUser}
+            handleCloseModal={() => setOpenExceptionForm((v) => !v)}
+            entityToEdit={dataCalendarException}
+          />
+        )}
+        {openScheduleModal && selectedDate?.dateString && (
+          <MakeScheduleDate
+            open={openScheduleModal}
+            handleCloseModal={() => setOpenScheduleModal(false)}
+            selectedDate={{
+              day: selectedDate.day,
+              dateString: selectedDate.dateString,
+            }}
+            idUser={idUser}
+          />
+        )}
+        <ModalConfirm
+          open={openModalDeleteException}
+          handleClose={() => setOpenModalDeleteException((v) => !v)}
+          handleConfirm={handleDeleteException}
+          title="Advertencia"
+          message="¿Estás seguro de querer borrar la exception del día?"
+          IconModal={<Feather name="trash" size={35} color="black" />}
         />
       </ScrollView>
-      {selectedDate && (
-        <MakeExceptionDay
-          open={openExceptionForm}
-          day={selectedDate}
-          idUser={idUser}
-          handleCloseModal={() => setOpenExceptionForm((v) => !v)}
-          entityToEdit={dataCalendarException}
-        />
-      )}
-      {openScheduleModal && selectedDate?.dateString && (
-        <MakeScheduleDate
-          open={openScheduleModal}
-          handleCloseModal={() => setOpenScheduleModal(false)}
-          selectedDate={{
-            day: selectedDate.day,
-            dateString: selectedDate.dateString,
-          }}
-          idUser={idUser}
-        />
-      )}
-      <ModalConfirm
-        open={openModalDeleteException}
-        handleClose={() => setOpenModalDeleteException((v) => !v)}
-        handleConfirm={handleDeleteException}
-        title="Advertencia"
-        message="¿Estás seguro de querer borrar la exception del día?"
-        IconModal={<Feather name="trash" size={35} color="black" />}
-      />
     </View>
   );
 };
@@ -263,6 +285,7 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
 export const localStyle = StyleSheet.create({
   contentCalendar: {
     paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   contentBtn: {
     flexDirection: "row",

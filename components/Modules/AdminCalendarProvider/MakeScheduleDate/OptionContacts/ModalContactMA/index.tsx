@@ -41,8 +41,10 @@ export const ModalContactMA = ({
         ? tempClientList
         : tempClientList.filter(
             (item) =>
-              item.tempNameClient.match(searchText) ||
-              item.tempPhoneClient.match(searchText)
+              item.tempNameClient
+                .toLowerCase()
+                .match(searchText.toLowerCase()) ||
+              item.tempPhoneClient.toLowerCase().match(searchText.toLowerCase())
           ),
     [tempClientList, searchText]
   );

@@ -1,12 +1,12 @@
 import { Tabs, useNavigation } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { getStoreSession, KEY_STORE } from "@/hooks/StoreDataSecure";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { useApiProvider } from "@/provider/InterceptorProvider";
 import * as Notifications from "expo-notifications";
@@ -20,7 +20,8 @@ import {
   APP_NAME_SLUG,
   PLATFORM_TYPE,
   TYPE_STATUS,
-  VERSION,
+  VERSION_ANDROID,
+  VERSION_IOS,
 } from "@/constants/Constants";
 import { useSessionProvider } from "@/provider/SessionProvider";
 import { useWebSocketProvider } from "@/provider/WebSocketProvider";
@@ -36,8 +37,8 @@ export default function TabLayout() {
     require("@/assets/sounds/short-success-sound.mp3")
   );
   const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
+  const { height } = Dimensions.get("window");
   const { handleNotification } = useNotificationProvider();
   const { setToken, token } = useApiProvider();
   const { storeSessionProvider } = useSessionProvider();
@@ -77,13 +78,13 @@ export default function TabLayout() {
       const dataVersion: CurrentVersionType = currentVersion?.items;
       if (
         Platform.OS === PLATFORM_TYPE.IOS &&
-        dataVersion.versionIos !== VERSION
+        dataVersion.versionIos !== VERSION_IOS
       ) {
         setShowUpdateVersion(true);
       }
       if (
         Platform.OS === PLATFORM_TYPE.ANDROID &&
-        dataVersion.versionAndroid !== VERSION
+        dataVersion.versionAndroid !== VERSION_ANDROID
       ) {
         setShowUpdateVersion(true);
       }
@@ -152,11 +153,9 @@ export default function TabLayout() {
   if (!token) return <></>;
 
   return (
-    <View
+    <SafeAreaView
       style={{
         ...localStyle.container,
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom,
         backgroundColor:
           colorScheme === "dark"
             ? ThemeColorsSthetic.backgroundStrong
@@ -181,7 +180,7 @@ export default function TabLayout() {
                 },
                 default: {},
               }),
-              height: 50,
+              height: height * 0.06,
               paddingBottom: 0,
               borderTopWidth: 0,
               backgroundColor: ThemeColorsSthetic.backgroundLight,
@@ -245,7 +244,7 @@ export default function TabLayout() {
         </Tabs>
       </View>
       {showUpdateVersion && <ModalUpdateVersion open={showUpdateVersion} />}
-    </View>
+    </SafeAreaView>
   );
 }
 

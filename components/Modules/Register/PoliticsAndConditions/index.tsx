@@ -352,6 +352,7 @@ export default function PoliticsAndConditions({
 export const localStyles = StyleSheet.create({
   contentPolitics: {
     paddingTop: 15,
+    flex: 1,
   },
   contentSubtitle: {
     width: "100%",
@@ -400,7 +401,8 @@ export const localStyles = StyleSheet.create({
   },
   contentText: {
     width: "85%",
-    height: "75%",
+    marginTop: 10,
+    flexGrow: 1,
     marginHorizontal: "auto",
     marginBottom: 15,
   },
@@ -409,5 +411,6 @@ export const localStyles = StyleSheet.create({
     alignItems: "center",
     width: "85%",
     marginHorizontal: "auto",
+    marginBottom: 10,
   },
 });

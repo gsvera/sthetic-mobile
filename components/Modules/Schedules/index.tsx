@@ -99,13 +99,13 @@ export const Schedules = ({ idUser, day, statusSchedule }: schedulesProps) => {
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {isFetchingSchedules ? (
         <View style={MarginStyle.marginT100}>
           <LoadingView />
         </View>
       ) : (
-        <ScrollView>
+        <ScrollView style={{ flexGrow: 1 }}>
           {listSchedule?.length > 0 ? (
             listSchedule
               ?.sort((a, b) => {

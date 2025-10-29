@@ -4,6 +4,7 @@ import {
   Pressable,
   TouchableOpacity,
   Platform,
+  ScrollView,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { GlobalColors, ThemeColorsSthetic } from "@/constants/Colors";
@@ -13,10 +14,7 @@ import {
   FontAwesome5,
   MaterialIcons,
 } from "@expo/vector-icons";
-import {
-  ErrorAlertMessage,
-  PromtConfirm,
-} from "@/components/Shared/Notifications/AlertMessage";
+import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiUser } from "@/api/User";
 import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
@@ -192,11 +190,11 @@ export default function More() {
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {viewComponent ? (
         renderViewComponent(viewComponent)
       ) : (
-        <View>
+        <View style={{ flex: 1 }}>
           <View style={localStyle.contentHeader}>
             <TouchableOpacity onPress={activeCamera}>
               <Image
@@ -231,59 +229,63 @@ export default function More() {
               )}
             </View>
           </View>
-          <View style={localStyle.contentDivisor}>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() =>
-                handleView(COMPONENTS_SETINGS.PERSONAL_INFORMATION)
-              }
-            >
-              <View style={localStyle.itemMenuText}>
-                <AntDesign name="user" style={localStyle.iconItem} />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Mis datos
-                </ThemedText>
-              </View>
-            </Pressable>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => handleView(COMPONENTS_SETINGS.CHANGE_PASSWORD)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <MaterialIcons name="password" style={localStyle.iconItem} />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Cambio de contraseña
-                </ThemedText>
-              </View>
-            </Pressable>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => handleView(COMPONENTS_SETINGS.MY_SUBSCRIPTION)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <AntDesign name="idcard" style={localStyle.iconItem} />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Mi subscripción
-                </ThemedText>
-              </View>
-            </Pressable>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => handleView(COMPONENTS_SETINGS.TRAINING)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <Entypo name="folder-video" style={localStyle.iconItem} />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Tutoriales
-                </ThemedText>
-              </View>
-            </Pressable>
-            {/*  EL APARTADO DE NOTIFICACIONES SE DEJA PARA EL SIGUIENTE RELEASE */}
-            {/* <Pressable style={localStyle.itemMenu} onPress={() => {}}>
+          <ScrollView
+            style={localStyle.contentMore}
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            <View style={localStyle.contentDivisor}>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() =>
+                  handleView(COMPONENTS_SETINGS.PERSONAL_INFORMATION)
+                }
+              >
+                <View style={localStyle.itemMenuText}>
+                  <AntDesign name="user" style={localStyle.iconItem} />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Mis datos
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() => handleView(COMPONENTS_SETINGS.CHANGE_PASSWORD)}
+              >
+                <View style={localStyle.itemMenuText}>
+                  <MaterialIcons name="password" style={localStyle.iconItem} />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Cambio de contraseña
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() => handleView(COMPONENTS_SETINGS.MY_SUBSCRIPTION)}
+              >
+                <View style={localStyle.itemMenuText}>
+                  <AntDesign name="idcard" style={localStyle.iconItem} />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Mi subscripción
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() => handleView(COMPONENTS_SETINGS.TRAINING)}
+              >
+                <View style={localStyle.itemMenuText}>
+                  <Entypo name="folder-video" style={localStyle.iconItem} />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Tutoriales
+                  </ThemedText>
+                </View>
+              </Pressable>
+              {/*  EL APARTADO DE NOTIFICACIONES SE DEJA PARA EL SIGUIENTE RELEASE */}
+              {/* <Pressable style={localStyle.itemMenu} onPress={() => {}}>
               <View style={localStyle.itemMenuText}>
                 <AntDesign name="bells" style={localStyle.iconItem} />
                 <ThemedText darkColor="black">
@@ -292,117 +294,115 @@ export default function More() {
                 </ThemedText>
               </View>
             </Pressable> */}
-          </View>
-          <View style={localStyle.contentDivisor}>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => handleView(COMPONENTS_SETINGS.MY_COMPANY)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <MaterialIcons
-                  name="work-outline"
-                  style={localStyle.iconItem}
-                />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Información de negocio
-                </ThemedText>
-              </View>
-            </Pressable>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => handleView(COMPONENTS_SETINGS.MY_LOCATION)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <Entypo name="location" style={localStyle.iconItem} />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Mi ubicación
-                </ThemedText>
-              </View>
-            </Pressable>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => handleView(COMPONENTS_SETINGS.TYPE_SERVICES)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <MaterialIcons name="style" style={localStyle.iconItem} />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Tipo de servicios
-                </ThemedText>
-              </View>
-            </Pressable>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => handleView(COMPONENTS_SETINGS.SERVICES_CATALOG)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <FontAwesome5
-                  name="clipboard-list"
-                  style={localStyle.iconItem}
-                />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Catalogo de servicios
-                </ThemedText>
-              </View>
-            </Pressable>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => handleView(COMPONENTS_SETINGS.PORFTOLIO_SERVICES)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <MaterialCommunityIcons
-                  name="book-open-page-variant-outline"
-                  style={localStyle.iconItem}
-                />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Portafolio de servicios
-                </ThemedText>
-              </View>
-            </Pressable>
-          </View>
-          <View style={localStyle.contentDivisor}>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => setOpenModalLogout(true)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <MaterialIcons name="logout" style={localStyle.iconItem} />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Cerrar sesion
-                </ThemedText>
-              </View>
-            </Pressable>
-          </View>
-          <View style={localStyle.contentDivisor}>
-            <Pressable
-              style={localStyle.itemMenu}
-              onPress={() => setOpenModalDeleteAccount((v) => !v)}
-            >
-              <View style={localStyle.itemMenuText}>
-                <AntDesign
-                  name="delete"
-                  style={{
-                    ...localStyle.iconItem,
-                    color: ThemeColorsSthetic.dangerColor,
-                  }}
-                />
-                <ThemedText darkColor="black">
-                  {"    "}
-                  Eliminar cuenta
-                </ThemedText>
-              </View>
-            </Pressable>
-          </View>
-          {/* <UploadOptionPictureModal
-            activeCamera={activeCamera}
-            open={openModal}
-            handleCloseModal={handleOpenModal}
-          /> */}
+            </View>
+            <View style={localStyle.contentDivisor}>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() => handleView(COMPONENTS_SETINGS.MY_COMPANY)}
+              >
+                <View style={localStyle.itemMenuText}>
+                  <MaterialIcons
+                    name="work-outline"
+                    style={localStyle.iconItem}
+                  />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Información de negocio
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() => handleView(COMPONENTS_SETINGS.MY_LOCATION)}
+              >
+                <View style={localStyle.itemMenuText}>
+                  <Entypo name="location" style={localStyle.iconItem} />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Mi ubicación
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() => handleView(COMPONENTS_SETINGS.TYPE_SERVICES)}
+              >
+                <View style={localStyle.itemMenuText}>
+                  <MaterialIcons name="style" style={localStyle.iconItem} />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Tipo de servicios
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() => handleView(COMPONENTS_SETINGS.SERVICES_CATALOG)}
+              >
+                <View style={localStyle.itemMenuText}>
+                  <FontAwesome5
+                    name="clipboard-list"
+                    style={localStyle.iconItem}
+                  />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Catálogo de servicios
+                  </ThemedText>
+                </View>
+              </Pressable>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() =>
+                  handleView(COMPONENTS_SETINGS.PORFTOLIO_SERVICES)
+                }
+              >
+                <View style={localStyle.itemMenuText}>
+                  <MaterialCommunityIcons
+                    name="book-open-page-variant-outline"
+                    style={localStyle.iconItem}
+                  />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Portafolio de servicios
+                  </ThemedText>
+                </View>
+              </Pressable>
+            </View>
+            <View style={localStyle.contentDivisor}>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() => setOpenModalLogout(true)}
+              >
+                <View style={localStyle.itemMenuText}>
+                  <MaterialIcons name="logout" style={localStyle.iconItem} />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Cerrar sesion
+                  </ThemedText>
+                </View>
+              </Pressable>
+            </View>
+            <View style={localStyle.contentDivisor}>
+              <Pressable
+                style={localStyle.itemMenu}
+                onPress={() => setOpenModalDeleteAccount((v) => !v)}
+              >
+                <View style={localStyle.itemMenuText}>
+                  <AntDesign
+                    name="delete"
+                    style={{
+                      ...localStyle.iconItem,
+                      color: ThemeColorsSthetic.dangerColor,
+                    }}
+                  />
+                  <ThemedText darkColor="black">
+                    {"    "}
+                    Eliminar cuenta
+                  </ThemedText>
+                </View>
+              </Pressable>
+            </View>
+          </ScrollView>
           <ModalConfirm
             open={openModalDeleteAccount}
             title="¿Estás seguro de querer eliminar tu cuenta?"
@@ -441,6 +441,9 @@ export default function More() {
 }
 
 const localStyle = StyleSheet.create({
+  contentMore: {
+    flex: 1,
+  },
   contentDivisor: {
     borderTopColor: GlobalColors.grayLigthColor,
     borderTopWidth: 1,

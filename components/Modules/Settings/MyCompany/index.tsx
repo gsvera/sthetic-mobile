@@ -16,6 +16,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as ImagePicker from "expo-image-picker";
 import {
+  Dimensions,
   Image,
   Keyboard,
   Platform,
@@ -59,9 +60,7 @@ const schema = yup.object().shape({
 });
 
 export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
-  const heightWithKeyBoard = Platform.OS === PLATFORM_TYPE.IOS ? "70%" : "67%";
-  const heightWithoutKeyboard =
-    Platform.OS === PLATFORM_TYPE.IOS ? "85%" : "87%";
+  const { height } = Dimensions.get("window");
   const { handleNotification } = useNotificationProvider();
   const {
     control,
@@ -193,7 +192,12 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
   };
 
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? height * 0.05 : 0,
+      }}
+    >
       <SubHeaderReturn
         subtitle="Información de negocio"
         handleReturn={returnBack}
@@ -204,13 +208,13 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
         </View>
       ) : (
         <View
-          style={{
-            height: isKeyboardVisible
-              ? heightWithKeyBoard
-              : heightWithoutKeyboard,
-          }}
+          style={
+            isKeyboardVisible
+              ? localStyle.withKeyboard
+              : localStyle.withoutKeyboard
+          }
         >
-          <ScrollView>
+          <ScrollView style={{ flexGrow: 1 }}>
             <View>
               <Pressable
                 style={{
@@ -250,6 +254,7 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
                       <TextInput
                         style={GeneralStyle.simpleInput}
                         placeholder="Ingrese el nombre de tu negocio"
+                        placeholderTextColor={ThemeColorsSthetic.muted}
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
@@ -275,12 +280,13 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
                         <View style={localStyle.descriptionBox}>
                           <TextInput
                             placeholder="Ingrese una breve descripción de sus servicios"
+                            placeholderTextColor={ThemeColorsSthetic.muted}
                             onBlur={onBlur}
                             onChangeText={onChange}
                             value={value}
                             multiline
                             numberOfLines={5}
-                            maxLength={5000}
+                            maxLength={500}
                           />
                         </View>
                         <ThemedText style={localStyle.suffix}>
@@ -304,6 +310,7 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
                       <TextInput
                         style={GeneralStyle.simpleInput}
                         placeholder="Ingrese la url del facebook de tu negocio"
+                        placeholderTextColor={ThemeColorsSthetic.muted}
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
@@ -321,6 +328,7 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
                       <TextInput
                         style={GeneralStyle.simpleInput}
                         placeholder="Ingrese la url del instagram de tu negocio"
+                        placeholderTextColor={ThemeColorsSthetic.muted}
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
@@ -338,6 +346,7 @@ export const MyCompany = ({ idUser, returnBack }: myCompanyProps) => {
                       <TextInput
                         style={GeneralStyle.simpleInput}
                         placeholder="Ingrese la url de la página web de tu negocio"
+                        placeholderTextColor={ThemeColorsSthetic.muted}
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
@@ -391,5 +400,7 @@ const localStyle = StyleSheet.create({
     marginTop: -25,
     marginRight: 10,
   },
+  withKeyboard: { height: Platform.OS === PLATFORM_TYPE.IOS ? "70%" : "50%" },
+  withoutKeyboard: { flex: 1 },
 });
 export default MyCompany;

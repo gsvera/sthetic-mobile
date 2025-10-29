@@ -3,7 +3,7 @@
     "name": "Meredith Aesthetic Worker",
     "slug": "sthetic-mobile",
     "version": "1.0.12",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/meredith-aesthetic-work-logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
