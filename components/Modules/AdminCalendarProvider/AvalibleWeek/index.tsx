@@ -5,7 +5,14 @@ import {
 } from "@/constants/Constants";
 import { modalCustomProps } from "@/constants/GeneralTypes";
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, Modal, StyleSheet, Platform } from "react-native";
+import {
+  View,
+  ScrollView,
+  Modal,
+  StyleSheet,
+  Platform,
+  Dimensions,
+} from "react-native";
 import { weekDaysProps } from "../types";
 import { ThemedText } from "@/components/ThemedText";
 import { ButtonGeneralStyle, TextStyle } from "@/constants/StyleComponents";
@@ -34,6 +41,7 @@ export const AvailibleWeek = ({
   const insets = useSafeAreaInsets();
   const queryClient = useQueryClient();
   const { handleNotification } = useNotificationProvider();
+  const { height } = Dimensions.get("window");
   const [availableTimeWeek, setAvailableTimeWeek] = useState<weekDaysProps[]>(
     []
   );
@@ -130,6 +138,7 @@ export const AvailibleWeek = ({
       transparent={true}
       visible={open}
       onRequestClose={handleCloseModal}
+      style={{ flex: 1 }}
     >
       <View
         style={{
@@ -147,9 +156,11 @@ export const AvailibleWeek = ({
           </ThemedText>
         </View>
         <View
-          style={{ height: Platform.OS === PLATFORM_TYPE.IOS ? "75%" : "72%" }}
+          style={{
+            height: height * (Platform.OS === PLATFORM_TYPE.IOS ? 0.75 : 0.68),
+          }}
         >
-          <ScrollView>
+          <ScrollView style={{ flexGrow: 1 }}>
             {availableTimeWeek.map((day, i) => (
               <AvailableTimeCard
                 key={i}

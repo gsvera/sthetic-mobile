@@ -177,6 +177,7 @@ export default function Login() {
                       <TextInput
                         style={{ ...loginStyle.input, ...TextStyle.value }}
                         placeholder="Ingrese su usuario"
+                        placeholderTextColor={ThemeColorsSthetic.muted}
                         keyboardType="email-address"
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -201,7 +202,8 @@ export default function Login() {
                       <View style={{ flexDirection: "row" }}>
                         <TextInput
                           style={{ ...loginStyle.input, ...TextStyle.value }}
-                          placeholder="Ingrese su password"
+                          placeholder="Ingrese su contraseña"
+                          placeholderTextColor={ThemeColorsSthetic.muted}
                           onBlur={onBlur}
                           onChangeText={onChange}
                           value={value}

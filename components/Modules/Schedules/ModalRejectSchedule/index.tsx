@@ -2,6 +2,7 @@ import ButtonCloseModal from "@/components/Shared/ButtonCloseModal";
 import GeneralButton from "@/components/Shared/GeneralButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemeColorsSthetic } from "@/constants/Colors";
+import { PLATFORM_TYPE } from "@/constants/Constants";
 import { modalActionCustomProps } from "@/constants/GeneralTypes";
 import {
   ButtonGeneralStyle,
@@ -13,7 +14,9 @@ import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import {
   Keyboard,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   StyleSheet,
   TextInput,
   TouchableWithoutFeedback,
@@ -46,38 +49,43 @@ export const ModalRejectSchedule = ({
       animationType="fade"
       onRequestClose={onHandlerClose}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={ModalStyle.modalView}>
-          <View style={localStyle.modalRejectSchedule}>
-            <ButtonCloseModal handleOnPress={onHandlerClose} />
-            <View style={localStyle.contentIcon}>
-              <AntDesign name="warning" style={localStyle.icon} />
-            </View>
-            <ThemedText style={localStyle.text}>
-              Agregue un comentario
-            </ThemedText>
-            <TextInput
-              style={localStyle.input}
-              multiline
-              numberOfLines={3}
-              maxLength={250}
-              value={localTextReject}
-              onChangeText={setLocalTextReject}
-            />
-            {showError && (
-              <ThemedText style={localStyle.textError}>
-                Debe agregar un motivo
+      <KeyboardAvoidingView
+        behavior={Platform.OS === PLATFORM_TYPE.IOS ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={ModalStyle.modalView}>
+            <View style={localStyle.modalRejectSchedule}>
+              <ButtonCloseModal handleOnPress={onHandlerClose} />
+              <View style={localStyle.contentIcon}>
+                <AntDesign name="warning" style={localStyle.icon} />
+              </View>
+              <ThemedText style={localStyle.text}>
+                Agregue un comentario
               </ThemedText>
-            )}
-            <GeneralButton
-              textBtn="Terminar"
-              styleText={TextStyle.fontBoldWhite}
-              styleBtn={ButtonGeneralStyle.btnActionSthetic}
-              handleOnPress={onHandlerConfirm}
-            />
+              <TextInput
+                style={localStyle.input}
+                multiline
+                numberOfLines={3}
+                maxLength={250}
+                value={localTextReject}
+                onChangeText={setLocalTextReject}
+              />
+              {showError && (
+                <ThemedText style={localStyle.textError}>
+                  Debe agregar un motivo
+                </ThemedText>
+              )}
+              <GeneralButton
+                textBtn="Terminar"
+                styleText={TextStyle.fontBoldWhite}
+                styleBtn={ButtonGeneralStyle.btnActionSthetic}
+                handleOnPress={onHandlerConfirm}
+              />
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };

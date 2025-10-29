@@ -137,7 +137,7 @@ export const MakeExceptionDay = ({
           bottom: insets.bottom,
         }}
       >
-        <ScrollView>
+        <ScrollView style={{ flexGrow: 1 }}>
           <ButtonCloseModal handleOnPress={handleCloseModalException} />
           <View style={{ marginBottom: 10 }}>
             <ThemedText style={TextStyle.titleModal}>

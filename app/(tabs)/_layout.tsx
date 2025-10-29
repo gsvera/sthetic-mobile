@@ -159,7 +159,7 @@ export default function TabLayout() {
         backgroundColor:
           colorScheme === "dark"
             ? ThemeColorsSthetic.backgroundStrong
-            : ThemeColorsSthetic.backgroundStrong,
+            : ThemeColorsSthetic.backgroundLight,
       }}
     >
       <View style={localStyle.container}>
