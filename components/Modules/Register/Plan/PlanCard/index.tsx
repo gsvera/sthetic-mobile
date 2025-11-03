@@ -13,6 +13,7 @@ export type PlanCardProps = {
   id: number;
   name: string;
   price: number;
+  duration: number;
   planDetails: BenefitsPlan[];
   onSelectPlan: (plan: PlanCardProps) => void;
 };
@@ -23,7 +24,8 @@ export const PlanCard = (detailPlan: PlanCardProps) => {
       <View style={localStyles.cardHeader}>
         <Text style={localStyles.title}>{detailPlan.name}</Text>
         <Text style={localStyles.price}>
-          {convertCurrency(detailPlan.price, 0)} / mes
+          {convertCurrency(detailPlan.price, 0)} x{" "}
+          {detailPlan.duration < 2 ? "mes" : `${detailPlan.duration} meses`}
         </Text>
       </View>
       <View style={localStyles.benefitsContainer}>
@@ -34,7 +36,7 @@ export const PlanCard = (detailPlan: PlanCardProps) => {
         ))}
       </View>
       <GeneralButton
-        textBtn="Elegir"
+        textBtn="Elegir plan"
         styleText={TextStyle.fontBoldWhite}
         styleBtn={ButtonGeneralStyle.btnSaveSthetic}
         handleOnPress={() => detailPlan.onSelectPlan(detailPlan)}
