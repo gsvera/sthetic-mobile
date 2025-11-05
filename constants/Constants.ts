@@ -1,10 +1,10 @@
 import { weekDays } from "./GeneralTypes";
 
-export const VERSION_ANDROID = "v.1.0.13";
-export const VERSION_IOS = "v.1.0.13";
+export const VERSION_ANDROID = "v1.0.14";
+export const VERSION_IOS = "v1.0.14";
 export const APP_NAME_SLUG = 'meredith-aesthetic-work';
 export const PACKAGE_NAME_ANDROID = "com.abasotech.meredithcarework";
-export const APP_STORE_ID = ""; // FALTA EL ID
+export const APP_STORE_ID = "6754846887";
 
 export const imageBg = require("@/assets/images/background.webp");
 

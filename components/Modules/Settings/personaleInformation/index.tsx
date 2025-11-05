@@ -26,6 +26,7 @@ import {
   Text,
   ScrollView,
   Platform,
+  useWindowDimensions,
 } from "react-native";
 import * as yup from "yup";
 
@@ -71,6 +72,7 @@ export const PersonalInformation = ({
   returnBack,
 }: subModuleProps) => {
   const { handleNotification } = useNotificationProvider();
+  const { height } = useWindowDimensions();
   const [disableButton, setDisableButton] = useState(true);
   const queryClient = useQueryClient();
   const initFormData = formDataInformation;
@@ -149,134 +151,142 @@ export const PersonalInformation = ({
   };
 
   return (
-    <View style={{ height: "100%" }}>
+    <View style={{ flex: 1 }}>
       <SubHeaderReturn
         subtitle="Mis datos personales"
         handleReturn={returnBack}
       />
-      <ScrollView>
-        <View style={localStyle.contentForm}>
-          <View style={{ width: "80%", paddingTop: 20 }}>
-            <View style={{ marginVertical: 10 }}>
-              <ThemedText style={localStyle.label}>* Nombre(s)</ThemedText>
-              <Controller
-                control={control}
-                name="firstName"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={GeneralStyle.simpleInput}
-                    placeholder="Ingrese su nombre"
-                    placeholderTextColor={ThemeColorsSthetic.muted}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-              />
-              {errors.firstName && (
-                <Text style={TextStyle.textError}>
-                  {errors.firstName.message}
-                </Text>
-              )}
-            </View>
-            <View style={{ marginVertical: 10 }}>
-              <ThemedText style={localStyle.label}>* Apellido(s)</ThemedText>
-              <Controller
-                control={control}
-                name="lastName"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={GeneralStyle.simpleInput}
-                    placeholder="Ingrese su apellido"
-                    placeholderTextColor={ThemeColorsSthetic.muted}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-              />
-              {errors.firstName && (
-                <Text style={TextStyle.textError}>
-                  {errors.firstName.message}
-                </Text>
-              )}
-            </View>
-            <View style={{ marginVertical: 10 }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <View style={{ width: "35%" }}>
-                  <ThemedText style={localStyle.label}>Lada</ThemedText>
-                  <TextInput
-                    style={GeneralStyle.simpleInput}
-                    value={lada}
-                    editable={false}
-                    selectTextOnFocus={false}
-                  />
-                </View>
-                <View style={{ width: "60%" }}>
-                  <ThemedText style={localStyle.label}>* Telefono</ThemedText>
-                  <Controller
-                    control={control}
-                    name="phone"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <TextInput
-                        style={GeneralStyle.simpleInput}
-                        placeholder="Ingrese su numero de telefono"
-                        placeholderTextColor={ThemeColorsSthetic.muted}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        maxLength={13}
-                      />
-                    )}
-                  />
-                  {errors.phone && (
-                    <Text style={TextStyle.textError}>
-                      {errors.phone.message}
-                    </Text>
+      <View style={{ height: height * 0.6 }}>
+        <ScrollView
+          style={{ flexGrow: 1 }}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <View style={localStyle.contentForm}>
+            <View style={{ width: "80%", paddingTop: 20 }}>
+              <View style={{ marginVertical: 10 }}>
+                <ThemedText style={localStyle.label}>* Nombre(s)</ThemedText>
+                <Controller
+                  control={control}
+                  name="firstName"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={GeneralStyle.simpleInput}
+                      placeholder="Ingrese su nombre"
+                      placeholderTextColor={ThemeColorsSthetic.muted}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
                   )}
+                />
+                {errors.firstName && (
+                  <Text style={TextStyle.textError}>
+                    {errors.firstName.message}
+                  </Text>
+                )}
+              </View>
+              <View style={{ marginVertical: 10 }}>
+                <ThemedText style={localStyle.label}>* Apellido(s)</ThemedText>
+                <Controller
+                  control={control}
+                  name="lastName"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={GeneralStyle.simpleInput}
+                      placeholder="Ingrese su apellido"
+                      placeholderTextColor={ThemeColorsSthetic.muted}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
+                  )}
+                />
+                {errors.firstName && (
+                  <Text style={TextStyle.textError}>
+                    {errors.firstName.message}
+                  </Text>
+                )}
+              </View>
+              <View style={{ marginVertical: 10 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View style={{ width: "35%" }}>
+                    <ThemedText style={localStyle.label}>Lada</ThemedText>
+                    <TextInput
+                      style={GeneralStyle.simpleInput}
+                      value={lada}
+                      editable={false}
+                      selectTextOnFocus={false}
+                    />
+                  </View>
+                  <View style={{ width: "60%" }}>
+                    <ThemedText style={localStyle.label}>* Telefono</ThemedText>
+                    <Controller
+                      control={control}
+                      name="phone"
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                          style={GeneralStyle.simpleInput}
+                          placeholder="Ingrese su numero de telefono"
+                          placeholderTextColor={ThemeColorsSthetic.muted}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          value={value}
+                          maxLength={13}
+                          keyboardType="numeric"
+                        />
+                      )}
+                    />
+                    {errors.phone && (
+                      <Text style={TextStyle.textError}>
+                        {errors.phone.message}
+                      </Text>
+                    )}
+                  </View>
                 </View>
               </View>
-            </View>
-            <View style={{ marginVertical: 10 }}>
-              <ThemedText style={localStyle.label}>* Email</ThemedText>
-              <Controller
-                control={control}
-                name="email"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={GeneralStyle.simpleInput}
-                    placeholder="Ingrese su email"
-                    placeholderTextColor={ThemeColorsSthetic.muted}
-                    keyboardType="email-address"
-                    onChangeText={(e) => onChange(e.toLowerCase())}
-                    onBlur={onBlur}
-                    value={value}
-                  />
+              <View style={{ marginVertical: 10 }}>
+                <ThemedText style={localStyle.label}>* Email</ThemedText>
+                <Controller
+                  control={control}
+                  name="email"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={GeneralStyle.simpleInput}
+                      placeholder="Ingrese su email"
+                      placeholderTextColor={ThemeColorsSthetic.muted}
+                      keyboardType="email-address"
+                      onChangeText={(e) => onChange(e.toLowerCase())}
+                      onBlur={onBlur}
+                      value={value}
+                    />
+                  )}
+                />
+                {errors.email && (
+                  <Text style={TextStyle.textError}>
+                    {errors.email.message}
+                  </Text>
                 )}
-              />
-              {errors.email && (
-                <Text style={TextStyle.textError}>{errors.email.message}</Text>
-              )}
-            </View>
-            <View style={localStyle.contentButton}>
-              <GeneralButton
-                styleBtn={ButtonGeneralStyle.btnUpdateSthetic}
-                textBtn="Actualizar datos"
-                styleText={{
-                  color: ThemeColorsSthetic.textLight,
-                }}
-                handleOnPress={handleSubmit(handleUpdatePersonalInformation)}
-                disabledBtn={disableButton}
-              />
+              </View>
+              <View style={localStyle.contentButton}>
+                <GeneralButton
+                  styleBtn={ButtonGeneralStyle.btnUpdateSthetic}
+                  textBtn="Actualizar datos"
+                  styleText={{
+                    color: ThemeColorsSthetic.textLight,
+                  }}
+                  handleOnPress={handleSubmit(handleUpdatePersonalInformation)}
+                  disabledBtn={disableButton}
+                />
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </View>
   );
 };

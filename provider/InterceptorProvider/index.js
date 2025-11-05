@@ -51,6 +51,7 @@ const ApiRequestProvider = ({ children }) => {
       });
 
       clearToken();
+      return;
     }
 
     if (statusCode === 403 && !token) {
