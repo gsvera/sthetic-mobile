@@ -34,4 +34,9 @@ export const apiSchedule = {
   makeOurScheduleService: function (data) {
     return axiosInstance.post(`${BASE_URL}/make-our-schedule-service`, data);
   },
+  makeUrlToShareCalendar: function (idProvider) {
+    return axiosInstance.post(
+      `${BASE_URL}/make-url-to-share-calendar/${idProvider}`
+    );
+  },
 };

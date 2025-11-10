@@ -139,6 +139,10 @@ const localStyle = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 0.5,
     borderRadius: 5,
+    backgroundColor: ThemeColorsSthetic.backgroundLight,
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   contentTabs: {
     marginBottom: Platform.OS === PLATFORM_TYPE.IOS ? 10 : 5,

@@ -24,8 +24,8 @@ export const TabsStatusSchedule = ({
         textBtn="Todos"
         styleText={
           statusSelected === undefined
-            ? TextStyle.fontBoldWhite
-            : TextStyle.fontBoldBlue
+            ? localStyle.tabSelected
+            : localStyle.tabUnSelected
         }
         styleBtn={
           statusSelected === undefined
@@ -38,8 +38,8 @@ export const TabsStatusSchedule = ({
         textBtn="Pendiente"
         styleText={
           statusSelected === STATUS_SERVICE.PENDIENT
-            ? TextStyle.fontBoldWhite
-            : TextStyle.fontBoldBlue
+            ? localStyle.tabSelected
+            : localStyle.tabUnSelected
         }
         styleBtn={
           statusSelected === STATUS_SERVICE.PENDIENT
@@ -52,8 +52,8 @@ export const TabsStatusSchedule = ({
         textBtn="Rechazado"
         styleText={
           statusSelected === STATUS_SERVICE.REJECT
-            ? TextStyle.fontBoldWhite
-            : TextStyle.fontBoldBlue
+            ? localStyle.tabSelected
+            : localStyle.tabUnSelected
         }
         styleBtn={
           statusSelected === STATUS_SERVICE.REJECT
@@ -66,8 +66,8 @@ export const TabsStatusSchedule = ({
         textBtn="Confirmado"
         styleText={
           statusSelected === STATUS_SERVICE.ACCEPT
-            ? TextStyle.fontBoldWhite
-            : TextStyle.fontBoldBlue
+            ? localStyle.tabSelected
+            : localStyle.tabUnSelected
         }
         styleBtn={
           statusSelected === STATUS_SERVICE.ACCEPT
@@ -80,8 +80,8 @@ export const TabsStatusSchedule = ({
         textBtn="Cancelado"
         styleText={
           statusSelected === STATUS_SERVICE.CANCEL
-            ? TextStyle.fontBoldWhite
-            : TextStyle.fontBoldBlue
+            ? localStyle.tabSelected
+            : localStyle.tabUnSelected
         }
         styleBtn={
           statusSelected === STATUS_SERVICE.CANCEL
@@ -94,8 +94,8 @@ export const TabsStatusSchedule = ({
         textBtn="No se presento"
         styleText={
           statusSelected === STATUS_SERVICE.NOPRESENT
-            ? TextStyle.fontBoldWhite
-            : TextStyle.fontBoldBlue
+            ? localStyle.tabSelected
+            : localStyle.tabUnSelected
         }
         styleBtn={
           statusSelected === STATUS_SERVICE.NOPRESENT
@@ -108,8 +108,8 @@ export const TabsStatusSchedule = ({
         textBtn="Finalizado"
         styleText={
           statusSelected === STATUS_SERVICE.FINALIZED
-            ? TextStyle.fontBoldWhite
-            : TextStyle.fontBoldBlue
+            ? localStyle.tabSelected
+            : localStyle.tabUnSelected
         }
         styleBtn={
           statusSelected === STATUS_SERVICE.FINALIZED
@@ -129,7 +129,6 @@ const localStyle = StyleSheet.create({
   },
   btnStatus: {
     marginRight: 8,
-    height: 40,
     borderRadius: 5,
     borderWidth: 0.5,
     borderColor: ThemeColorsSthetic.textTitle,
@@ -137,10 +136,13 @@ const localStyle = StyleSheet.create({
     paddingHorizontal: 8,
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: ThemeColorsSthetic.backgroundLight,
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   btnStatusSelected: {
     marginRight: 8,
-    height: 40,
     borderRadius: 5,
     borderWidth: 0.5,
     borderColor: ThemeColorsSthetic.textTitle,
@@ -149,6 +151,17 @@ const localStyle = StyleSheet.create({
     paddingHorizontal: 8,
     flexDirection: "row",
     alignItems: "center",
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  tabSelected: {
+    ...TextStyle.fontBoldWhite,
+    fontSize: 14,
+  },
+  tabUnSelected: {
+    ...TextStyle.fontBoldBlue,
+    fontSize: 14,
   },
 });
 export default TabsStatusSchedule;

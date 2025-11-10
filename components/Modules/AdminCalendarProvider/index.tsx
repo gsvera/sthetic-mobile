@@ -26,7 +26,6 @@ import { MakeExceptionDay } from "./MakeExceptionDay";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { REACT_QUERY_KEYS } from "@/api/react-query-keys";
 import { apiCalendar } from "@/api/Calendar";
-import { getStoreSession, KEY_STORE } from "@/hooks/StoreDataSecure";
 import "dayjs/locale/es";
 import { convertDateToGeneralFormat } from "@/utils/GeneralUtils";
 import ExceptionDay from "./ExceptionDay";
@@ -39,6 +38,8 @@ import { ThemeColorsSthetic } from "@/constants/Colors";
 import { ObjectResponse, ResponseApi } from "@/api/responseApi";
 import LoadingView from "@/components/Shared/LoadingView";
 import { MakeScheduleDate } from "./MakeScheduleDate";
+import { apiSchedule } from "@/api/Schedule";
+import ModalShareAvailable from "@/components/Shared/ModalShareAvailable";
 
 dayjs.locale("es"); // Esta config se debera establecer a futuro para ingles tambien
 
@@ -54,6 +55,10 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
   const [openExceptionForm, setOpenExceptionForm] = useState(false);
   const [openModalDeleteException, setOpenModalDeleteException] =
     useState(false);
+  const [shareUrlSchedule, setShareUrlSchedule] = useState({
+    open: false,
+    url: "",
+  });
   const [selectedDate, setSelectedDate] = useState<weekDaysProps>({
     day: "",
     isActive: false,
@@ -63,6 +68,21 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
     maxReservations: 0,
     dateString: dayjs().format(FORMAT_DATE.GENERAL_EN),
   });
+
+  const { mutate: makeShareUrl } = useMutation({
+    mutationFn: () => apiSchedule.makeUrlToShareCalendar(idUser),
+    onSuccess: (data: ResponseApi) => handleSuccessMakeShareUrl(data.data),
+    onError: ErrorAlertMessage,
+  });
+
+  const handleSuccessMakeShareUrl = (data: ObjectResponse) => {
+    if (data.error)
+      return handleNotification({
+        type: TYPE_STATUS.ERROR,
+        message: data.message,
+      });
+    setShareUrlSchedule({ open: true, url: data.items });
+  };
 
   const { data: dataCalendar = [], isFetching: isFetchingCalendar } = useQuery({
     queryKey: [REACT_QUERY_KEYS.calendar.calendarByUser.getByIdUser(idUser)],
@@ -171,18 +191,28 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
         }}
       >
         <View style={localStyle.contentBtn}>
-          <GeneralButton
-            styleBtn={ButtonGeneralStyle.btnSaveSthetic}
-            styleText={TextStyle.fontBoldWhite}
-            textBtn={"Crear cita"}
-            handleOnPress={() => setOpenScheduleModal(true)}
-          />
-          <GeneralButton
-            styleBtn={ButtonGeneralStyle.btnActionSthetic}
-            styleText={TextStyle.fontBoldWhite}
-            textBtn="Horario semanal"
-            handleOnPress={() => setOpenForm((v) => !v)}
-          />
+          <View>
+            <GeneralButton
+              styleBtn={ButtonGeneralStyle.btnSaveSthetic}
+              styleText={localStyle.textStyleBtn}
+              textBtn={"Crear cita"}
+              handleOnPress={() => setOpenScheduleModal(true)}
+            />
+            <GeneralButton
+              styleBtn={{ ...ButtonGeneralStyle.btnSaveSthetic, marginTop: 10 }}
+              styleText={localStyle.textStyleBtn}
+              textBtn={"Compartir disponibilidad"}
+              handleOnPress={makeShareUrl}
+            />
+          </View>
+          <View>
+            <GeneralButton
+              styleBtn={ButtonGeneralStyle.btnActionSthetic}
+              styleText={localStyle.textStyleBtn}
+              textBtn="Horario semanal"
+              handleOnPress={() => setOpenForm((v) => !v)}
+            />
+          </View>
         </View>
         <Calendar
           onDayPress={(day: any) => handleSelectedDate(day.dateString)}
@@ -218,7 +248,7 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
             >
               <GeneralButton
                 styleBtn={ButtonGeneralStyle.btnActionSthetic}
-                styleText={TextStyle.fontBoldWhite}
+                styleText={localStyle.textStyleBtn}
                 textBtn={
                   !dataCalendarException
                     ? "Agregar excepción"
@@ -277,6 +307,13 @@ export const AdminCalendarProvider = ({ idUser }: adminCalendarProvider) => {
           message="¿Estás seguro de querer borrar la exception del día?"
           IconModal={<Feather name="trash" size={35} color="black" />}
         />
+        {shareUrlSchedule.open && (
+          <ModalShareAvailable
+            open={shareUrlSchedule.open}
+            handleClose={() => setShareUrlSchedule({ open: false, url: "" })}
+            urlToShare={shareUrlSchedule.url}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -299,6 +336,10 @@ export const localStyle = StyleSheet.create({
   btnDelete: {
     ...ButtonGeneralStyle.btnDeleteSthetic,
     marginLeft: 5,
+  },
+  textStyleBtn: {
+    fontSize: 14,
+    ...TextStyle.fontBoldWhite,
   },
 });
 

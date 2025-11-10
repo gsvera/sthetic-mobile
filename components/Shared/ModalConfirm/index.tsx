@@ -27,7 +27,12 @@ export const ModalConfirm = ({
   isLoading,
 }: modalConfirmProps) => {
   return (
-    <Modal animationType="fade" transparent={true} visible={open}>
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={open}
+      onRequestClose={handleClose}
+    >
       <View
         style={localStyle.modalView}
         onStartShouldSetResponder={() => {

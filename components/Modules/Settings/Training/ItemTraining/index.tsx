@@ -37,7 +37,7 @@ export const ItemTraining = ({ item }: itemTrainingProps) => {
         </View>
 
         <GeneralButton
-          styleText={TextStyle.fontBoldWhite}
+          styleText={localStyle.textBtn}
           textBtn="Ver video"
           styleBtn={ButtonGeneralStyle.btnShortAction}
           handleOnPress={() => setOpenModalVideo(true)}
@@ -64,6 +64,10 @@ const localStyle = StyleSheet.create({
   labelVideo: {
     ...TextStyle.value,
     fontWeight: "bold",
+  },
+  textBtn: {
+    ...TextStyle.fontBoldWhite,
+    fontSize: 13,
   },
 });
 

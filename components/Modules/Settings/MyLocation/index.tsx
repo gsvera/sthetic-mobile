@@ -372,7 +372,6 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
               textBtn={
                 <>
                   <ThemedText>Ubicación actual {"  "}</ThemedText>
-
                   <FontAwesome6
                     name="location-crosshairs"
                     style={localStyle.iconMap}

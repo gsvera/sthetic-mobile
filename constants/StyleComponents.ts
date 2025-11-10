@@ -218,7 +218,7 @@ export const TextStyle = StyleSheet.create({
     }, 
     titleModal: {
         fontWeight: 'bold',
-        fontSize: 24,
+        fontSize: 20,
         color: ThemeColorsSthetic.textTitle,
         textAlign: 'center'
     },
