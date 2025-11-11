@@ -8,7 +8,9 @@ import {
 } from "@/constants/StyleComponents";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Alert,
   Dimensions,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -198,20 +200,72 @@ export const MyLocation = ({ idUser, returnBack }: myLocationProps) => {
 
   const handleDeviceLocation = async () => {
     setRequiredLocation(false);
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
+
+    const { status: hasPermission, canAskAgain } =
+      await Location.getForegroundPermissionsAsync();
+
+    if (hasPermission === "granted" && !canAskAgain) {
+      await getCurrentLocation();
       return;
     }
 
-    setLoadingLocation(true);
+    if (hasPermission === "denied" && !canAskAgain) {
+      Alert.alert(
+        "Permiso de ubicación denegado",
+        "Debes habilitar el permiso de ubicación manualmente en los ajustes del dispositivo.",
+        [
+          { text: "Cancelar", style: "cancel" },
+          {
+            text: "Ir a ajustes",
+            onPress: () => Linking.openSettings(),
+          },
+        ]
+      );
+      return;
+    }
 
-    const location = await Location.getCurrentPositionAsync({});
-    const { latitude, longitude } = location.coords;
-    setStateSelected(undefined);
-    setMunicipalitySelected(undefined);
-    geolocationInvert({ latitude, longitude });
-    handleUpdateLocation({ latitude, longitude });
-    setLoadingLocation(false);
+    if (hasPermission === "undetermined" || canAskAgain) {
+      Alert.alert(
+        "Acceso a la ubicación",
+        "Necesitamos permiso para acceder a tu ubicación actual para mostrar a tus clientes en donde te encuentras y así solicitar tus servicios.",
+        [
+          { text: "Cancelar", style: "cancel" },
+          {
+            text: "Continuar",
+            onPress: async () => {
+              const { status: newStatus } =
+                await Location.requestForegroundPermissionsAsync();
+              if (newStatus === "granted") {
+                await getCurrentLocation();
+              } else {
+                Alert.alert(
+                  "Permiso denegado",
+                  "No se concedió el acceso a la ubicación."
+                );
+              }
+            },
+          },
+        ]
+      );
+    }
+  };
+
+  const getCurrentLocation = async () => {
+    try {
+      setLoadingLocation(true);
+
+      const location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+
+      setStateSelected(undefined);
+      setMunicipalitySelected(undefined);
+      geolocationInvert({ latitude, longitude });
+      handleUpdateLocation({ latitude, longitude });
+    } catch (err) {
+      console.error("Error obteniendo ubicación:", err);
+    } finally {
+      setLoadingLocation(false);
+    }
   };
 
   {

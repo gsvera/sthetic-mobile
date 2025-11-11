@@ -4,8 +4,9 @@ import {
   TextStyle,
 } from "@/constants/StyleComponents";
 import {
+  Alert,
+  Linking,
   Modal,
-  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -128,12 +129,66 @@ export const UploadImageModal = ({
 
   // Esta funcion es para cargar archivos desde el dispositivo
   const showFileManager = async () => {
+    try {
+      const { status, canAskAgain } =
+        await ImagePicker.getMediaLibraryPermissionsAsync();
+
+      // 2️⃣ Si ya tiene permiso, continuar
+      if (status === "granted") {
+        await openGallery();
+        return;
+      }
+
+      if (status === "denied" && !canAskAgain) {
+        Alert.alert(
+          "Permiso de galería denegado",
+          "Debes habilitar el acceso a la galería manualmente en los ajustes del dispositivo.",
+          [
+            { text: "Cancelar", style: "cancel" },
+            {
+              text: "Ir a ajustes",
+              onPress: () => Linking.openSettings(),
+            },
+          ]
+        );
+        return;
+      }
+
+      if (status === "undetermined" || canAskAgain) {
+        Alert.alert(
+          "Acceso a tu galería",
+          "Necesitamos permiso para acceder a tus fotos y permitirte seleccionar imágenes para subir y crear tu portafolio de evidencias para que lo puedan visualizar tus clientes",
+          [
+            { text: "Cancelar", style: "cancel" },
+            {
+              text: "Continuar",
+              onPress: async () => {
+                const { status: newStatus } =
+                  await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (newStatus === "granted") {
+                  await openGallery();
+                } else {
+                  Alert.alert(
+                    "Permiso denegado",
+                    "No se concedió el acceso a la galería."
+                  );
+                }
+              },
+            },
+          ]
+        );
+      }
+    } catch (err) {
+      console.error("Error al abrir la galería:", err);
+    }
     const hasPermission = await requestGalleryPermission();
 
     if (!hasPermission) {
       return;
     }
+  };
 
+  const openGallery = async () => {
     if (listImage.length >= MAX_LENGTH.MAX_FILE_TO_UPLOAD) {
       return ErrorAlertMessage({
         message: `Solo puedes cargar un maximo de ${MAX_LENGTH.MAX_FILE_TO_UPLOAD} archivos`,
@@ -142,8 +197,6 @@ export const UploadImageModal = ({
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
-      // allowsEditing: true,
-      // aspect: [4, 3],
       allowsMultipleSelection: true,
       selectionLimit: 5,
       quality: 0.7,
