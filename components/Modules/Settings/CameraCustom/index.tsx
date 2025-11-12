@@ -73,25 +73,14 @@ export const CameraCustom = ({ returnBack, idUser }: cameraCustomProps) => {
   };
 
   const openSettingsMobile = () => {
-    () => Linking.openSettings();
+    Linking.openSettings();
   };
 
   useEffect(() => {
     if (permission === null) return;
 
     if (!permission.granted) {
-      Alert.alert(
-        "Acceso a la cámara",
-        "Necesitamos permiso para acceder a tu cámara y permitirte tomar fotos. Esto es por temas de seguridad para mostrarle a tus clientes quién eres y darles mayor confianza en tus servicios.",
-        [
-          {
-            text: "Cancelar",
-            style: "cancel",
-            onPress: () => setShowRetryAgain(true),
-          },
-          { text: "Continuar", onPress: () => requestPermission() },
-        ]
-      );
+      requestPermission();
     }
     if (permission && permission.granted) setCameraReady(true);
   }, [permission]);

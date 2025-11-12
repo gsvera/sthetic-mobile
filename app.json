@@ -2,7 +2,7 @@
   "expo": {
     "name": "Meredith Aesthetic Worker",
     "slug": "sthetic-mobile",
-    "version": "1.0.15",
+    "version": "1.0.16",
     "orientation": "default",
     "icon": "./assets/images/meredith-aesthetic-work-logo.png",
     "scheme": "myapp",
@@ -11,7 +11,9 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Esta aplicación necesita acceder a tu ubicación para mostrar tu posición en el mapa."
+        "NSLocationWhenInUseUsageDescription": "Esta aplicación necesita acceder a tu ubicación para mostrar tu posición en el mapa.",
+        "NSCameraUsageDescription": "Necesitamos acceso a tu cámara para que puedas tomar fotos y mostrarle a tus clientes quién eres, brindando mayor confianza en tus servicios.",
+        "NSPhotoLibraryAddUsageDescription": "Necesitamos acceso a tu galería para que puedas seleccionar y subir fotos como evidencia de tus trabajos realizados."
       },
       "bundleIdentifier": "com.abasotech.meredithcarework",
       "config": {
@@ -22,7 +24,7 @@
       "ascAppId": "6754846887"
     },
     "android": {
-      "versionCode": 15,
+      "versionCode": 16,
       "googleServicesFile": "./google-services.json",
       "supportsTablet": true,
       "adaptiveIcon": {

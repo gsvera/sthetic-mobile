@@ -268,12 +268,8 @@ async function registerForPushNotificationsAsync() {
     finalStatus = status;
   }
 
-  if (finalStatus !== "granted") {
-    alert("No se otorgaron permisos para notificaciones push");
-    return;
-  }
-
-  const tokenData = await Notifications.getExpoPushTokenAsync();
-
-  return tokenData.data;
+  if (finalStatus === "granted") {
+    const tokenData = await Notifications.getExpoPushTokenAsync();
+    return tokenData.data;
+  } else return null;
 }

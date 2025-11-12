@@ -139,53 +139,20 @@ export const UploadImageModal = ({
         return;
       }
 
-      if (status === "denied" && !canAskAgain) {
-        Alert.alert(
-          "Permiso de galería denegado",
-          "Debes habilitar el acceso a la galería manualmente en los ajustes del dispositivo.",
-          [
-            { text: "Cancelar", style: "cancel" },
-            {
-              text: "Ir a ajustes",
-              onPress: () => Linking.openSettings(),
-            },
-          ]
-        );
-        return;
-      }
+      const { status: newStatus } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      if (status === "undetermined" || canAskAgain) {
-        Alert.alert(
-          "Acceso a tu galería",
-          "Necesitamos permiso para acceder a tus fotos y permitirte seleccionar imágenes para subir y crear tu portafolio de evidencias para que lo puedan visualizar tus clientes",
-          [
-            { text: "Cancelar", style: "cancel" },
-            {
-              text: "Continuar",
-              onPress: async () => {
-                const { status: newStatus } =
-                  await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if (newStatus === "granted") {
-                  await openGallery();
-                } else {
-                  Alert.alert(
-                    "Permiso denegado",
-                    "No se concedió el acceso a la galería."
-                  );
-                }
-              },
-            },
-          ]
-        );
+      if (newStatus === "granted") {
+        await openGallery();
       }
     } catch (err) {
       console.error("Error al abrir la galería:", err);
     }
-    const hasPermission = await requestGalleryPermission();
+    // const hasPermission = await requestGalleryPermission();
 
-    if (!hasPermission) {
-      return;
-    }
+    // if (!hasPermission) {
+    //   return;
+    // }
   };
 
   const openGallery = async () => {
@@ -291,11 +258,18 @@ export const UploadImageModal = ({
   return (
     <Modal
       animationType="slide"
-      transparent={false}
+      transparent={true}
       visible={open}
       onRequestClose={handleClose}
+      style={{ flex: 1 }}
     >
-      <View style={{ top: insets.top }}>
+      <View
+        style={{
+          ...localStyle.contentModal,
+          top: insets.top,
+          bottom: insets.bottom,
+        }}
+      >
         <ButtonCloseModal handleOnPress={handleClose} />
         {loadingData ? (
           <LoadingView />
@@ -482,6 +456,11 @@ const localStyle = StyleSheet.create({
     fontSize: 15,
     textAlign: "right",
     marginTop: -10,
+  },
+  contentModal: {
+    flex: 1,
+
+    backgroundColor: ThemeColorsSthetic.backgroundLight,
   },
 });
 
