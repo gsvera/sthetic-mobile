@@ -2,7 +2,7 @@
   "expo": {
     "name": "Meredith Aesthetic Worker",
     "slug": "sthetic-mobile",
-    "version": "1.0.16",
+    "version": "1.0.17",
     "orientation": "default",
     "icon": "./assets/images/meredith-aesthetic-work-logo.png",
     "scheme": "meredithcarework",
@@ -24,7 +24,7 @@
       "ascAppId": "6754846887"
     },
     "android": {
-      "versionCode": 16,
+      "versionCode": 17,
       "googleServicesFile": "./google-services.json",
       "supportsTablet": true,
       "adaptiveIcon": {
