@@ -7,7 +7,7 @@ import LoadingView from "@/components/Shared/LoadingView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import { HistoryPayType, modalCustomProps } from "@/constants/GeneralTypes";
-import { GridStyle, MarginStyle, TextStyle } from "@/constants/StyleComponents";
+import { MarginStyle, TextStyle } from "@/constants/StyleComponents";
 import { useQuery } from "@tanstack/react-query";
 import { Modal, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -63,9 +63,6 @@ export const HistoryPayModal = ({
           ) : listHistoryPay.length > 0 ? (
             <View style={{ height: "80%", marginTop: 20 }}>
               <ScrollView>
-                {listHistoryPay.map((item: HistoryPayType) => (
-                  <ListItemHistoryPay key={item.id} item={item} />
-                ))}
                 {listHistoryPay.map((item: HistoryPayType) => (
                   <ListItemHistoryPay key={item.id} item={item} />
                 ))}

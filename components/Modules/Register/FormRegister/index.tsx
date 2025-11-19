@@ -258,7 +258,7 @@ export const FormRegister = ({
                   <TextInput
                     style={{ ...localStyles.input, width: "60%" }}
                     placeholderTextColor={ThemeColorsSthetic.muted}
-                    placeholder="Ingrese su numero de telefono"
+                    placeholder="Ingrese su número de teléfono"
                     keyboardType="numeric"
                     onBlur={onBlur}
                     onChangeText={onChange}

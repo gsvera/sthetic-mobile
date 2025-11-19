@@ -24,7 +24,7 @@ import { apiUser } from "@/api/User";
 import { ErrorAlertMessage } from "@/components/Shared/Notifications/AlertMessage";
 import { KEY_STORE, setStoreSession } from "@/hooks/StoreDataSecure";
 import { useApiProvider } from "@/provider/InterceptorProvider";
-import { parsePasswordEncrypt } from "@/utils/GeneralUtils";
+import { openLink, parsePasswordEncrypt } from "@/utils/GeneralUtils";
 import { loginData } from "@/constants/GeneralTypes";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -135,6 +135,11 @@ export default function Login() {
     login({ ...data, password: passwordEncrypt, isProvider: true });
   };
 
+  const handleRedirectToRegister = () => {
+    return openLink(
+      `${process.env.EXPO_PUBLIC_API_URL}/registro-de-subscripcion?origin=${PLATFORM_TYPE.IOS}`
+    );
+  };
   return (
     <View
       style={{
@@ -245,13 +250,21 @@ export default function Login() {
                         </ThemedText>
                       </Pressable>
                     </Link>
-                    <Link href="/newaccount" asChild>
-                      <Pressable>
+                    {Platform.OS === PLATFORM_TYPE.IOS ? (
+                      <Pressable onPress={handleRedirectToRegister}>
                         <ThemedText style={styles.textInteraction}>
                           ¿No tiene una cuenta? Cree una.
                         </ThemedText>
                       </Pressable>
-                    </Link>
+                    ) : (
+                      <Link href="/newaccount" asChild>
+                        <Pressable>
+                          <ThemedText style={styles.textInteraction}>
+                            ¿No tiene una cuenta? Cree una.
+                          </ThemedText>
+                        </Pressable>
+                      </Link>
+                    )}
                   </View>
                 </View>
                 <View style={{ marginTop: 50, marginBottom: 20 }}>

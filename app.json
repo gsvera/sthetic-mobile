@@ -5,7 +5,7 @@
     "version": "1.0.16",
     "orientation": "default",
     "icon": "./assets/images/meredith-aesthetic-work-logo.png",
-    "scheme": "myapp",
+    "scheme": "meredithcarework",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

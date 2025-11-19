@@ -1,7 +1,7 @@
 import { weekDays } from "./GeneralTypes";
 
-export const VERSION_ANDROID = "v1.0.16";
-export const VERSION_IOS = "v1.0.16";
+export const VERSION_ANDROID = "v1.0.17";
+export const VERSION_IOS = "v1.0.17";
 export const APP_NAME_SLUG = 'meredith-aesthetic-work';
 export const PACKAGE_NAME_ANDROID = "com.abasotech.meredithcarework";
 export const APP_STORE_ID = "6754846887";
@@ -16,7 +16,7 @@ export const REGEX = {
     ONLY_TEXT: /^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+$/ ,
     ONLY_NUMBER: /^\d+$/ ,  
     ONLY_NUMBER_PRICE: /^[+-]?(\d+([.,]\d*)?|[.,]\d+)$/ ,
-    PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/ ,
+    PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/ ,
     EMAIL: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 }
 

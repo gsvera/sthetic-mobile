@@ -22,6 +22,7 @@ import { StripeDataCustomerType, UserPlan } from "@/constants/GeneralTypes";
 import {
   convertCurrency,
   convertDateToGeneralFormat,
+  openLink,
 } from "@/utils/GeneralUtils";
 import { ThemeColorsSthetic } from "@/constants/Colors";
 import GeneralButton from "@/components/Shared/GeneralButton";
@@ -168,6 +169,11 @@ export const MySupscription = ({
   };
 
   const handlePayment = () => {
+    if (Platform.OS === PLATFORM_TYPE.IOS) {
+      return openLink(
+        `${process.env.EXPO_PUBLIC_API_URL}/pago-de-membresia?userId=${idUser}&origin=${PLATFORM_TYPE.IOS}`
+      );
+    }
     if (totalPay === 0) {
       handleSuccessPay(null);
     } else {
@@ -265,14 +271,18 @@ export const MySupscription = ({
                 </ThemedText>
               </View>
             </View>
-            <View style={localStyle.rowData}>
-              <ThemedText style={TextStyle.label}>¿Tiene un cupon?</ThemedText>
-              <TextInput
-                style={localStyle.inputCoupon}
-                onChangeText={setCoupon}
-                value={coupon}
-              />
-            </View>
+            {Platform.OS === PLATFORM_TYPE.ANDROID && (
+              <View style={localStyle.rowData}>
+                <ThemedText style={TextStyle.label}>
+                  ¿Tiene un cupon?
+                </ThemedText>
+                <TextInput
+                  style={localStyle.inputCoupon}
+                  onChangeText={setCoupon}
+                  value={coupon}
+                />
+              </View>
+            )}
             {isFetchingCoupon ? (
               <LoadingView styleProps={localStyle.loader} />
             ) : coupon && couponData ? (
